@@ -24,6 +24,12 @@
 - No external memory files. All persistent context lives in this file and in `src/bin/*.md` notes files.
 - Do not store personal data anywhere in the repo.
 
+## Notes files ownership
+- All `src/**.md` files are owned and maintained by Claude, not the user.
+- Responsibilities include: writing notes at the end of each session, keeping them accurate, consistent in notation and structure, and useful for a future teacher assessing the user's understanding.
+- Correctness is paramount. If something in a `.md` file is wrong, fix it immediately without asking.
+- If something is wrong in a `.rs` or other non-`.md` file, point it out and ask the user to fix it — never silently ignore it.
+
 ## Workflow
 - The user commits to GitHub manually at the end of each session.
 
