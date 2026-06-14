@@ -27,7 +27,7 @@ fn totient(mut n: u64) -> u64 {
         p += 1;
     }
 
-    result * if n > 1 { n - 1 } else { 1 }
+    return result * if n > 1 { n - 1 } else { 1 };
 }
 
 #[cfg(test)]

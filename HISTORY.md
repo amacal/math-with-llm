@@ -4,6 +4,17 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-14 — Modular Exponentiation
+**File:** `src/bin/mod-exponent.rs`
+
+Computing a^b mod m in O(log b) using the square-and-multiply method. The binary representation of b determines which powers of a contribute to the product; consecutive powers are related by squaring, so a single LSB-first pass suffices. Two running values are maintained: `power` (current power of the base) and `result` (accumulated product of powers at set bit positions). Both are reduced mod m after every multiplication to keep intermediates bounded; u128 is used for the intermediate product to avoid overflow before reduction.
+
+Loop invariant: after n bits processed, result = base^(exp & (2^n - 1)) mod m and power = base^(2^n) mod m. When all bits are consumed the mask covers the full exponent, giving the correct answer. Edge cases: exp = 0 returns 1; modulus = 1 returns 0; modulus = 0 returns None.
+
+**Depends on:** Euclidean GCD (modular arithmetic foundation — the reduction identity (a·b) mod m = ((a mod m)·(b mod m)) mod m underpins every multiplication step)
+
+---
+
 ## 2026-06-14 — Euler's Totient Function
 **File:** `src/bin/mod-totient.rs`
 

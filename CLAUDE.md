@@ -29,6 +29,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
   - Build on a previous problem (harder variant or extension), OR
   - Share the same underlying idea in a different domain, OR
   - Fill a clear gap in the covered territory.
+- Only propose a problem if all of its prerequisites are already covered by existing `.rs` files. Do not offer a problem that depends on a concept not yet implemented, even if that concept would itself be a good next step.
 - For each proposal, briefly state *why* it's interesting given what's already been done.
 
 ## Memory
