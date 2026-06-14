@@ -1,42 +1,97 @@
 # Chinese Remainder Theorem (CRT)
 
+## Key insight
+
+The Chinese Remainder Theorem answers a natural question: if you know two remainders of an unknown number — say, it leaves remainder 2 when divided by 3, and remainder 3 when divided by 5 — can you recover the number? The answer is yes, provided the two moduli share no common factor. The solution is unique within the range from 0 to the product of the two moduli, and the construction reduces to a single modular inverse computation.
+
 ## Problem statement
-Given `x ≡ a₁ (mod m₁)` and `x ≡ a₂ (mod m₂)` with `gcd(m₁, m₂) = 1`, find the unique solution `x ∈ [0, m₁·m₂)`.
+
+Given two congruences with coprime moduli:
+
+$$x \equiv a_1 \pmod{m_1} \qquad x \equiv a_2 \pmod{m_2} \qquad \gcd(m_1, m_2) = 1$$
+
+find the unique solution x in the range from 0 to the product:
+
+$$x \in [0,\ m_1 \cdot m_2)$$
 
 ## Existence
-As `x` runs through `[0, m₁·m₂)`, the pair `(x mod m₁, x mod m₂)` hits every combination in `[0, m₁) × [0, m₂)` exactly once — the coprime cycles don't repeat until `m₁·m₂`. So for any target pair `(a₁, a₂)`, a solution exists.
+
+The range from 0 to the product m1·m2 contains exactly m1·m2 integers. The set of all possible pairs of remainders also contains exactly m1·m2 combinations — m1 choices for the first remainder and m2 for the second. The uniqueness proof below shows that no two different values of x can produce the same pair of remainders. So m1·m2 distinct inputs produce m1·m2 distinct pairs, and since there are exactly m1·m2 possible pairs, every combination must be hit. In particular, the target pair (a1, a2) is hit by some x.
 
 ## Uniqueness
-Suppose `x` and `y` both satisfy both congruences. Then:
-- `m₁ | (x - y)` and `m₂ | (x - y)`
-- Since `gcd(m₁, m₂) = 1`, both dividing means `m₁·m₂ | (x - y)`
-- But `x, y ∈ [0, m₁·m₂)`, so `x - y ∈ (-(m₁·m₂), m₁·m₂)` — the only multiple of `m₁·m₂` in that open interval is `0`
-- Therefore `x = y`
+
+Suppose x and y both satisfy both congruences. Then m1 divides x - y and m2 divides x - y. Since the two moduli are coprime, both dividing the same value means their product divides it too:
+
+$$m_1 \cdot m_2 \mid (x - y)$$
+
+But both x and y lie in the range:
+
+$$[0,\ m_1 \cdot m_2)$$
+
+so their difference lies strictly between the negation and the value of the product. The only multiple of the product in that open interval is zero, so x equals y.
 
 ## Construction
-Write `x = a₁ + k·m₁` (satisfies the first congruence for any integer `k`). Substitute into the second congruence:
-- `a₁ + k·m₁ ≡ a₂ (mod m₂)`
-- `k·m₁ ≡ (a₂ - a₁) (mod m₂)`
-- `k ≡ (a₂ - a₁) · m₁⁻¹ (mod m₂)`
 
-The inverse exists because `gcd(m₁, m₂) = 1`. Then `x = a₁ + k·m₁`, reduced to `[0, m₁·m₂)`.
+We know x must satisfy the first congruence, so we can write it in the form:
 
-## Unsigned subtraction trap
-`(a₂ - a₁) mod m₂` requires care with `u64`. Two cases:
-- `a₂ ≥ a₁`: compute `a₂ - a₁` directly (result is in `[0, m₂)` after normalization)
-- `a₂ < a₁`: compute `(m₂ - (a₁ - a₂) % m₂) % m₂` — reduce before subtracting from `m₂`, then take one more `% m₂` to handle the case where `(a₁ - a₂)` is exactly divisible by `m₂`
+$$x = a_1 + k \cdot m_1$$
 
-The user discovered a subtle bug here: first wrote `y.1 - (x.0 - y.0)` (missing the inner `% y.1`), which failed when `x.0 - y.0 > y.1`. A misleading test with a wrong expected value masked the bug initially.
+for some integer k. This satisfies the first congruence for any k. Substituting into the second congruence and isolating k:
+
+$$a_1 + k \cdot m_1 \equiv a_2 \pmod{m_2}$$
+
+$$k \cdot m_1 \equiv a_2 - a_1 \pmod{m_2}$$
+
+$$k \equiv (a_2 - a_1) \cdot m_1^{-1} \pmod{m_2}$$
+
+The modular inverse of m1 exists because the moduli are coprime. Once k is determined, the solution is:
+
+$$x = a_1 + k \cdot m_1$$
+
+reduced to the range from 0 to the product of the moduli.
+
+## Unsigned subtraction
+
+Computing the difference in the construction requires care with unsigned 64-bit integers. When the second remainder is smaller than the first, naive subtraction would underflow. The safe form reduces the difference before subtracting from the modulus:
+
+$$m_2 - ((a_1 - a_2) \bmod m_2)$$
+
+One additional mod m2 is applied to the whole expression to handle the edge case where the difference is exactly divisible by m2 — without it, the inner expression would equal m2 itself rather than 0.
+
+## Worked example
+
+Solve the system:
+
+$$x \equiv 2 \pmod{3} \qquad x \equiv 3 \pmod{5}$$
+
+Write the general form satisfying the first congruence, then substitute into the second:
+
+$$x = 2 + 3k$$
+
+$$2 + 3k \equiv 3 \pmod{5}$$
+
+$$3k \equiv 1 \pmod{5}$$
+
+Find the inverse of 3 modulo 5. By inspection:
+
+$$3 \cdot 2 = 6 \equiv 1 \pmod{5}$$
+
+so the inverse is 2. Then:
+
+$$k \equiv 1 \cdot 2 = 2 \pmod{5}$$
+
+$$x = 2 + 3 \cdot 2 = 8$$
+
+Verification:
+
+$$8 \bmod 3 = 2 \checkmark \qquad 8 \bmod 5 = 3 \checkmark \qquad 8 \in [0,\ 15) \checkmark$$
 
 ## Edge cases
-- Non-coprime moduli: `mod_inverse` returns `None`, propagated up
-- `m = 0`: caught explicitly before normalization
-- Unnormalized inputs (`a ≥ m`): normalized at entry with `%`
-- `m₁·m₂` overflow: caught with `checked_mul`
-- `k·m₁` overflow: caught with `checked_mul`
+
+When the moduli are not coprime, the modular inverse call returns None and the algorithm propagates it upward. Inputs larger than their modulus are reduced at entry. The intermediate products are checked for overflow with checked_mul.
 
 ## Complexity
-O(log(min(m₁, m₂))) — dominated by the modular inverse call, which calls extended GCD.
 
-## Relation to previous problems
-Direct application of [[mod-inverse]], which is a direct application of [[gcd-euclidean-extended]]. CRT is the first result that uses modular inverse as a tool rather than as an end in itself. It is foundational for RSA key generation, efficient multi-precision arithmetic, and competitive programming number theory.
+The dominant cost is the modular inverse computation, which calls extended GCD. Everything else is constant work:
+
+$$O(\log(\min(m_1, m_2)))$$

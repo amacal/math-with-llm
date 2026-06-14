@@ -1,46 +1,84 @@
 # Extended Euclidean GCD
 
 ## Key insight
-The regular Euclidean algorithm computes `gcd(a, b)`. The extended version additionally finds integers `x` and `y` such that `ax + by = gcd(a, b)` — Bézout's identity. Such coefficients always exist and can be derived as a byproduct of the same reduction steps.
 
-## Why the coefficients exist (Bézout's identity)
-At every step of the Euclidean algorithm, the current remainder can be expressed as a linear combination of the original `a` and `b`. The seeds are trivial: `a = a·1 + b·0` and `b = a·0 + b·1`. Each new remainder `r' = r_prev - q·r` inherits coefficients by substitution:
+The basic Euclidean algorithm finds the greatest common divisor of two integers, but throws away everything except the final answer. The extended version keeps track of something extra at each step: how to express the current remainder as a combination of the two original inputs. By the time the algorithm terminates, the GCD itself is expressed that way, giving us two integers x and y such that:
 
-```
-r' = (a·x_prev + b·y_prev) - q·(a·x + b·y)
-   = a·(x_prev - q·x) + b·(y_prev - q·y)
-```
+$$a \cdot x + b \cdot y = \gcd(a, b)$$
 
-So `x' = x_prev - q·x` and `y' = y_prev - q·y`. When the algorithm terminates, the last non-zero remainder is the GCD, and it carries the Bézout coefficients.
+This equation is known as Bézout's identity, and the extended algorithm is the standard way to compute the coefficients x and y.
 
-## State carried through the loop
-Six values: the current `(a, b)` pair as in the basic algorithm, plus two coefficient pairs `(xa, ya)` and `(xb, yb)` for each. At termination, `b = 0` so `a` is the GCD; `(xa, ya)` are its Bézout coefficients.
+## Why the coefficients always exist
 
-## Seeds
-- `a = a·1 + b·0` → `(xa, ya) = (1, 0)`
-- `b = a·0 + b·1` → `(xb, yb) = (0, 1)`
+The argument is that at every step of the Euclidean algorithm, the current remainder can be written as a linear combination of the original a and b. We maintain this as an invariant by tracking two coefficient pairs alongside the two working values.
 
-## Edge cases
-- `gcd(0, 0)` is undefined — returns `None`, same as the basic algorithm.
-- `gcd(0, n)` returns `(n, (0, 1))` — the loop never executes, seed values are returned directly.
-- `gcd(n, 0)` returns `(n, (1, 0))` — same reason.
-- `gcd(n, n)` returns `(n, (0, 1))` — after one iteration, `b` becomes 0.
-- Multiple valid coefficient pairs exist (e.g. `gcd(25, 25)` could yield `(1, 0)` or `(0, 1)`); the implementation returns whichever the algorithm naturally produces.
+At the very start, before any step is taken, the two working values are a and b themselves. Each can trivially be written as a combination of the originals:
+
+$$a = a \cdot 1 + b \cdot 0 \qquad b = a \cdot 0 + b \cdot 1$$
+
+So the initial coefficient pairs are (xa, ya) = (1, 0) for the first value and (xb, yb) = (0, 1) for the second. Now suppose at some point in the algorithm we have two values, each expressed as a combination of the originals:
+
+$$\text{current}_a = a \cdot x_a + b \cdot y_a \qquad \text{current}_b = a \cdot x_b + b \cdot y_b$$
+
+The next step computes the remainder of dividing the first by the second. Using the same rearrangement as in the basic algorithm, the new remainder is:
+
+$$r = \text{current}_a - q \cdot \text{current}_b$$
+
+where q is the quotient. Substituting the linear combinations into this:
+
+$$r = (a \cdot x_a + b \cdot y_a) - q \cdot (a \cdot x_b + b \cdot y_b) = a \cdot (x_a - q \cdot x_b) + b \cdot (y_a - q \cdot y_b)$$
+
+So the new remainder is also a linear combination of a and b, with coefficients:
+
+$$x_r = x_a - q \cdot x_b \qquad y_r = y_a - q \cdot y_b$$
+
+Since this holds at every step and the seeds satisfy it trivially, the invariant is maintained throughout. When the algorithm terminates with b = 0, the value in the a position is the GCD, and its coefficient pair (xa, ya) satisfies:
+
+$$\gcd(a, b) = a \cdot x_a + b \cdot y_a$$
+
+## The loop invariant
+
+To be precise about what is maintained, the invariant is that at every point during the loop, the current working values satisfy:
+
+$$\text{current}_a = \text{initial}_a \cdot x_a + \text{initial}_b \cdot y_a$$
+$$\text{current}_b = \text{initial}_a \cdot x_b + \text{initial}_b \cdot y_b$$
+
+This holds at the seeds by construction, and the update rule for the coefficients preserves it at each step. At termination, b = 0 and a is the GCD, so the first equation gives the Bézout identity directly.
+
+## Termination and correctness
+
+Termination and correctness of the GCD computation are identical to the basic Euclidean algorithm — b strictly decreases each step and reaches zero, at which point the value in the a position is the greatest common divisor. The coefficient tracking adds only constant work per iteration and does not affect these arguments.
 
 ## Overflow handling
-Inputs are `u64` but Bézout coefficients are `i64` (they can be negative). The quotient `q = a / b` is computed as `u64` and then converted with `i64::try_from`. The only case where `q` exceeds `i64::MAX` is when `b = 1`, which means `a % b = 0` so `b` becomes 0 after this step. In that case the coefficient update is skipped entirely — the values being computed would be discarded anyway since the loop is about to exit and `(xa, ya)` (not `(xb, yb)`) is returned.
 
-## Loop invariant
-At every point in the loop: `a = initial_a · xa + initial_b · ya` and `b = initial_a · xb + initial_b · yb`. The invariant for `b` technically breaks in the final step when `q > i64::MAX` and the coefficient update is skipped — but `b` becomes 0 at that point and `(xb, yb)` are never used, so correctness is unaffected.
+The inputs are unsigned 64-bit integers, but the Bézout coefficients can be negative, so they are tracked as signed 64-bit integers. At each step, the quotient q is computed from unsigned values and then converted to i64. The only case where q can exceed the maximum i64 value is when the divisor b equals 1. But when b = 1, the remainder a mod b is 0, so b becomes 0 after this step and the loop exits. The coefficient update for xb and yb would be computed and immediately discarded since the algorithm returns xa and ya, not xb and yb. The implementation detects this case and skips the update entirely, which is safe because the values being skipped are never used.
 
-## Termination
-`b` is a non-negative integer. Each step sets `b_new = a % b`, which is strictly less than `b`. So `b` strictly decreases at every iteration and must reach 0 in finite steps.
+## Edge cases
 
-## Correctness
-The key invariant of the Euclidean algorithm: the set of common divisors of `(a, b)` equals the set of common divisors of `(b, a mod b)`. Both directions hold — if `d` divides `a` and `b`, it divides `a mod b`; if `d` divides `b` and `a mod b`, it divides `a`. So gcd is preserved at every step. When `b = 0`, the common divisors of `(a, 0)` are exactly the divisors of `a`, so `a` is the GCD.
+When one or both inputs are zero, the loop never executes and the seed values are returned directly. gcd(0, 0) is undefined and returns None. gcd(0, n) returns n with coefficients (0, 1), since b = a·0 + n·1. gcd(n, 0) returns n with coefficients (1, 0), since a = n·1 + 0·0. When a equals b, one iteration produces remainder 0, and the result is (n, (0, 1)). Multiple valid coefficient pairs exist in general — for example gcd(6, 3) could produce (1, 0) or (0, 2) — and the algorithm returns whichever it naturally computes.
+
+## Worked example
+
+Trace gcd(35, 15), tracking the coefficient pairs at each step. The invariants throughout are:
+
+$$a = 35 \cdot x_a + 15 \cdot y_a$$
+$$x_a' = x_b \qquad y_a' = y_b \qquad x_b' = x_a - q \cdot x_b \qquad y_b' = y_a - q \cdot y_b$$
+
+We start with:
+
+$$x_a=1,\ y_a=0 \qquad x_b=0,\ y_b=1$$
+$$a = 35 \cdot 1 + 15 \cdot 0 = 35$$
+$$x_b' = 1 - 2 \cdot 0 = 1,\ y_b' = 0 - 2 \cdot 1 = -2$$
+
+The second iteration does:
+$$x_a=0,\ y_a=1 \qquad x_b=1,\ y_b=-2$$
+$$a = 35 \cdot 0 + 15 \cdot 1 = 15$$
+$$x_b' = 0 - 3 \cdot 1 = -3,\ y_b' = 1 - 3 \cdot (-2) = 7$$
+
+The final step is:
+$$x_a=1,\ y_a=-2$$
+$$a = 35 \cdot 1 + 15 \cdot (-2) = 5$$
 
 ## Complexity
-O(log(min(a, b))) — identical to the basic Euclidean algorithm. The coefficient tracking adds only constant work per iteration.
 
-## Relation to modular inverses
-Bézout's identity `ax + by = 1` (when `gcd(a, b) = 1`) means `ax ≡ 1 (mod b)` — so `x` is the modular inverse of `a` modulo `b`. The extended Euclidean algorithm is the standard way to compute modular inverses, which are foundational to RSA and other number-theoretic cryptographic schemes.
+The number of steps is O(log(min(a, b))), identical to the basic algorithm. Tracking the coefficients adds only a constant number of arithmetic operations per step, so the overall complexity is unchanged.

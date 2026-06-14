@@ -1,35 +1,86 @@
 # Modular Inverse
 
 ## Key insight
-The modular inverse of `a` modulo `m` is an integer `x` in `[0, m)` such that `a * x ≡ 1 (mod m)`. It is the multiplicative inverse in the ring of integers modulo `m` — the analogue of `1/a` in regular arithmetic, but restricted to integers.
 
-## Existence condition
-The inverse exists if and only if `gcd(a, m) = 1`. If `gcd(a, m) > 1`, then the remainders of `a * x mod m` cycle through values that are all multiples of `gcd(a, m)`, so 1 is never reached. The user discovered this by working through `a = 2`, `m = 4` by hand.
+In regular arithmetic, every non-zero number has a multiplicative inverse: the inverse of 3 is 1/3, because 3 × 1/3 = 1. Modular arithmetic works with integers only, so fractions are not available. The modular inverse of a modulo m is an integer x such that:
 
-## Algorithm
-A thin wrapper over extended GCD. Call `gcd(a, m)`:
-- If the result is not `Some((1, _))`, return `None` — inverse does not exist.
-- Otherwise, take the Bézout coefficient `x` for `a`. By Bézout: `x * a + y * m = 1`, so `x * a ≡ 1 (mod m)`.
-- Normalise `x` to `[0, m)`: if `x >= 0`, return `x`; if `x < 0`, return `m - |x|`.
+$$a \cdot x \equiv 1 \pmod{m}$$
 
-## Why normalisation works
-`a * (x + m) = a * x + a * m ≡ a * x (mod m)`. Adding any multiple of `m` to `x` preserves the congruence, so `x + m` is equally valid. Since the Bézout coefficient satisfies `|x| < m`, a single addition of `m` is always enough to land in `[0, m)`.
+This is the closest integer analogue to 1/a. It does not always exist — and knowing exactly when it does is the key to understanding the algorithm.
 
-## Why `m as i64` must be avoided
-The naive expression `(x + m as i64) as u64 % m` overflows when `m > i64::MAX` because the cast wraps to a negative value. The fix is to branch on the sign of `x` and use `u64` subtraction: `m - (-x as u64)`.
+## When does the inverse exist?
+
+The inverse of a modulo m exists if and only if gcd(a, m) = 1. To see why, consider what happens when gcd(a, m) = d > 1. The values of a·x mod m, as x ranges over all integers, cycle through multiples of d — they are always divisible by d. Since 1 is not divisible by d, the value 1 is never reached, and no inverse exists.
+
+When gcd(a, m) = 1, the extended Euclidean algorithm gives us integers x and y satisfying Bézout's identity:
+
+$$a \cdot x + m \cdot y = 1$$
+
+Reducing both sides modulo m, the term m·y vanishes since it is a multiple of m, leaving:
+
+$$a \cdot x \equiv 1 \pmod{m}$$
+
+So x is exactly the modular inverse we are looking for.
+
+## Normalisation to [0, m)
+
+The Bézout coefficient x produced by the extended GCD may be negative. Both x and x + m are valid inverses, since adding m to x does not change the congruence:
+
+$$a \cdot (x + m) = a \cdot x + a \cdot m \equiv a \cdot x \equiv 1 \pmod{m}$$
+
+The convention is to return the unique representative in the range [0, m). Since the Bézout coefficient satisfies |x| < m, a single addition of m is always sufficient to bring a negative x into range.
+
+## Worked example
+
+Find the inverse of 3 modulo 11 — that is, find x such that:
+
+$$3 \cdot x \equiv 1 \pmod{11}$$
+
+Run the extended Euclidean algorithm on (3, 11), tracking the Bézout coefficients for a throughout. The invariant maintained at every step is:
+
+$$a = 3 \cdot x_a + 11 \cdot y_a$$
+
+The first step has quotient q = 0 since 3 < 11, so the coefficients do not change — the pair simply swaps and the algorithm effectively starts from (11, 3) in the next step.
+
+$$x_a=1,\ y_a=0 \qquad x_b=0,\ y_b=1$$
+$$a = 3 \cdot 1 + 11 \cdot 0 = 3$$
+$$x_b' = 1 - 0 \cdot 0 = 1,\ y_b' = 0 - 0 \cdot 1 = 0$$
+
+&nbsp;
+
+$$x_a=0,\ y_a=1 \qquad x_b=1,\ y_b=0$$
+$$a = 3 \cdot 0 + 11 \cdot 1 = 11$$
+$$x_b' = 0 - 3 \cdot 1 = -3,\ y_b' = 1 - 3 \cdot 0 = 1$$
+
+&nbsp;
+
+$$x_a=1,\ y_a=0 \qquad x_b=-3,\ y_b=1$$
+$$a = 3 \cdot 1 + 11 \cdot 0 = 3$$
+$$x_b' = 1 - 1 \cdot (-3) = 4,\ y_b' = 0 - 1 \cdot 1 = -1$$
+
+&nbsp;
+
+$$x_a=-3,\ y_a=1 \qquad x_b=4,\ y_b=-1$$
+$$a = 3 \cdot (-3) + 11 \cdot 1 = 2$$
+$$x_b' = -3 - 2 \cdot 4 = -11,\ y_b' = 1 - 2 \cdot (-1) = 3 \quad \text{(discarded, b = 0)}$$
+
+&nbsp;
+
+$$x_a=4,\ y_a=-1$$
+$$a = 3 \cdot 4 + 11 \cdot (-1) = 1$$
+
+The GCD is 1, confirming the inverse exists. The Bézout coefficient is xa = 4, which is already in [0, 11), so the modular inverse of 3 modulo 11 is 4.
+
+Sanity check:
+
+$$3 \times 4 = 12 = 11 + 1 \equiv 1 \pmod{11} \checkmark$$
 
 ## Edge cases
-- `gcd(a, m) > 1`: no inverse, return `None`.
-- `a = 0`: `gcd(0, m) = m`, so `None` unless `m = 1`.
-- `m = 1`: everything is `0 mod 1`; `gcd(a, 1) = 1` for any `a`, so the inverse is `Some(0)` — the only element of `[0, 1)`.
-- `m = 0`: `gcd(a, 0) = a`, so `None` unless `a = 1` (but `mod 0` is undefined anyway).
-- Large inputs (`u64::MAX`): handled safely by branching on sign rather than casting `m` to `i64`.
 
-## Loop invariant (inherited from extended GCD)
-At every iteration: `a = xa * initial_a + ya * initial_b` and `b = xb * initial_a + yb * initial_b`. The invariant for `b` is broken in the final step when the quotient overflows `i64` — but `b` becomes 0 at that point and `(xb, yb)` are never used.
+When gcd(a, m) > 1 no inverse exists and the algorithm returns None. When a = 0, gcd(0, m) = m, so the inverse exists only if m = 1. When m = 1, every integer is congruent to 0 modulo 1, so the only element of [0, 1) is 0, and the inverse is Some(0) for any a. When m = 0, modular arithmetic is undefined and the algorithm returns None.
 
 ## Complexity
-O(log(min(a, m))) — the wrapper adds O(1) work on top of extended GCD.
 
-## Relation to previous problems
-Direct application of [[gcd-euclidean-extended]]. The Bézout coefficient `x` is exactly the modular inverse when `gcd = 1`. This is the foundation for RSA key generation and modular arithmetic in cryptographic schemes.
+The algorithm is a thin wrapper over extended GCD, adding only a constant amount of work for the existence check and normalisation. The complexity is therefore the same:
+
+$$O(\log(\min(a, m)))$$
