@@ -4,6 +4,17 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-16 — Euler's Theorem & Modular Inverse via Exponentiation
+**File:** `src/bin/mod-euler.rs`
+
+Euler's Theorem: for any a with gcd(a, n) = 1, a^φ(n) ≡ 1 (mod n). The proof goes through the group structure of (Z/nZ)* — the integers coprime to n form a multiplicative group of order φ(n), and by Lagrange's theorem the order of any element divides the group order, forcing a^φ(n) = 1. Fermat's Little Theorem is the special case n = p prime, giving a^(p-1) ≡ 1 (mod p).
+
+The theorem yields an alternative formula for modular inverse: multiplying a^φ(n) ≡ 1 by a^(-1) gives a^(-1) ≡ a^(φ(n)-1) (mod n). The implementation computes φ(n) by trial division then applies modular exponentiation. Overall complexity is O(sqrt(n)) — worse than extended GCD's O(log n) — but reduces to O(log n) when n is a known prime, since φ(p) = p-1 requires no factorization.
+
+**Depends on:** Euler's Totient Function, Modular Exponentiation, Euclidean GCD
+
+---
+
 ## 2026-06-14 — Modular Exponentiation
 **File:** `src/bin/mod-exponent.rs`
 
