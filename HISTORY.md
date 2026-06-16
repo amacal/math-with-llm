@@ -4,6 +4,17 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-16 — Miller-Rabin Primality Test
+**File:** `src/bin/mod-miller-rabin.rs`
+
+The Fermat test fails against Carmichael numbers — composites where a^(n-1) ≡ 1 (mod n) for all coprime bases. The smallest is 561 = 3 × 11 × 17; it fools Fermat because (p-1) | (n-1) for each prime factor p (Korselt's criterion), which follows from CRT plus Fermat applied to each prime separately.
+
+Miller-Rabin strengthens Fermat by exploiting the fact that x^2 ≡ 1 (mod p) has exactly two solutions (±1) when p is prime — a consequence of p being prime forcing divisibility onto one of (x-1) or (x+1). Write n-1 = 2^s × d (d odd) and inspect the sequence a^d, a^(2d), ..., a^(n-1). For a prime the sequence either starts at 1 or passes through -1; a third square root of 1 proves compositeness. A base that fails to detect a composite is a strong liar; Rabin proved at most 1/4 of all bases are strong liars for any composite, so k independent bases reduce the false positive rate to (1/4)^k. Complexity: O(log n) per base.
+
+**Depends on:** Modular Exponentiation, Euler's Theorem / Fermat's Little Theorem, Chinese Remainder Theorem (for the Carmichael number analysis)
+
+---
+
 ## 2026-06-16 — Euler's Theorem & Modular Inverse via Exponentiation
 **File:** `src/bin/mod-euler.rs`
 
