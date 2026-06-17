@@ -4,6 +4,15 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-17 — RSA Cryptosystem
+**File:** `src/bin/mod-rsa.rs`
+
+RSA is built on three observations: n = p·q is easy to compute but hard to factor; φ(n) = (p-1)(q-1) is easy given p and q but hard from n alone; and Euler's theorem guarantees m^(de) ≡ m (mod n) whenever de ≡ 1 (mod φ(n)) and gcd(m, n) = 1. The public exponent e is chosen with gcd(e, φ(n)) = 1; the private exponent d is its modular inverse mod φ(n), computed via extended GCD. Encryption is c = m^e mod n, decryption is m = c^d mod n; the roles of e and d are symmetric, which makes signing (encrypt with d, verify with e) mathematically equivalent. The message constraint m < min(p, q) ensures gcd(m, n) = 1 so Euler's theorem applies. Textbook RSA is deterministic and vulnerable to dictionary attacks on small message spaces — real deployments require random padding (OAEP). Complexity: keygen O(log n), encryption O(log e), decryption O(log n); the asymmetry is intentional since encryption is the high-frequency operation.
+
+**Depends on:** Miller-Rabin (primality check on p and q), Euler's Totient Function (computing φ(n)), Euler's Theorem / Fermat's Little Theorem (correctness proof), Modular Exponentiation (encrypt/decrypt), Modular Inverse / Extended Euclidean GCD (computing d from e)
+
+---
+
 ## 2026-06-16 — Miller-Rabin Primality Test
 **File:** `src/bin/mod-miller-rabin.rs`
 
