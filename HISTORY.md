@@ -4,6 +4,15 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-18 — Baby-Step Giant-Step (Discrete Logarithm)
+**File:** `src/bin/mod-bsgs.rs`
+
+BSGS solves g^x ≡ h (mod p) in O(sqrt(p) * log p) time and O(sqrt(p)) space. The key idea is the decomposition x = k*m + y with m = ceil(sqrt(p)), which rewrites the equation as g^(km) ≡ h * g^(-y) (mod p). Baby steps precompute all m right-hand values into a hash map; giant steps scan left-hand values and look for a collision. Correctness rests on the coverage argument: m = ceil(sqrt(p)) ensures m^2 - 1 >= p-2, so every valid exponent is reachable — floor would leave gaps. The baby-step table depends on h and must be rebuilt per query; the giant-step table depends only on g and p and can be reused across queries for the same group. Generator finding for safe primes requires checking only two conditions: g^2 ≢ 1 and g^((p-1)/2) ≢ 1, since p-1 = 2q has only two proper divisors.
+
+**Depends on:** Modular Exponentiation (both phases), Modular Inverse (baby-step computation of g^(-y)), Miller-Rabin (primality check for p)
+
+---
+
 ## 2026-06-18 — Pollard's Rho Factoring Algorithm
 **File:** `src/bin/mod-pollard-rho.rs`
 
