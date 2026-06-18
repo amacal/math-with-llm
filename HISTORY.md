@@ -4,6 +4,15 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-18 — Pollard's Rho Factoring Algorithm
+**File:** `src/bin/mod-pollard-rho.rs`
+
+Pollard's Rho finds a non-trivial factor of a composite n in expected O(n^(1/4)) time and O(1) space. The core insight is that a collision mod p (a prime factor of n) suffices: if x ≡ y (mod p) but x ≢ y (mod n), then p divides |x - y| and p divides n, forcing 1 < gcd(|x - y|, n) < n. The birthday paradox guarantees such a collision after O(sqrt(p)) draws from the residues mod p, giving O(n^(1/4)) in the worst case (p ≈ sqrt(n)). Floyd's cycle detection finds the collision in O(1) space: tortoise advances one step, hare two, and they must meet once both are inside the inevitable cycle of the finite sequence. The function f(x) = x^2 + c mod n provides pseudo-random mixing mod p. Failure modes — full collision mod n, or degenerate cycles — are handled by retrying with a different c. Even n is handled as a special case (return 2) since the quadratic sequence cannot generate a collision mod 2 through normal dynamics.
+
+**Depends on:** Miller-Rabin (primality check before factoring), Modular Exponentiation (used in Miller-Rabin), Euclidean GCD (gcd call at every step of the inner loop)
+
+---
+
 ## 2026-06-17 — RSA Cryptosystem
 **File:** `src/bin/mod-rsa.rs`
 
