@@ -115,7 +115,7 @@ fn pollard_rho(n: u64) -> Option<PollardRhoResult> {
         return Some(PollardRhoResult::Factor { n, d: 2, c: 0, r: 0 });
     }
 
-    const LIMIT: u64 = 1024;
+    const LIMIT: u64 = 1048576;
     const ATTEMPTS: u64 = 10;
     const PRIMES: [u64; 10] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
 
