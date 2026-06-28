@@ -4,6 +4,15 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-28 — Big Integer Arithmetic (Schoolbook)
+**File:** `src/bin/big-uint.rs`
+
+Arbitrary-precision unsigned integers represented as `Vec<u64>` in base 2^64, least-significant chunk first. The core invariant — no trailing zeros except `vec![0]` for zero — gives every number a unique representation, making equality a plain element comparison. Comparison is lexicographic from the most significant chunk downward. Addition and subtraction use `overflowing_add`/`overflowing_sub` with a single carry or borrow that is always 0 or 1 (the two-overflows-simultaneously argument). Subtraction returns `Option<BigNumber>` to signal the unsigned underflow case; trailing zeros are stripped to restore the invariant. `mul128` computes the full 128-bit product of two `u64` values by splitting into 32-bit halves and combining four products; correctness rests on the fact that `high` from `mul128` is at most `0xfffffffffffffffe`, leaving room for a carry without overflow. Schoolbook multiplication follows the distributive law: each `(i,j)` pair contributes `a_i * b_j` at position `i+j`. Deferred carry handling: instead of chasing cascading carries immediately, overflow counts are accumulated in a separate `carries` array (safe because each cell receives at most `min(n,m)` increments) and merged into the result in a final linear pass. Complexity O(n*m).
+
+**Depends on:** — (self-contained foundation; introduces the big-integer track)
+
+---
+
 ## 2026-06-18 — Baby-Step Giant-Step (Discrete Logarithm)
 **File:** `src/bin/mod-bsgs.rs`
 
