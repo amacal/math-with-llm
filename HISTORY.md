@@ -4,6 +4,15 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-30 — Sieve of Eratosthenes
+**File:** `src/bin/sieve-eratosthenes.rs`
+
+The sieve finds all primes up to n in O(n log log n) time and O(n) space by elimination: mark every number as candidate, then for each prime p cross out all multiples from p*p upward. Stopping at sqrt(n) is correct because any composite c ≤ n has a prime factor q ≤ sqrt(c) ≤ sqrt(n), so all composites are guaranteed to be crossed out once all primes up to sqrt(n) have been processed. Starting the inner pass at p*p (not 2*p) is correct because every smaller multiple p*k with k < p was already crossed out when k (or a prime factor of k) was processed earlier. Complexity: O(n log log n) because the total crossings are proportional to n * sum(1/p over primes p ≤ n), and that sum of prime reciprocals grows as log(log(n)) by Mertens' theorem — much slower than the harmonic series log(n).
+
+**Depends on:** — (self-contained; introduces Mertens' theorem and the harmonic series as background)
+
+---
+
 ## 2026-06-30 — Karatsuba Multiplication
 **File:** `src/bin/big-uint-karatsuba.rs`
 

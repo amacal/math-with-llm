@@ -1,13 +1,40 @@
 use std::{
     cmp::{Ordering, max, min},
-    ops::{Add, Sub, Shl},
+    fmt::{Debug, Display},
+    ops::{Add, Shl, Sub},
 };
 
-fn main() {}
+fn main() {
+    let num1 = BigNumber::new(vec![0x07, 0x08, 0x09, 0x0a]);
+    let num2 = BigNumber::new(vec![0x01, 0x02, 0x03, 0x04]);
 
-#[derive(Debug)]
+    let schoolbook = num1.mul_schoolbook(&num2);
+    let karatsuba = num1.mul_karatsuba(&num2);
+
+    println!("Schoolbook result: {}", schoolbook);
+    println!("Karatsuba result:  {}", karatsuba);
+}
+
 struct BigNumber {
     data: Vec<u64>,
+}
+
+impl Display for BigNumber {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut result = String::new();
+
+        for &val in self.data.iter().rev() {
+            result.push_str(&format!("{:016x}", val));
+        }
+
+        write!(f, "0x{}", result)
+    }
+}
+
+impl Debug for BigNumber {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        return write!(f, "BigNumber({})", self);
+    }
 }
 
 impl BigNumber {

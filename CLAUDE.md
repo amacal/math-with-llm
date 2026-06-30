@@ -67,6 +67,13 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Write as a patient student explaining to a peer — slow, explicit, treating nothing as obvious. A reader who has never seen the argument should be able to follow every step.
 - Avoid one-sentence paragraphs. If a thought needs only one sentence, it probably belongs attached to the paragraph before or after it.
 
+## Session closing ritual
+At the end of every session, after the correctness and complexity wrap-up, always provide:
+1. **Skill assessment** — briefly evaluate the user's mathematical and programming performance in that session. Note what they handled well, where precision slipped, and what the difficulty level revealed about their current standing.
+2. **Book recommendations** — suggest 3 books most relevant to the topic(s) covered. Prefer books that match the computational and algorithmic depth of this repo over pure-math textbooks.
+
+Do not skip this for short or easy sessions.
+
 ## Workflow
 - Proactively read the current working file and run its tests whenever the user says they've made a change, without waiting to be asked.
 - The user commits to GitHub manually at the end of each session.
