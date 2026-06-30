@@ -38,6 +38,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
   - Share the same underlying idea in a different domain, OR
   - Fill a clear gap in the covered territory.
 - Only propose a problem if all of its prerequisites are already covered by existing `.rs` files. Do not offer a problem that depends on a concept not yet implemented, even if that concept would itself be a good next step.
+- Exception: a foundational concept that is *itself* a missing prerequisite for a natural future target is a valid — and preferred — proposal. When such a stepping-stone exists, name the larger target it unlocks and explain why the intermediate session is the right entry point rather than jumping directly. Prefer the smaller step when a direct jump would leave a conceptual gap.
 - For each proposal, briefly state *why* it's interesting given what's already been done.
 - Topic selection must be deliberate, not just the next connected problem. Explicitly consider cross-domain options (algorithms, probability, linear algebra, numerical methods) alongside natural extensions. Do not default to the chain.
 

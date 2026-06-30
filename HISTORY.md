@@ -4,6 +4,16 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-30 — Naive Polynomial Multiplication (Linear Convolution)
+**File:** `src/bin/poly-mul-naive.rs`
+
+Polynomial multiplication is equivalent to linear convolution of the coefficient vectors. The key formula is c[k] = sum of a[i] * b[k-i] over all valid i, derived directly from the distributive law: every pair (i, j) with i+j=k contributes to the k-th output coefficient. The output has n+m-1 coefficients because degrees add (the leading terms multiply as x^(n-1) * x^(m-1) = x^(n+m-2)) and coefficient count is degree plus one. Complexity is O(n*m) because each of the n*m pairs (i,j) is visited exactly once. The distinction between linear convolution (output length n+m-1, no wrapping) and cyclic convolution (output length n, indices mod n) was introduced — NTT computes cyclic convolution natively, and zero-padding recovers linear convolution from it.
+
+**Depends on:** — (self-contained; introduces the polynomial multiplication track as a stepping stone toward NTT)
+**Unlocks:** Primitive roots mod p, Number Theoretic Transform (NTT)
+
+---
+
 ## 2026-06-30 — Segmented Sieve
 **File:** `src/bin/sieve-segmented.rs`
 
