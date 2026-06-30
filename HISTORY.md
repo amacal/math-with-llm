@@ -4,8 +4,17 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-30 — Karatsuba Multiplication
+**File:** `src/bin/big-uint-karatsuba.rs`
+
+Karatsuba reduces big integer multiplication from O(n^2) to O(n^log_2(3)) ≈ O(n^1.585) by saving one recursive sub-multiplication per level. The key algebraic identity: A_hi*B_lo + A_lo*B_hi = (A_lo + A_hi)(B_lo + B_hi) - A_lo*B_lo - A_hi*B_hi, so only three multiplications (z0, z1, z2) are needed instead of four. Multiplication by (2^64)^k is a free shift (prepend k zero chunks). The subtraction order for z1 is safe because z0 + z1 + z2 = (A_lo+A_hi)(B_lo+B_hi) guarantees neither step underflows. The recurrence T(n) = 3T(n/2) + O(n) solves to O(n^log_2(3)) by the Master Theorem (log_2(3) ≈ 1.585 > 1 = c, so recursive work dominates). Had four sub-multiplications been kept, log_2(4) = 2 recovers exactly schoolbook O(n^2). Base case: both operands have one chunk, computed via mul128. Pivot strategy: pad the shorter operand to match the longer before splitting, ensuring pivot >= 1 always.
+
+**Depends on:** Big Integer Arithmetic / Schoolbook (`big-uint-naive.rs`) — representation, addition, subtraction, mul128, canonical invariant
+
+---
+
 ## 2026-06-28 — Big Integer Arithmetic (Schoolbook)
-**File:** `src/bin/big-uint.rs`
+**File:** `src/bin/big-uint-naive.rs`
 
 Arbitrary-precision unsigned integers represented as `Vec<u64>` in base 2^64, least-significant chunk first. The core invariant — no trailing zeros except `vec![0]` for zero — gives every number a unique representation, making equality a plain element comparison. Comparison is lexicographic from the most significant chunk downward. Addition and subtraction use `overflowing_add`/`overflowing_sub` with a single carry or borrow that is always 0 or 1 (the two-overflows-simultaneously argument). Subtraction returns `Option<BigNumber>` to signal the unsigned underflow case; trailing zeros are stripped to restore the invariant. `mul128` computes the full 128-bit product of two `u64` values by splitting into 32-bit halves and combining four products; correctness rests on the fact that `high` from `mul128` is at most `0xfffffffffffffffe`, leaving room for a carry without overflow. Schoolbook multiplication follows the distributive law: each `(i,j)` pair contributes `a_i * b_j` at position `i+j`. Deferred carry handling: instead of chasing cascading carries immediately, overflow counts are accumulated in a separate `carries` array (safe because each cell receives at most `min(n,m)` increments) and merged into the result in a final linear pass. Complexity O(n*m).
 
