@@ -4,6 +4,15 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-06-30 — Segmented Sieve
+**File:** `src/bin/sieve-segmented.rs`
+
+The segmented sieve finds primes in [L, R] using O(sqrt(R)) space instead of O(R). Small primes up to sqrt(R) are precomputed with the basic sieve; each is then used to cross out its multiples inside the window [L, R]. The first multiple of p that falls in the window is ceil(L/p) · p, computed as `((L + p - 1) / p) * p`. A guard ensures p itself is never marked composite. Correctness: every composite c ≤ R has a prime factor p ≤ sqrt(c) ≤ sqrt(R), so p is always in the precomputed list. Floating point sqrt must use ceil, not floor, to avoid silently dropping a prime when R is a perfect square. Time: O(sqrt(R) log log R) for precomputation plus O((R - L) log log R) for the window.
+
+**Depends on:** Sieve of Eratosthenes (`sieve-eratosthenes.rs`) — the precomputation step is exactly the basic sieve
+
+---
+
 ## 2026-06-30 — Sieve of Eratosthenes
 **File:** `src/bin/sieve-eratosthenes.rs`
 
