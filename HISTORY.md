@@ -4,6 +4,16 @@ Ordered by date descending. Each entry records the date, the concept covered, th
 
 ---
 
+## 2026-07-01 — Primitive Roots mod p
+**File:** `src/bin/mod-primitive-root.rs`
+
+A primitive root mod p is an element whose order — the smallest k with g^k ≡ 1 (mod p) — equals p-1, the full size of the group (Z/pZ)*. Lagrange's theorem (order divides group order) turns the naive O(p) order check into an O(log^2 p) one: g is a primitive root iff g^((p-1)/q) ≢ 1 (mod p) for every distinct prime factor q of p-1, since any proper divisor of p-1 must divide (p-1)/q for at least one such q. Existence is guaranteed by a counting argument: if no element had order p-1, every element would satisfy x^((p-1)/q) ≡ 1 for some prime factor q, but each such equation has at most (p-1)/q solutions (a polynomial-degree bound valid since Z/pZ is a field), and for p=7 the totals (3+2=5) fall short of the group size (6), forcing a contradiction. Density: primitive roots make up a φ(p-1)/(p-1) fraction of all residues, and this fraction is a global property of the set, not tied to any location in the range — searching from g=2 upward has no advantage over any other starting point except that it avoids the two structurally guaranteed failures, g=1 (order always 1) and g=p-1 (order always 2, since (-1)^2≡1). Two real bugs surfaced during implementation: `factorize` initially treated any nontrivial factor from Pollard's Rho as prime without recursively checking it (caught via composite outputs like 55 = 5×11 on input 15785), and `primitive_root` initially never verified p itself was prime, silently returning meaningless results for composite inputs. Complexity is O(p^(1/4) log p), dominated by factoring p-1 via Pollard's Rho (O(n^(1/4)) per split, up to log2(p-1) splits); the candidate search itself is only O(log log p · log^2 p) in expectation, using a Mertens'-theorem-style bound on (p-1)/φ(p-1).
+
+**Depends on:** Miller-Rabin Primality Test, Pollard's Rho Factoring Algorithm, Modular Exponentiation, Euler's Theorem (Lagrange's theorem), Sieve of Eratosthenes (Mertens' theorem)
+**Unlocks:** Number Theoretic Transform (NTT) — needs a primitive root as the modular root of unity
+
+---
+
 ## 2026-06-30 — Naive Polynomial Multiplication (Linear Convolution)
 **File:** `src/bin/poly-mul-naive.rs`
 

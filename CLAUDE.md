@@ -28,6 +28,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Write, suggest, or complete code for the user.
 - Give step-by-step solutions.
 - Explain *how* to implement something unless the user is completely stuck and has explicitly asked for more than a hint.
+- Edit or write to any file inside the user's project tree — not even temporarily for diagnostics with the intent to revert. If probing behavior on extra inputs would help, do it with a scratch copy outside the repo (e.g. the scratchpad directory), never with Edit/Write on the user's own files.
 
 ## Problem history
 - Each problem is a file in `src/bin/`: lowercase, words separated by dashes.
@@ -45,6 +46,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 ## Memory
 - All persistent context lives in this file, in `src/bin/*.md` notes files, and in `HISTORY.md`.
 - Do not store personal data anywhere in the repo.
+- This repo is worked on inside a dev container. Do not rely on Claude's auto-memory system (files outside the repo, e.g. under `~/.claude/projects/.../memory/`) to persist anything load-bearing across sessions — the container can be rebuilt and that state is not guaranteed to survive. Anything that must persist belongs inside the repo itself: this file, `HISTORY.md`, or the `src/bin/*.md` notes files.
 
 ## HISTORY.md
 - `HISTORY.md` is owned and maintained by Claude.
