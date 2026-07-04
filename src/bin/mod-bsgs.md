@@ -1,6 +1,6 @@
 # Baby-Step Giant-Step (Discrete Logarithm)
 
-## What the algorithm does
+## Overview
 
 Given a prime p, a generator g of the multiplicative group (Z/pZ)*, and a target h in {1, ..., p-1}, Baby-Step Giant-Step (BSGS) finds the integer x in 0..p-2 such that g^x ≡ h (mod p). This x is called the discrete logarithm of h base g modulo p. The algorithm runs in O(sqrt(p) * log p) time and O(sqrt(p)) space, compared to O(p * log p) for naive brute force.
 
@@ -34,15 +34,19 @@ Baby steps depend on h (they compute h * g^(-y)), so the table must be rebuilt f
 
 ## Finding a generator
 
-For a safe prime p — one where p-1 = 2*q and q is also prime — a candidate g is a generator if and only if both g^2 ≢ 1 (mod p) and g^q ≢ 1 (mod p). This follows because the only proper divisors of p-1 = 2q are 2 and q, so checking that g raised to each of these is not 1 confirms that no proper subgroup contains g, forcing its order to be the full p-1.
+For a safe prime p — one where p-1 = 2*q and q is also prime — a candidate g is a generator if and only if both g^2 ≢ 1 (mod p) and g^q ≢ 1 (mod p). This follows because the only proper divisors of p-1 = 2q are 2 and q, so checking that g raised to each of these is not 1 confirms that no proper subgroup contains g, forcing its order to be the full p-1. This safe-prime shortcut is a special case of a more general test: for an arbitrary prime p, the same idea works by checking g^((p-1)/q) for every distinct prime factor q of p-1, not just the two divisors available when p-1 happens to have the special form 2*q. That general test, together with a proof that a generator always exists for any prime p, is the subject of the Primitive Roots mod p session.
 
-## Correctness invariant
+## Correctness
 
-The algorithm is correct because the decomposition x = k*m + y covers all exponents in 0..p-2 without gaps (as argued above), and the hash map lookup finds a matching pair in O(1) per giant step. When the function returns None, it means h is not in the group (h = 0 is the main case: g^x mod p is never 0 for any prime p, since the group {1..p-1} excludes 0). The returned x always satisfies g^x ≡ h (mod p) by construction.
+The algorithm is correct because the decomposition x = k*m + y covers all exponents in 0..p-2 without gaps (as argued above), and the hash map lookup finds a matching pair in O(1) per giant step. The returned x always satisfies g^x ≡ h (mod p) by construction, since it is only returned after an explicit match between a baby-step value and a giant-step value confirms the underlying congruence.
 
 ## Complexity
 
 Time: O(sqrt(p) * log p). Both phases run O(sqrt(p)) iterations; each iteration calls mod_exp at cost O(log p). Space: O(sqrt(p)) for the hash map storing m baby-step values.
+
+## Edge cases
+
+When the function returns None, it means no matching pair (k, y) was found among the O(sqrt(p)) values checked. The only structural case where this must happen is h = 0: since g^x mod p is a nonzero residue for every x when p is prime (the group {1, ..., p-1} excludes 0 entirely), no exponent can ever produce h = 0, so a query with h = 0 always exhausts the search and correctly returns None. This implementation also assumes p is prime and g is a genuine generator of the full group without independently verifying either — a composite p breaks the entire group-theoretic argument silently, since (Z/pZ)* is only guaranteed to be a group of order p-1 when p is prime. The Primitive Roots mod p session addresses exactly this gap by checking primality before doing any group-theoretic work.
 
 ## Worked example
 

@@ -1,6 +1,6 @@
 # Karatsuba Multiplication
 
-## The core idea
+## Overview
 
 Karatsuba multiplication is a divide-and-conquer algorithm that multiplies two n-chunk big integers in O(n^log_2(3)) time, beating the O(n^2) of schoolbook by reducing the number of recursive sub-multiplications from four to three. The saving comes entirely from one algebraic identity, not from any clever data structure.
 
@@ -30,25 +30,27 @@ Multiplication by (2^64)^k in the Vec<u64> representation is not arithmetic at a
 
 Computing z_1 requires two subtractions of big unsigned integers, which could underflow if done in the wrong order. The safety argument is: since z_1 = A_hi*B_lo + A_lo*B_hi >= 0 and z_0 >= 0, it follows that (A_lo + A_hi)(B_lo + B_hi) = z_0 + z_1 + z_2 >= z_2, so the first subtraction (removing z_2) is always safe. After removing z_2 the remainder is z_1 + z_0 >= z_0, so the second subtraction (removing z_0) is also always safe. Subtracting z_2 first and z_0 second is therefore guaranteed not to underflow.
 
-## Complexity
-
-There are three recursive calls on sub-problems of size roughly n/2, plus O(n) work for additions, subtractions, and shifts. This gives the recurrence:
-
-$$T(n) = 3 \cdot T(n/2) + O(n)$$
-
-The Master Theorem handles recurrences of the form T(n) = a*T(n/b) + O(n^c). The key comparison is between log_b(a) and c: when log_b(a) > c the recursive work dominates; when log_b(a) < c the top-level work dominates; when they are equal both contribute equally. Here a = 3, b = 2, c = 1, and log_2(3) ≈ 1.585 > 1, so the recursive work dominates and T(n) = O(n^log_2(3)). This is strictly better than the schoolbook O(n^2), and the entire improvement rests on reducing a = 4 (naive) to a = 3 (Karatsuba). Had we kept four sub-multiplications, log_2(4) = 2 would have recovered exactly O(n^2).
-
 ## Base case and the pivot strategy
 
 The recursion reduces sub-problem size only when the pivot is at least 1, which requires min(len_a, len_b) >= 2. When either input has a single chunk, splitting would produce a zero high half and leave the same problem to recurse on — infinite recursion. The implementation resolves this by padding the shorter operand to the length of the longer one before splitting, ensuring both halves are always non-empty and the pivot is always >= 1. The true base case is both operands having exactly one chunk, at which point mul128 computes the exact 128-bit product directly.
 
 The pivot is chosen as min(len_a, len_b) / 2 after padding has equalized the lengths, so both splits land at the same position and the sub-problems are as balanced as possible.
 
+## Correctness
+
+Karatsuba's correctness is an induction on the number of chunks in the operands. The base case is a single chunk on each side, where mul128 computes the exact 128-bit product directly, with no recursion involved. For the inductive step, assume the three recursive calls that compute z0 = A_lo*B_lo, z2 = A_hi*B_hi, and (A_lo+A_hi)*(B_lo+B_hi) each return the exact product of their (shorter) arguments — this is licensed by the induction hypothesis, since each recursive call operates on operands with strictly fewer chunks than the top-level call. Given those three exact values, the algebraic identity established above shows that z1 = A_hi*B_lo + A_lo*B_hi is recovered exactly by subtraction, with no approximation involved. The final assembly A*B = z2*(2^64)^(2n) + z1*(2^64)^n + z0 is then just the original four-term expansion with the two middle terms combined, so it reconstructs A*B exactly whenever z0, z1, and z2 are each exact — which the induction hypothesis and the algebraic identity together guarantee.
+
+## Complexity
+
+There are three recursive calls on sub-problems of size roughly n/2, plus O(n) work for additions, subtractions, and shifts. This gives the recurrence:
+
+$$T(n) = 3 \cdot T(n/2) + O(n)$$
+
+The Master theorem handles recurrences of the form T(n) = a*T(n/b) + O(n^c). The key comparison is between log_b(a) and c: when log_b(a) > c the recursive work dominates; when log_b(a) < c the top-level work dominates; when they are equal both contribute equally. Here a = 3, b = 2, c = 1, and log_2(3) ≈ 1.585 > 1, so the recursive work dominates and T(n) = O(n^log_2(3)). This is strictly better than the schoolbook O(n^2), and the entire improvement rests on reducing a = 4 (naive) to a = 3 (Karatsuba). Had we kept four sub-multiplications, log_2(4) = 2 would have recovered exactly O(n^2).
+
 ## Worked example
 
-Take A = [3, 5] and B = [7, 11] in base 2^64, meaning A = 3 + 5*(2^64) and B = 7 + 11*(2^64). With pivot n = 1:
-
-A_lo = 3, A_hi = 5, B_lo = 7, B_hi = 11
+Take A = [3, 5] and B = [7, 11] in base 2^64, meaning A = 3 + 5*(2^64) and B = 7 + 11*(2^64). With pivot n = 1, the split gives A_lo = 3, A_hi = 5, B_lo = 7, B_hi = 11.
 
 Both inputs have length 2 and the sub-problems have length 1, so the three products hit the base case directly:
 

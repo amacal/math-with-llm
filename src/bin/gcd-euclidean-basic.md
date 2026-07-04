@@ -1,12 +1,12 @@
 # Euclidean GCD
 
-## Key insight
+## Overview
 
 The algorithm rests on a single observation about divisibility. If some number d divides both a and b, then it also divides anything you can build by adding and subtracting multiples of a and b. In particular, it divides a minus any whole multiple of b. The remainder when you divide a by b is exactly that — a with as many copies of b removed as possible while staying non-negative. So a common divisor of a and b must also divide the remainder, and by the same argument in reverse, a common divisor of b and the remainder must divide a. The two pairs share exactly the same common divisors, so they share the same greatest one.
 
 $$\gcd(a,\ b) = \gcd(b,\ a \bmod b)$$
 
-## Proof of the core identity
+## Correctness
 
 We want to show that gcd(a, b) and gcd(b, a mod b) are equal. The strategy is to show that the two pairs have identical sets of common divisors. Since the sets are equal, their maxima — the greatest common divisors — must be equal too.
 
@@ -50,15 +50,11 @@ Again, the combination in parentheses is an integer, so d divides a. Any common 
 
 $$\gcd(a,\ b) = \gcd(b,\ a \bmod b)$$
 
-## Termination and base case
-
-The algorithm applies the identity repeatedly, each time replacing the pair (a, b) with (b, r). For this process to be useful it must eventually stop. The reason it does is that the second argument strictly shrinks at every step. The remainder r is always less than b — that is built into the definition of remainder, since if r were as large as b you could subtract one more copy and reduce further. So we have a strictly decreasing sequence of non-negative integers, and any such sequence must reach zero in a finite number of steps.
-
-When the second argument reaches zero, we have the pair (a, 0) for some value of a. The greatest common divisor of a and 0 is a itself, because every integer divides zero — for any d, the equation 0 = d · 0 holds — so the common divisors of (a, 0) are simply all the divisors of a, and the largest of those is a:
+This reduction is only useful because it terminates: the second argument strictly shrinks at every step, since the remainder r is always less than b by the definition of remainder (if r were as large as b, one more copy of b could still be subtracted). A strictly decreasing sequence of non-negative integers must reach zero in a finite number of steps. When the second argument reaches zero, the pair is (a, 0) for some value of a, and the greatest common divisor of a and 0 is a itself, because every integer divides zero — for any d, the equation 0 = d · 0 holds — so the divisors of (a, 0) are simply the divisors of a, and the largest of those is a:
 
 $$\gcd(a,\ 0) = a$$
 
-## Complexity proof
+## Complexity
 
 To bound the number of steps, we look at two consecutive steps at a time rather than one. Suppose the current pair is (b, r1) and after one step it becomes (r1, r2). We want to prove that:
 
@@ -107,7 +103,7 @@ This result is known as Lamé's theorem, published in 1844 — it was the first 
 
 When one of the inputs is zero the answer is immediate. gcd(0, n) and gcd(n, 0) both return n, because every integer divides zero, making n the largest common divisor of the pair. The case gcd(0, 0) is undefined: every positive integer divides zero, so there is no finite greatest common divisor, and the implementation returns None.
 
-When a is less than b, the first step computes a mod b, which equals a itself since a fits inside b without any subtraction. The pair becomes (b, a), so the inputs are swapped for free without any special handling.
+When a is less than b, the first step computes a mod b, which equals a itself since a fits inside b without any subtraction. The pair becomes (b, a), so the inputs are swapped for free without any special handling. The implementation uses unsigned 64-bit integers, which sidesteps a further hazard: with signed integers, Rust's remainder operator truncates toward zero, so -12 % 8 produces -4 rather than 4, and a negative remainder would make the second argument grow instead of shrink, breaking termination — taking the absolute value of both inputs before the loop begins avoids this entirely.
 
 ## Worked example
 
@@ -116,7 +112,3 @@ Tracing gcd(48, 18) through each step:
 $$\gcd(48,\ 18) \;\to\; \gcd(18,\ 12) \;\to\; \gcd(12,\ 6) \;\to\; \gcd(6,\ 0) \;\to\; 6$$
 
 At each step the remainder is 48 mod 18 = 12, then 18 mod 12 = 6, then 12 mod 6 = 0. The answer is 6. To verify: 48 = 8 × 6 and 18 = 3 × 6, and since 8 and 3 share no common factor, no divisor larger than 6 can divide both.
-
-## Negative numbers
-
-The implementation uses unsigned 64-bit integers, which sidesteps the issue entirely. With signed integers, Rust's remainder operator truncates toward zero, so -12 % 8 produces -4 rather than 4. A negative remainder would cause the second argument to increase on that step, and the algorithm would fail to converge. The fix is straightforward: take the absolute value of both inputs before the loop begins.

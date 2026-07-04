@@ -26,9 +26,13 @@ and decryption recovers
 
 $$m = c^d \bmod n$$
 
-Both operations are single calls to modular exponentiation.
+Both of these are single calls to the modular exponentiation routine developed earlier — encryption raises m to e, decryption raises c to d, and nothing else needs to happen at this layer for the arithmetic to work out, though real systems add padding before encryption, as discussed next.
 
-## Correctness argument
+## Textbook RSA and the padding gap
+
+In this implementation encryption is deterministic: the same m always produces the same c. An attacker with the public key can precompute a dictionary mapping every possible ciphertext back to its plaintext, which breaks confidentiality for small message spaces. Real deployments prepend random padding to m before encryption (OAEP is the standard scheme), making each encryption probabilistic. The mathematical core developed here is correct; the padding layer is an engineering addition on top of it.
+
+## Correctness
 
 Decryption recovers m because applying both exponents in sequence raises m to the power de:
 
@@ -38,13 +42,7 @@ Since de ≡ 1 (mod φ(n)), there exists a positive integer k such that de = k·
 
 $$m^{de} = m^{k \cdot \varphi(n) + 1} = m \cdot \left(m^{\varphi(n)}\right)^k \pmod{n}$$
 
-Euler's theorem states that m^φ(n) ≡ 1 (mod n) whenever gcd(m, n) = 1, so the bracketed term vanishes and the result is m. The theorem applies because RSA requires m < min(p, q): a value smaller than both prime factors cannot be a multiple of either, which guarantees gcd(m, n) = 1. The same argument holds with e and d swapped, which is why signing (encrypt with d, verify with e) is mathematically equivalent.
-
-The proof via Euler's theorem fails when gcd(m, n) > 1 — that is, when m is a multiple of p or q. For large primes the probability of this occurring at random is approximately 1/p, which is negligible in practice. A complete proof that covers even these edge cases uses CRT applied to the congruences mod p and mod q separately, but the Euler argument handles the relevant range.
-
-## Textbook RSA and the padding gap
-
-In this implementation encryption is deterministic: the same m always produces the same c. An attacker with the public key can precompute a dictionary mapping every possible ciphertext back to its plaintext, which breaks confidentiality for small message spaces. Real deployments prepend random padding to m before encryption (OAEP is the standard scheme), making each encryption probabilistic. The mathematical core developed here is correct; the padding layer is an engineering addition on top of it.
+Euler's theorem states that m^φ(n) ≡ 1 (mod n) whenever gcd(m, n) = 1, so the bracketed term vanishes and the result is m. The actual requirement is exactly this coprimality condition, gcd(m, n) = 1 — nothing more. A convenient sufficient special case is m < min(p, q): a value smaller than both prime factors cannot be a multiple of either, so it automatically satisfies gcd(m, n) = 1. But this is only sufficient, not necessary — plenty of larger m also satisfy gcd(m, n) = 1 and are handled correctly, as the worked example below shows. The same argument holds with e and d swapped, which is why signing (encrypt with d, verify with e) is mathematically equivalent.
 
 ## Complexity
 
@@ -54,13 +52,17 @@ Encryption is O(log e). Since e is chosen by the implementer, it can be a number
 
 The intentional asymmetry — fast encryption, slower decryption — matches the usage pattern: the public key is used by everyone who encrypts, the private key only by the owner who decrypts.
 
+## Edge cases
+
+The proof via Euler's theorem fails when gcd(m, n) > 1 — that is, when m happens to be a multiple of p or q. For large primes the probability of this occurring at random is approximately 1/p, which is negligible in practice. A complete proof that covers even these edge cases uses CRT applied to the congruences mod p and mod q separately, but the Euler argument above handles the relevant range for any realistic message.
+
 ## Worked example
 
 Take p = 7, q = 11 (below the implementation's minimum but useful for hand verification). Then n = 77 and φ(n) = 6 · 10 = 60. Choose e = 13: gcd(13, 60) = 1, confirmed by the Euclidean algorithm. Compute d as the inverse of 13 mod 60: 13 · 37 = 481 = 8 · 60 + 1, so d = 37.
 
 Public key: (77, 13). Private key: (77, 37).
 
-Encrypt m = 19: compute 19^13 mod 77 via square-and-multiply. The result is c = 61.
+Encrypt m = 19: compute 19^13 mod 77 via square-and-multiply. The result is c = 61. Note that m = 19 exceeds min(p, q) = 7, so this falls outside the convenient sufficient case discussed above — but gcd(19, 77) = 1 still holds (77 = 4·19 + 1), which is the only condition Euler's theorem actually needs, so decryption still recovers m correctly.
 
 Decrypt c = 61: compute 61^37 mod 77. The result is 19, recovering the original message.
 

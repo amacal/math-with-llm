@@ -1,6 +1,6 @@
 # Euler's Totient Function
 
-## What the function computes
+## Overview
 
 Euler's totient function φ(n) counts the integers in [1, n] that are coprime to n — that is, integers k where gcd(k, n) = 1. For example, φ(12) = 4 because only {1, 5, 7, 11} share no common factor with 12. The remaining eight numbers are divisible by 2 or 3, which are the prime factors of 12.
 
@@ -34,15 +34,17 @@ The implementation factors n by trial division. A candidate p starts at 2 and in
 
 After the loop, if n > 1, then the remaining n is a prime factor with exponent 1, contributing the factor (n − 1) to the result.
 
-The key correctness invariant is that composite candidates (p = 4, 6, 9, …) never divide the current n, because all their prime factors were already divided out in earlier iterations. So only actual primes do any work.
+## Correctness
 
-## Why the remaining n is always prime
-
-When the loop exits, p·p > n for the current (reduced) n. Suppose n > 1 and n were composite: then n = a·b for some a, b > 1, and at least one of them — say a — satisfies a ≤ sqrt(n). But then a ≤ p−1 was already tested by the loop, and since a divides n it would have been divided out. Contradiction. Therefore n must be prime.
+Two facts must both hold for trial division to compute φ(n) correctly. First, composite candidates (p = 4, 6, 9, …) never actually divide the current n during the loop, because all of their prime factors were already divided out in earlier iterations — so only genuine primes ever do any work, even though the loop naively tries every integer starting from 2. Second, whatever value of n remains after the loop exits must itself be prime: when the loop exits, p·p > n for the current (reduced) n, and if that remaining n were composite, n = a·b for some a, b > 1 with at least one factor — say a — satisfying a ≤ sqrt(n). But then a would have been at most p−1 and already tested by the loop, and since a divides n it would have been divided out already, a contradiction. Therefore the leftover n must be prime, confirming that the final "n > 1" branch correctly contributes exactly one more prime factor with exponent 1.
 
 ## Complexity
 
-The outer loop runs at most O(sqrt(n)) iterations in the worst case. That worst case is when n is a large prime: no factor is found until the loop exits, having tested every p from 2 up to sqrt(n). For highly composite n the loop exits much earlier as factors are removed and the current n shrinks. Each inner division loop runs O(log n) times in total across all primes (since each prime p contributes at most log_p(n) divisions). The dominant cost is the O(sqrt(n)) outer iterations.
+The outer loop runs at most O(sqrt(n)) iterations in the worst case. That worst case is when n is a large prime: no factor is found until the loop exits, having tested every p from 2 up to sqrt(n). For highly composite n the loop exits much earlier as factors are removed and the current n shrinks. The inner division loop runs O(log n) times in total across the entire factorization, regardless of how many distinct primes divide n: every successful division shrinks the current n by a factor of at least 2 (the smallest possible prime), so the number of successful divisions cannot exceed log₂(n) before n reaches 1. The dominant cost is still the O(sqrt(n)) outer iterations, since O(log n) is asymptotically smaller.
+
+## Edge cases
+
+When n = 1, the loop condition p·p ≤ n fails immediately (2·2 = 4 > 1), so no factors are ever multiplied in, and the remaining n = 1 does not satisfy the "n > 1" check either — result correctly stays at its initial value of 1, matching the convention φ(1) = 1 (the only integer in [1, 1] is 1 itself, and gcd(1, 1) = 1). When n is prime, the loop again finds no factor smaller than sqrt(n) that divides it, and the final "n > 1" branch multiplies in exactly (n − 1), correctly recovering φ(p) = p − 1 without ever needing to test p itself as a candidate.
 
 ## Worked example
 

@@ -1,20 +1,32 @@
 # Pollard's Rho Factoring Algorithm
 
-## What the algorithm does
+## Overview
 
 Given a composite integer n, Pollard's Rho finds a non-trivial factor d with 1 < d < n. It does not prove primality — a Miller-Rabin check comes first to confirm that n is composite before the factoring machinery runs. The algorithm is probabilistic: it restarts with a different constant when an attempt fails.
 
 ## The core insight
 
-Let p be any prime factor of n (unknown to us). If we can find two values x and y in [0, n) with x ≡ y (mod p) but x ≢ y (mod n), then p divides |x - y| (by definition of congruence mod p), and p divides n (since p is a factor). A standard property of GCD says that if p divides both arguments, then p divides gcd(|x - y|, n). This forces gcd(|x - y|, n) >= p > 1. Since x ≢ y (mod n) implies n does not divide |x - y| (both values lie in [0, n), so |x - y| < n), the GCD is also strictly less than n. We have found a non-trivial factor.
+Let p be any prime factor of n (unknown to us). If we can find two values x and y in [0, n) with x ≡ y (mod p) but x ≢ y (mod n), then p divides |x - y| (by definition of congruence mod p), and p divides n (since p is a factor). A standard property of GCD says that if p divides both arguments, then p divides their GCD as well, which pins down the quantity of interest:
+
+$$1 < p \leq \gcd(|x - y|,\, n) < n$$
+
+The left inequality says the GCD is a genuine common factor greater than 1, and the right inequality holds because x ≢ y (mod n) means n cannot divide |x - y| (both values lie in [0, n), so |x - y| < n). Together these say gcd(|x - y|, n) is a non-trivial factor of n — exactly what we set out to find.
 
 The key asymmetry is this: we only need a collision mod p, not mod n. The residue space mod p has size p, which is much smaller than n, so collisions appear far sooner than a brute-force search mod n would require.
 
 ## Why O(sqrt(p)) steps suffice: the birthday paradox
 
-The birthday paradox says that if you draw values uniformly at random from a set of size m, you expect a repeated value after approximately sqrt(m) draws. This follows from the probability that all k draws are distinct being approximately e^(-k^2 / 2m), which drops below 1/2 when k ~ sqrt(m).
+The birthday paradox says that if you draw values uniformly at random from a set of size m, you expect a repeated value after approximately sqrt(m) draws. This follows from an approximation for the probability that all k draws are distinct,
 
-The function f(x) = (x^2 + c) mod n, iterated from a starting value, behaves pseudo-randomly modulo any prime factor p. Applying the birthday paradox with m = p: after about sqrt(p) iterations, two sequence values x_i and x_j will satisfy x_i ≡ x_j (mod p). Since p <= sqrt(n) when n has two roughly equal prime factors, we have sqrt(p) <= n^(1/4), giving the overall expected complexity of O(n^(1/4)).
+$$P(\text{all distinct}) \approx e^{-k^2 / 2m}$$
+
+which decays toward zero once k grows past roughly sqrt(m), meaning a repeated value becomes overwhelmingly likely by that point.
+
+The iteration function used to generate the pseudo-random sequence is
+
+$$f(x) = (x^2 + c) \bmod n$$
+
+chosen because squaring is cheap to compute while still mixing the input enough that, modulo any prime factor p of n, the resulting sequence behaves like a stream of independent random draws from {0, ..., p-1}. Applying the birthday paradox with m = p: after about sqrt(p) iterations, two sequence values x_i and x_j will satisfy x_i ≡ x_j (mod p). Since p <= sqrt(n) when n has two roughly equal prime factors, we have sqrt(p) <= n^(1/4), giving the overall expected complexity of O(n^(1/4)).
 
 ## Floyd's cycle detection
 
@@ -26,15 +38,17 @@ The sequence has a "rho" shape (a tail of non-repeating values followed by a cyc
 
 Two failure modes exist. First, if gcd(|x - y|, n) = n, the pointers have collided mod n rather than just mod p — the collision is too strong and yields a trivial result. Second, some values of c produce degenerate sequences that cycle without the pointers ever achieving a useful collision. In both cases, the attempt returns None and the outer loop retries with a different constant c in f(x) = x^2 + c. The values c = 0 and c = 2 are conventionally avoided: c = 0 reduces f to pure squaring (a highly structured sequence) and c = 2 is empirically poor.
 
-Even numbers are handled as a special case before the main algorithm: if n is even, the factor 2 is returned immediately. This is necessary because f(x) = x^2 + c mod n for even n cannot generate a collision mod 2 through the normal sequence dynamics.
-
-## Correctness invariant
+## Correctness
 
 The algorithm is correct whenever it returns a factor d: by construction, d = gcd(|x - y|, n) and 1 < d < n, so d is a non-trivial divisor of n. When it returns None, it signals that no factor was found with the attempted c values and iteration limits — not that n is prime. Primality is the responsibility of Miller-Rabin, called before the factoring loop.
 
 ## Complexity
 
 Expected time: O(n^(1/4)) for a semiprime (n = p * q with p and q roughly equal primes of size sqrt(n)). More precisely O(p^(1/2)) where p is the smallest prime factor of n — smaller factors are found faster. Space: O(1) (two pointers, no stored history).
+
+## Edge cases
+
+Even numbers are handled as a special case before the main algorithm runs: if n is even, the factor 2 is returned immediately without ever constructing the sequence. This is necessary because f(x) = x^2 + c mod n cannot generate a genuine collision mod 2 through the normal sequence dynamics — the residues mod 2 only take two values, and squaring mod 2 is the identity, so the birthday-paradox argument that guarantees fast collisions elsewhere does not carry over to this smallest possible prime factor. Small n also needs care: for n = 1 there is no non-trivial factor to find, and for n itself prime the algorithm is not meant to be called at all, since primality is checked by Miller-Rabin beforehand rather than by Pollard's Rho discovering that no factor exists.
 
 ## Worked example
 

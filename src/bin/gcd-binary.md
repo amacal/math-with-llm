@@ -1,6 +1,6 @@
 # Binary GCD (Stein's Algorithm)
 
-## Key insight
+## Overview
 
 The Euclidean algorithm reduces the pair (a, b) by computing a mod b, which requires integer division. The binary GCD algorithm achieves the same result using only subtraction, comparison, and bit shifts. It rests on two properties of GCD that together replace division entirely.
 
@@ -14,39 +14,21 @@ $$\gcd(2a,\ 2b) = 2 \cdot \gcd(a,\ b) \qquad \gcd(2a,\ b) = \gcd(a,\ b) \quad (b
 
 ## Proofs of the two properties
 
-Both properties are equalities of greatest common divisors. The proof strategy for each follows the pattern established for the Euclidean algorithm: show that the two pairs share the same set of common divisors, then conclude their greatest elements must be equal.
+Both properties are equalities of greatest common divisors, and both are proved the same way: by showing the two pairs share exactly the same set of common divisors, using the two-directions strategy introduced in `gcd-euclidean-basic.md`'s proof of its core identity.
 
-**Property 1: gcd(a, b) = gcd(a − b, b) for a ≥ b.**
-
-We show both directions. Suppose k divides both a and b, so a = kp and b = kq for integers p and q. Then the difference is:
+**Property 1: gcd(a, b) = gcd(a − b, b) for a ≥ b.** Suppose k divides both a and b, so a = kp and b = kq for integers p and q. Then the difference is:
 
 $$a - b = kp - kq = k(p - q)$$
 
-Since p − q is an integer, k divides a − b. Together with k dividing b, k is a common divisor of (a − b, b). For the reverse direction, suppose k divides both a − b and b, writing a − b = ks and b = kq. Rearranging:
+Since p − q is an integer, k divides a − b, and together with k dividing b, k is a common divisor of (a − b, b). For the reverse direction, suppose k divides both a − b and b, writing a − b = ks and b = kq; rearranging gives a = (a−b) + b = ks + kq = k(s+q), so k divides a and is a common divisor of (a, b). Both directions hold, so the greatest common divisors are equal.
 
-$$a = (a - b) + b = ks + kq = k(s + q)$$
-
-So k divides a, and is therefore a common divisor of (a, b). Both directions hold, so the two pairs share exactly the same set of common divisors, which means their greatest elements are equal.
-
-**Property 2: gcd(2a, b) = gcd(a, b) when b is odd.**
-
-Every common divisor of (a, b) is also a common divisor of (2a, b): if k divides a it divides 2a, and if it already divides b the pair (2a, b) is covered. For the reverse direction, suppose d divides both 2a and b. Since d divides b and b is odd, d must itself be odd — if d were even we could write d = 2m, and then 2m dividing b would force b to be even, contradicting the assumption. So d is odd, which means gcd(d, 2) = 1. By Bézout's identity applied to d and 2, there exist integers x and y with:
-
-$$dx + 2y = 1$$
-
-Multiplying both sides by a:
+**Property 2: gcd(2a, b) = gcd(a, b) when b is odd.** Every common divisor of (a, b) is also a common divisor of (2a, b), since if k divides a it divides 2a. For the reverse direction, suppose d divides both 2a and b; since d divides the odd number b, d must itself be odd (an even d dividing b would force b to be even). So gcd(d, 2) = 1, and by Bézout's identity there exist integers x, y with dx + 2y = 1. Multiplying both sides by a:
 
 $$dax + 2ay = a$$
 
-Since d divides 2a, it divides 2ay. Since d trivially divides dax, it divides their sum a. So d divides both a and b, and the two pairs again share the same common divisors.
+Since d divides 2a, it divides 2ay, and since d trivially divides dax, it divides their sum a. So d divides both a and b, and the two pairs again share the same common divisors.
 
-**Property 3: gcd(2a, 2b) = 2 · gcd(a, b).**
-
-By Bézout's identity (produced by the extended Euclidean algorithm), there exist integers x and y such that ax + by = gcd(a, b). Multiplying both sides by 2:
-
-$$(2a)x + (2b)y = 2 \cdot \gcd(a, b)$$
-
-Any common divisor of (2a, 2b) divides every linear combination of 2a and 2b, so it divides 2 · gcd(a, b). In the other direction, since gcd(a, b) divides a it follows that 2 · gcd(a, b) divides 2a; similarly it divides 2b. So 2 · gcd(a, b) is a common divisor of (2a, 2b), and every other common divisor divides it. That makes it the greatest.
+**Property 3: gcd(2a, 2b) = 2 · gcd(a, b).** By Bézout's identity there exist integers x, y with ax + by = gcd(a, b); multiplying both sides by 2 gives (2a)x + (2b)y = 2·gcd(a, b). Any common divisor of (2a, 2b) divides every linear combination of 2a and 2b, so it divides 2·gcd(a, b). In the other direction, since gcd(a, b) divides both a and b, 2·gcd(a, b) divides both 2a and 2b. So 2·gcd(a, b) is a common divisor of (2a, 2b) that every other common divisor divides — making it the greatest.
 
 ## The three reduction cases
 
@@ -64,25 +46,23 @@ When both arguments are odd, neither can be halved directly. The larger is repla
 
 $$\gcd(a,\ b) = \gcd(a - b,\ b) \qquad (a > b,\ a \text{ odd},\ b \text{ odd})$$
 
-## Base case
+## Correctness
 
-The loop runs while both arguments are positive, and exits as soon as one reaches zero. At that point, the other holds the GCD of the original pair after all common factors of 2 have been stripped. Since k counts how many times both arguments were halved together, the final answer is:
+The algorithm terminates because at least one bit is eliminated every two steps: the subtraction case always produces an even result, guaranteeing the next step is a shift, and the shift case strictly reduces the bit length of one argument. So no two consecutive steps can both be subtractions, and every subtraction is followed by at least one shift. Since both arguments stay non-negative and their total bit length decreases steadily, the process must reach zero in a finite number of steps.
+
+The loop runs while both arguments are positive and exits as soon as one reaches zero. At that point, the other holds the GCD of the original pair after all common factors of 2 have been stripped, and since k counts how many times both arguments were halved together, the final answer is:
 
 $$\text{result} = (a + b) \cdot 2^k$$
 
-Writing a + b rather than, say, max(a, b) works because at termination exactly one of the two is zero. Adding zero leaves the survivor unchanged, so a + b picks out the non-zero value without an extra branch.
-
-## Termination
-
-The algorithm terminates because at least one bit is eliminated every two steps. The subtraction case produces an even result, guaranteeing the next step is a shift. The shift case strictly reduces the bit length of one argument. So no two consecutive steps can both be subtractions, and every subtraction is followed by at least one shift. This ensures that the total bit length of the pair decreases steadily, and since both arguments are non-negative integers, the process must reach zero in a finite number of steps.
+Writing a + b rather than, say, max(a, b) works because at termination exactly one of the two is zero, and adding zero leaves the survivor unchanged, so a + b picks out the non-zero value without an extra branch.
 
 ## Complexity
 
-The interleaving argument above bounds the number of steps. Starting from inputs of at most n bits each, every two steps shorten at least one argument by at least one bit. The number of steps is therefore at most proportional to the total bit length of the pair:
+The interleaving argument above bounds the number of steps: starting from inputs of at most n bits each, every two steps shorten at least one argument by at least one bit, so the number of steps is at most proportional to the total bit length of the pair:
 
 $$O(\log(\min(a, b))) \text{ steps}$$
 
-This matches the Euclidean algorithm. The practical advantage of binary GCD is that it uses only shifts and subtracts — single-cycle operations on virtually all hardware — whereas Euclidean GCD requires integer division, which is slower on many processors.
+This matches the Euclidean algorithm asymptotically, but the constant factor differs in practice. The Euclidean algorithm can eliminate many bits in a single division — for example gcd(1000, 3) reduces straight to gcd(3, 1), discarding almost the entire bit length of the first argument in one step — while binary GCD, without division, must work bit by bit. Binary GCD's advantage is that it uses only shifts and subtracts, single-cycle operations on virtually all hardware, whereas Euclidean GCD requires integer division, which is slower on many processors; which algorithm wins in practice depends on the relative cost of division versus the number of bits eliminated per step.
 
 ## Edge cases
 
@@ -118,14 +98,4 @@ One argument is zero; the survivor is 3. Restoring the stripped factor:
 
 $$\text{result} = 3 \cdot 2^1 = 6$$
 
-Verification: 24 = 4 × 6 and 18 = 3 × 6, and since 4 and 3 share no common factor, no divisor larger than 6 divides both. ✓
-
-The step from gcd(3, 9) to gcd(3, 6) and then immediately to gcd(3, 3) illustrates the key structural guarantee: the subtraction produced an even number (6 = 9 − 3), and the next step was forced to be a shift. This is why subtraction and shift must interleave, and why the bit length of the pair decreases steadily.
-
-## Contrast with Euclidean GCD
-
-The Euclidean algorithm can eliminate many bits in a single division. For example:
-
-$$\gcd(1000,\ 3) \;\to\; \gcd(3,\ 1)$$
-
-One step discards almost the entire bit length of the first argument. Binary GCD cannot do this — without division it must work bit by bit. The asymptotic complexity is the same, but the constant factor differs: Euclidean GCD is typically faster on hardware with cheap division, while binary GCD is preferable when division is slow or unavailable.
+Verification: 24 = 4 × 6 and 18 = 3 × 6, and since 4 and 3 share no common factor, no divisor larger than 6 divides both. The step from gcd(3, 9) to gcd(3, 6) and then immediately to gcd(3, 3) illustrates the key structural guarantee: the subtraction produced an even number (6 = 9 − 3), and the next step was forced to be a shift, which is why subtraction and shift must interleave and why the bit length of the pair decreases steadily.

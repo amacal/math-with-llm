@@ -12,7 +12,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - When the user states an idea with imprecise notation, do not correct and move on. Hold at the imprecise statement — ask them to restate it precisely before continuing. Only supply the correction after a genuine attempt.
 
 ## Pacing and assumed knowledge
-- Do not assume fluency in the mathematical background a problem depends on. Every concept used as a tool must have been explicitly covered in a prior session before it can be treated as known. Check HISTORY.md before assuming something is background.
+- Do not assume fluency in the mathematical background a problem depends on. Every concept used as a tool must have been explicitly covered in a prior session before it can be treated as known. Check the session history files (`HISTORY-YYYY.MM.md`) before assuming something is background.
 - Calibrate question difficulty so the user can answer with genuine understanding, not just pattern-matching. A question the user can answer correctly and quickly, because they actually understand it, is better than a question that over-challenges and stalls the session. Fluency comes from many correct reps, not from struggling with questions that are too far ahead.
 - When introducing a new concept, anchor it with a concrete small example and an intuitive picture before asking any question about it. The user should be able to see what is happening before being asked to reason about why.
 - Intuition first, formalism second. Name the idea in plain language before giving it a formal label. Never lead with notation.
@@ -44,15 +44,32 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Topic selection must be deliberate, not just the next connected problem. Explicitly consider cross-domain options (algorithms, probability, linear algebra, numerical methods) alongside natural extensions. Do not default to the chain.
 
 ## Memory
-- All persistent context lives in this file, in `src/bin/*.md` notes files, and in `HISTORY.md`.
+- All persistent context lives in this file, in `src/bin/*.md` notes files, and in the `HISTORY-YYYY.MM.md` session history files.
 - Do not store personal data anywhere in the repo.
-- This repo is worked on inside a dev container. Do not rely on Claude's auto-memory system (files outside the repo, e.g. under `~/.claude/projects/.../memory/`) to persist anything load-bearing across sessions — the container can be rebuilt and that state is not guaranteed to survive. Anything that must persist belongs inside the repo itself: this file, `HISTORY.md`, or the `src/bin/*.md` notes files.
+- This repo is worked on inside a dev container. Do not rely on Claude's auto-memory system (files outside the repo, e.g. under `~/.claude/projects/.../memory/`) to persist anything load-bearing across sessions — the container can be rebuilt and that state is not guaranteed to survive. Anything that must persist belongs inside the repo itself: this file, the `HISTORY-YYYY.MM.md` session history files, or the `src/bin/*.md` notes files.
 
-## HISTORY.md
-- `HISTORY.md` is owned and maintained by Claude.
-- It records every session in reverse chronological order (most recent first): date, concept, file, key ideas, and which prior entries it depends on.
-- After each session, append a new entry following the existing format. Derive the date from the git commit that introduced the file.
-- The dependency chain in each entry is the primary input for deciding when a theory review is necessary before introducing a new problem.
+## Session history (`HISTORY-YYYY.MM.md`)
+- Session history is split one file per calendar month — `HISTORY-2026.06.md`, `HISTORY-2026.07.md`, and so on — instead of a single ever-growing `HISTORY.md`. There is no monolithic `HISTORY.md`; do not recreate one.
+- Each monthly file is owned and maintained by Claude, exactly like its predecessor was.
+- Within a file, entries are ordered by date descending (most recent first): date, concept, file, key ideas, and which prior entries it depends on.
+- To append a new session: derive the date from the git commit that introduced the file, work out its `YYYY.MM`, and add the entry to the top of that month's file. If the month's file doesn't exist yet, create it with a minimal header only — `# Session History — {YYYY-MM}` plus a one-line pointer back to this file for the entry format and a `Previous:` / `Next:` link to the adjacent monthly file(s) if any exist. Do not repeat the entry-format instructions inside the monthly file itself — they live here, once.
+- Filenames sort chronologically as plain strings, so the most recent month is always the alphabetically-last `HISTORY-*.md` file — use that instead of maintaining a separate index file.
+- A session's dependency chain will often point into an earlier monthly file; that's expected and not a problem to fix. The dependency chain, not the file boundary, decides whether a theory review is needed before introducing a new problem, so follow a chain into as many monthly files as it reaches.
+- Every entry follows this fixed template, in this order:
+  ```
+  ## {YYYY-MM-DD} — {Concept Title}
+  **File:** `src/bin/{filename}.rs`
+
+  {One paragraph, roughly 5-8 sentences: the core idea in one sentence, the key
+  fact or invariant that makes it correct, any real bug or edge case found
+  during the session, and the complexity result.}
+
+  **Depends on:** {comma-separated concept names, or "—" if none}
+  **Unlocks:** {comma-separated concept names this enables, or "—" if not yet known}
+  ```
+- Write the summary paragraph in plain ASCII math (`a^k mod n`, not `$$a^k \pmod n$$`) and flowing prose with no "Key result:" style labels — the session history files are a scannable index, not a teaching document, so they skip the `$$` display-math rule that applies to `src/bin/*.md`.
+- Keep entries comparable in length to each other — roughly 5-8 sentences each. If a session genuinely needs more (a large synthesis session), trim to the load-bearing facts rather than including everything from the notes file; the full detail belongs in the notes file, not here.
+- The `Unlocks` field is often unknown when an entry is first written. Whenever a later session's `Depends on` references an earlier concept, go back and backfill that earlier entry's `Unlocks` field — regardless of which monthly file it lives in — rather than leaving it silently blank once the forward link is known.
 
 ## Notes files ownership
 - All `src/**.md` files are owned and maintained by Claude, not the user.
@@ -62,13 +79,28 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - If something is wrong in a `.rs` or other non-`.md` file, point it out and ask the user to fix it — never silently ignore it.
 
 ## Notes writing style
-- Write in full prose paragraphs, not bullet points. Each paragraph should build an argument across multiple sentences before stopping.
-- All math goes on its own display line using `$$...$$`. Do not use inline math inside sentences — keep prose and formulas visually separate. Multiple closely related equations may share one display line separated by `\qquad` when they express a group of facts of the same kind (e.g. definitions of several variables at once).
+- Write in full prose paragraphs, not bullet points. Each paragraph should build an argument across multiple sentences before stopping. This applies everywhere in a notes file, including worked examples — do not switch to a bulleted trace just because the content is a step-by-step computation.
+- All math goes on its own display line using `$$...$$`. Do not use inline math inside sentences — keep prose and formulas visually separate. This includes notation like divisibility: never write `p | n` inline; spell it out in prose as "p divides n" (or put the divisibility statement in its own `$$` block if it needs to stand alone as a formula). Multiple closely related equations may share one display line separated by `\qquad` when they express a group of facts of the same kind (e.g. definitions of several variables at once).
 - Every formula gets a sentence before it that explains why you are about to write it, and a sentence after that says what it means, not just what it says.
-- `$$...$$` math formatting is for `.md` files only. In terminal output (chat responses), write math in plain text — use plain ASCII operators and avoid LaTeX notation.
+- `$$...$$` math formatting is for `.md` files under `src/bin/` only. The `HISTORY-YYYY.MM.md` session history files and terminal output (chat responses) use plain ASCII math notation instead — see the "Session history" section below for why.
 - When a proof technique appears for the first time (e.g. proving set equality via two directions, proof by contradiction, induction), explain the technique in plain language before applying it. Do not assume the reader has seen it before.
 - Write as a patient student explaining to a peer — slow, explicit, treating nothing as obvious. A reader who has never seen the argument should be able to follow every step.
 - Avoid one-sentence paragraphs. If a thought needs only one sentence, it probably belongs attached to the paragraph before or after it.
+- When a concept was already fully defined or derived in an earlier session's notes (e.g. order of an element, Lagrange's theorem, modular exponentiation), do not re-derive it from scratch. Cite the earlier file by name in one sentence and state only the specific fact being reused. Re-derive only the parts that are genuinely new in this session.
+
+### Canonical section structure
+Every notes file follows this section order. Headings are sentence case (`## Worked example`, not `## Worked Example`).
+1. `# {Problem Title}` — matches the problem name.
+2. `## Overview` — plain-language statement of what problem is being solved or what is being computed, with the core intuition given before any formalism. This is the fixed name for the opening section; do not use ad hoc alternatives like "Key insight" or "What the function computes."
+3. Zero or more bespoke theory/derivation sections, named for their specific content (e.g. `## Multiplicativity`, `## The general formula`). These vary file to file because the underlying math varies — only the outer skeleton (steps 2, 4, 5, 6, 7) is fixed.
+4. `## Correctness` — the fixed name for the correctness argument or invariant. Do not use variants like "Correctness argument," "Correctness invariant," "Proof of the core identity," or "Why X always works."
+5. `## Complexity` — always immediately follows Correctness.
+6. `## Edge cases` — include whenever there is a genuine edge case worth calling out (zero/negative/degenerate inputs, overflow boundaries, probabilistic failure modes). Give it its own section rather than folding it into a paragraph of Correctness or Complexity.
+7. `## Worked example` — always the last section, always full prose, always a concrete non-trivial input traced by hand.
+- Do not add `## Depends on` or `## Unlocks` sections to a notes file — that information lives solely in the session history files (`HISTORY-YYYY.MM.md`) so there is one source of truth for the dependency chain. If a specific fact from a prior session is reused, cite it inline in prose where it's used instead.
+- Target roughly 700-1500 words for a standard single-concept session — comparable in depth to its siblings, not wildly shorter or longer. Judge size by word count, not line count: every notes file in this repo writes each paragraph as one unwrapped markdown line, so `wc -l` under-counts content depth badly (a 1000-word paragraph and a 100-word paragraph can both be "one line"). Two documented exceptions to the target band exist, and both must be justified explicitly in the file rather than left to drift silently:
+  - A session that genuinely synthesizes several prior concepts (e.g. Number Theoretic Transform, Primitive Roots mod p — each pulling in five or more earlier sessions) may run longer. Say so in the Overview.
+  - A session that is genuinely a thin wrapper over one previously-proven algorithm (e.g. Modular Inverse over Extended Euclidean GCD, CRT over Modular Inverse) may run shorter. Do not pad a thin wrapper with filler just to hit the target — say in the Overview or Complexity section that it is a thin wrapper and why, and let it stay short.
 
 ## Session closing ritual
 At the end of every session, after the correctness and complexity wrap-up, always provide:
