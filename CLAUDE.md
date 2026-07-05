@@ -70,6 +70,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Write the summary paragraph in plain ASCII math (`a^k mod n`, not `$$a^k \pmod n$$`) and flowing prose with no "Key result:" style labels — the session history files are a scannable index, not a teaching document, so they skip the `$$` display-math rule that applies to `src/bin/*.md`.
 - Keep entries comparable in length to each other — roughly 5-8 sentences each. If a session genuinely needs more (a large synthesis session), trim to the load-bearing facts rather than including everything from the notes file; the full detail belongs in the notes file, not here.
 - The `Unlocks` field is often unknown when an entry is first written. Whenever a later session's `Depends on` references an earlier concept, go back and backfill that earlier entry's `Unlocks` field — regardless of which monthly file it lives in — rather than leaving it silently blank once the forward link is known.
+- A session derived from outside reading (a book, paper, etc.) rather than a `src/bin` problem uses `**Source:** {Book Title}, Chapter {N}, Section {N.N}` in place of the `**File:**` line. Everything else about the entry — dating, ordering, the summary paragraph, Depends on/Unlocks — follows the same rules as a src/bin session.
 
 ## Notes files ownership
 - All `src/**.md` files are owned and maintained by Claude, not the user.

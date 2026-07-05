@@ -6,6 +6,16 @@ Part of the session history series; see `CLAUDE.md`'s "Session history" section 
 
 ---
 
+## 2026-07-05 — Number Theory Step by Step, Section 1.3: Euclidean Algorithm
+**Source:** *Number Theory Step by Step* (Kuldeep Singh), Chapter 1, Section 1.3 (Exercises 1-19)
+
+Section 1.3 proves Bezout's Identity via well-ordering (the least positive value of a set S = {ax+by : ax+by>0} is shown to be gcd(a,b)) and builds the Euclidean Algorithm and its reverse on top of it. Worked gcd(156,18)=6 via 156=18*8+12, 18=12*1+6, 12=6*2+0, then back-substituted to find 156(-1)+18(9)=6, reusing the same Bezout machinery already coded in gcd-euclidean-extended.rs but running it by hand in the book's back-substitution style instead of the forward-threaded style used in that file. Euclid's Lemma (a|bc, gcd(a,b)=1 => a|c) got an intuitive prime-factorization argument via 198|5x => 198|x: since gcd(198,5)=1, none of 198's prime factors (2, 3^2, 11) can hide inside the 5, so they must all be in x. The harder proof exercises (12, 15, 17, 19) all resolved via two reused techniques: proving set-equality of common divisors in both directions (the same technique behind gcd(a,b)=gcd(b,r) in gcd-euclidean-basic.md), and mutual divisibility (X|Y and Y|X, both positive, so X=Y) -- the latter closed exercise 17's proof that gcd(ma,mb)=mg. Exercise 12(ii)'s induction needed an extra multiplicativity lemma (gcd(a,m)=1 and gcd(b,m)=1 implies gcd(ab,m)=1), proved by multiplying the two Bezout equations a*x1+m*y1=1 and b*x2+m*y2=1 together and regrouping. Recurring precision slips: mixing up which quantity a divisibility statement applies to (claiming "d|x, d|y" instead of "d|a, d|b"), and asserting "gcd(ma,mb) = mg" directly from a linear combination instead of the weaker "gcd(ma,mb) | mg" that the combination actually gives.
+
+**Depends on:** Extended Euclidean GCD, Modular Inverse (both reused the Bezout machinery), gcd-euclidean-basic's Proposition 1.14 argument
+**Unlocks:** Section 1.4 (Linear Diophantine Equations)
+
+---
+
 ## 2026-07-04 — Number Theoretic Transform (NTT)
 **File:** `src/bin/poly-mul-ntt.rs`
 
