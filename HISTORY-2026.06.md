@@ -132,7 +132,7 @@ Euler's totient function phi(n) counts the integers in [1, n] coprime to n. The 
 The Chinese Remainder Theorem finds the unique solution x mod (m1*m2) to two congruences with coprime moduli m1 and m2. The construction writes x = a1 + k*m1 and substitutes into the second congruence to solve for k, giving k = (a2 - a1) * m1^(-1) mod m2 via the modular inverse of m1 mod m2. Uniqueness follows because any two solutions differ by a multiple of both moduli, and since the moduli are coprime their product must divide that difference, which is impossible for two distinct solutions inside the same range of size m1*m2. A real bug surfaced during the session: (a2 - a1) must be reduced mod m2 before being treated as a value to multiply, since a naive unsigned subtraction can underflow when a2 < a1. Complexity is O(log(min(m1, m2))), dominated by the extended Euclidean algorithm inside the modular inverse call.
 
 **Depends on:** Modular Inverse (and transitively Extended Euclidean GCD)
-**Unlocks:** Miller-Rabin Primality Test (Carmichael number analysis via CRT); proposed as the reconstruction mechanism for a future multi-modulus NTT
+**Unlocks:** Miller-Rabin Primality Test (Carmichael number analysis via CRT), Multi-modulus NTT with CRT Reconstruction (`poly-mul-crt.rs`)
 
 ---
 

@@ -6,6 +6,16 @@ Part of the session history series; see `CLAUDE.md`'s "Session history" section 
 
 ---
 
+## 2026-07-05 — Multi-Modulus NTT with CRT Reconstruction
+**File:** `src/bin/poly-mul-crt.rs`
+
+Multi-modulus NTT multiplies polynomials whose output coefficients exceed any single NTT prime by running the NTT independently modulo three primes (998244353, 985661441, 469762049) and recovering each true coefficient via two successive CRT calls. The key correctness condition is that c[k] < p1*p2*p3 for every output coefficient: uniqueness of the CRT solution then forces the recovered value to equal c[k] exactly, since c[k] itself satisfies all three congruences by construction. When a single prime p suffices depends on whether n*B^2 < p, where n is the transform length and B bounds the input coefficients; the three-prime product (~4.6e26) pushes this threshold far above u64::MAX, so any output coefficient that fits in u64 is guaranteed exact. Two bugs were found: the inverse NTT divides by the transform size n=16, not by p-1, and these coincide only for p=17 (the small test prime), masking the error until a production prime was used; and the CRT chaining loop initially accumulated against the raw p1 residues at every step instead of the running combined residue, causing the second CRT call to silently ignore the p2 information. The CRT function was widened to u128 throughout to handle intermediate moduli up to p1*p2*p3. Complexity is O(n log n), dominated by the three NTT passes; reconstruction is O(n) with a constant log(p) factor absorbed into the constant.
+
+**Depends on:** Number Theoretic Transform (NTT), Chinese Remainder Theorem
+**Unlocks:** —
+
+---
+
 ## 2026-07-05 — Number Theory Step by Step, Section 1.3: Euclidean Algorithm
 **Source:** *Number Theory Step by Step* (Kuldeep Singh), Chapter 1, Section 1.3 (Exercises 1-19)
 
@@ -22,7 +32,7 @@ Section 1.3 proves Bezout's Identity via well-ordering (the least positive value
 NTT multiplies two polynomials in O(n log n) by evaluating both at n points and multiplying pointwise, instead of convolving coefficients directly — using the facts that a degree-<=d polynomial is determined by d+1 points, and that evaluating a product at a point equals the product of the two values there. The n points are the powers of h = g^((p-1)/n), an element of order exactly n built from a primitive root g. Fast evaluation splits a polynomial into even/odd halves via P(x) = E(x^2) + x*O(x^2); because h^(n/2) = -1, the pair (h^k, h^(k+n/2)) squares to the same value, letting this halving recurse all the way down whenever n is a power of 2. Recursive correctness follows by induction on the combine formula, and the inverse transform reuses the same routine with h^(-1) in place of h plus a final division by n, justified by an orthogonality identity proved via telescoping. The in-place (offset, stride) implementation surfaced five real bugs: a wrong base case, a read-position formula that assumed contiguous instead of interleaved halves, a read/write clobbering hazard needing a scratch buffer, a twiddle factor that must advance with the loop index rather than staying fixed, and a zero-padding direction mistake at the convolution level. Complexity is T(n) = 2T(n/2) + O(n) = O(n log n), the Master theorem's boundary case, versus Karatsuba's O(n^log2 3) where the branching factor exceeds the halving factor.
 
 **Depends on:** Primitive Roots mod p (root construction, order-of-a-power lemma), Naive Polynomial Multiplication (convolution baseline, cyclic/linear distinction), Miller-Rabin Primality Test (two-square-roots-of-1 fact), Euler's Theorem / Lagrange's theorem (order divides group order), Modular Inverse (computing h^-1, n^-1), Karatsuba Multiplication (Master theorem contrast)
-**Unlocks:** Multi-modulus NTT with CRT reconstruction (combining results mod several primes via `gcd-crt.rs` to exceed any single prime's representable range) — proposed as the next session; fast big-integer multiplication via NTT as an alternative to Karatsuba
+**Unlocks:** Multi-modulus NTT with CRT Reconstruction (`poly-mul-crt.rs`)
 
 ---
 

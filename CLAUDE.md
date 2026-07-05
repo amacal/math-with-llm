@@ -110,6 +110,10 @@ At the end of every session, after the correctness and complexity wrap-up, alway
 
 Do not skip this for short or easy sessions.
 
+After the skill assessment and book recommendations, handle the written artifacts using two sequential agent calls:
+1. Spawn a **write agent** (fork) using the prompt in `.skills/session-close.md`. This agent writes the notes file and history entry, keeping the raw file I/O out of your context.
+2. Once the write agent finishes, spawn a **verify agent** (fork) using the prompt in `.skills/session-verify.md`. This agent audits the output and reports any CLAUDE.md violations. If violations are found, fix them directly (do not spawn another agent for this).
+
 ## Workflow
 - Proactively read the current working file and run its tests whenever the user says they've made a change, without waiting to be asked.
 - The user commits to GitHub manually at the end of each session.
