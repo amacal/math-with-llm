@@ -142,7 +142,7 @@ The Chinese Remainder Theorem finds the unique solution x mod (m1*m2) to two con
 The modular inverse of a mod m is a thin wrapper over extended GCD: it exists exactly when gcd(a, m) = 1, and when it does, the Bezout coefficient x from a*x + m*y = gcd(a,m) = 1 is the answer after normalizing into the range [0, m). Existence was explored by hand with a = 2, m = 4, where gcd(2,4) = 2 != 1 confirms no inverse exists in that case. Normalization uses m - |x| rather than (x + m) % m, which avoids overflow when m is close to i64::MAX and x is negative. The result satisfies a * a^(-1) = 1 mod m by construction, which is exactly the defining property being computed. Complexity is O(log(min(a, m))), inherited directly from the extended Euclidean algorithm underneath.
 
 **Depends on:** Extended Euclidean GCD
-**Unlocks:** Chinese Remainder Theorem, Baby-Step Giant-Step, RSA Cryptosystem, Number Theoretic Transform — computing modular inverses throughout; Number Theory Step by Step Section 1.3 (Bezout machinery reused for back-substitution)
+**Unlocks:** Chinese Remainder Theorem, Baby-Step Giant-Step, RSA Cryptosystem, Number Theoretic Transform — computing modular inverses throughout; Number Theory Step by Step Section 1.3 (Bezout machinery reused for back-substitution), Section 1.4 (Linear Diophantine Equations)
 
 ---
 
@@ -152,7 +152,7 @@ The modular inverse of a mod m is a thin wrapper over extended GCD: it exists ex
 Extended Euclidean GCD augments the ordinary algorithm to also produce Bezout coefficients x and y such that a*x + b*y = gcd(a, b). The coefficients are threaded through the same reduction steps used by the basic algorithm: each new remainder inherits updated coefficients by direct substitution, seeded with (x_a, y_a) = (1, 0) and (x_b, y_b) = (0, 1). The loop invariant holds at every step — a_current = a_initial * x_a + b_initial * y_a — which is what guarantees the final coefficients are correct once a_current reaches the gcd. An overflow edge case, when the quotient q exceeds i64::MAX, can only occur when b = 1, meaning the loop is about to exit anyway, so the discarded coefficient update never affects the result. Termination and complexity are identical to the basic Euclidean algorithm: O(log(min(a,b))) via Lame's theorem.
 
 **Depends on:** Euclidean GCD
-**Unlocks:** Modular Inverse — a thin wrapper that reads the Bezout coefficient directly off this algorithm; Number Theory Step by Step Section 1.3 (Bezout machinery reused for back-substitution)
+**Unlocks:** Modular Inverse — a thin wrapper that reads the Bezout coefficient directly off this algorithm; Number Theory Step by Step Section 1.3 (Bezout machinery reused for back-substitution), Section 1.4 (Linear Diophantine Equations)
 
 ---
 
