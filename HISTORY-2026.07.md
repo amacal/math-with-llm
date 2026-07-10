@@ -6,6 +6,16 @@ Part of the session history series; see `CLAUDE.md`'s "Session history" section 
 
 ---
 
+## 2026-07-10 — Integer Square Root
+**File:** `src/bin/mod-isqrt.rs`
+
+isqrt(n) computes the largest r with r^2 <= n using only integer bisection, motivated directly by a floating-point sqrt precision bug flagged in the segmented sieve's notes. An early n/2 upper bound was shown to fail for n = 1, 2, 3, but the crudest possible bracket lo=0, hi=n turned out to cost the same O(log n) asymptotic complexity as any tighter bound, since log(sqrt(n)) = log(n)/2 is only a constant-factor difference. Hand-tracing bisection on n=2 surfaced two real stalls: a floor-rounded mid = (lo+hi)/2 combined with lo=mid on the non-overshoot branch never advances once hi = lo+1, and setting hi=mid on the overshoot branch is a no-op whenever mid already equals hi. Both were fixed together by discarding mid entirely on overshoot (hi = mid-1, since an overshooting mid can never be the answer) and rounding mid up rather than down, which as a side effect absorbs the final two-candidate check into the loop itself instead of needing a separate check after it stops. Overflow is handled by treating any checked-multiplication overflow of mid*mid as an automatic overshoot, sound because n itself is bounded by the same 64-bit range; a narrower edge case, n = u64::MAX causing hi-lo+1 to overflow on the very first iteration, is handled with a saturating add whose resulting off-by-one is harmless since the inflated mid is discarded by the overshoot branch regardless. Complexity is O(log n), an exponential improvement over a linear scan from 0.
+
+**Depends on:** — (self-contained bisection algorithm; motivated by, but not technically dependent on, the floating-point sqrt bug flagged in Segmented Sieve's notes)
+**Unlocks:** —
+
+---
+
 ## 2026-07-08 — Number Theory Step by Step, Section 1.4: Linear Diophantine Equations
 **Source:** *Number Theory Step by Step* (Kuldeep Singh), Chapter 1, Section 1.4 (Exercises 1-16, Supplementary Problems 1.1-1.24)
 
