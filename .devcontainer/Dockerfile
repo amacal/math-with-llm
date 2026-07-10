@@ -6,8 +6,8 @@ RUN sudo apt-get upgrade -y
 RUN sudo apt-get install -y linux-perf
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
-RUN rustup update 1.96.0
-RUN rustup default 1.96.0
+RUN rustup update 1.97.0
+RUN rustup default 1.97.0
 RUN rustup component add rustfmt
 RUN rustup component add clippy
 RUN rustup target add x86_64-unknown-none

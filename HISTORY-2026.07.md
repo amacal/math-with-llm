@@ -6,6 +6,16 @@ Part of the session history series; see `CLAUDE.md`'s "Session history" section 
 
 ---
 
+## 2026-07-10 — Continued Fractions
+**File:** `src/bin/gcd-euclidean-fraction.rs`
+
+Continued fractions rewrite a/b as a nested tower of integer parts and reciprocals, and the headline result this session is that this sequence of terms is exactly the sequence of Euclidean algorithm quotients on (a, b), not just analogous to it, since both processes repeatedly apply the same division equation a = b*q + r; the induction carries through because at every stage both processes are dividing the identical pair of remainders, and both terminate together once a remainder hits 0. A second result gives a fast way to reconstruct the truncated fraction at each depth (the k-th convergent, p_k/q_k) via the linear recurrence p_k = a_k*p_(k-1)+p_(k-2) (and the same for q), derived by showing that extending the truncation by one term is equivalent to substituting a_(k-1) -> a_(k-1)+1/a_k into the previous formula and clearing the introduced fraction by multiplying through by a_k. Applying both results to sqrt(2) gave its continued fraction expansion [1;2,2,2,...], derived by rationalizing 1/(sqrt(2)-1) = sqrt(2)+1 and noticing the resulting state repeats forever; the convergents of that expansion were then shown, by hand and in code, to satisfy p_k^2 - 2*q_k^2 = +-1 exactly, an instance of Pell's equation that gives a zero-floating-point test oracle for approximation quality. A genuine test bug surfaced along the way: a hand-derived term list for 13/8 was both too short (three terms instead of the correct five, 1,1,1,1,2) and had an internally-inconsistent expected convergent, caught by re-running the Euclidean algorithm by hand rather than trusting the first guess. The session implements the convergent recurrence and the sqrt(2) approximation but stops short of a `continued_fraction_terms(a,b)` function driven by the Euclidean algorithm itself; the rational-number tests use hand-computed term lists instead. Complexity is O(n) for computing convergents from a term list of length n, and would be O(log(min(a,b))) for generating a rational's terms via the Euclidean algorithm, per Lame's theorem.
+
+**Depends on:** Euclidean GCD (division-with-remainder mechanics, Lame's theorem), Extended Euclidean GCD (the incremental-state-threading design reused for computing convergents alongside a loop)
+**Unlocks:** Pell's equation (the identity p_k^2-2q_k^2=+-1 was discovered but the equation itself was not solved as a Diophantine problem in its own right), Wiener's attack on RSA (flagged as a cryptographic application of convergents, not yet pursued), `continued_fraction_terms(a,b)` (the Euclidean-quotient generator itself, proven as theory this session but not yet implemented)
+
+---
+
 ## 2026-07-10 — Newton's Method for Integer Square Root
 **File:** `src/bin/mod-isqrt-newton.rs`
 
