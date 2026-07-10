@@ -6,13 +6,23 @@ Part of the session history series; see `CLAUDE.md`'s "Session history" section 
 
 ---
 
+## 2026-07-10 — Newton's Method for Integer Square Root
+**File:** `src/bin/mod-isqrt-newton.rs`
+
+Newton's method computes isqrt(n) by iterating x1 = (x0 + n/x0)/2, derived from scratch as the x-intercept of the tangent line to f(x) = x^2 - n at the current guess x0, and shown to converge quadratically (e1 = e0^2/(2*x0), versus bisection's geometric e_(k+1) = c*e_k) via the substitution s = sqrt(n), e0 = x0 - s. Hand-tracing the integer-truncated version on n = 8 (8, 4, 3, 2, then back to 3) revealed the sequence never settles at a fixed point but enters a 2-3 cycle, which falsified the naive invariant "x0 >= sqrt(n)" (the final value 2 is below sqrt(8) ~= 2.828) and motivated the real invariant x0 >= r = floor(sqrt(n)) instead, together with a stopping rule of x1 >= x0 (not x1 == x0), returning x0. The invariant's lower bound follows from AM-GM ((a+b)/2 >= sqrt(a*b)) applied to x0 and n/x0, whose product is n; the upper-bound half (the sequence strictly decreases while x0 > r) follows because x0 > r forces x0 >= r+1, hence x0^2 > n by the definition of r, hence n/x0 < x0. Complexity has two phases: an initial halving phase indistinguishable from bisection (since n/x0 is tiny while x0 >> r, taking about (1/2)*log2(n) steps), followed by a much smaller O(log log n) quadratic tail once x0 nears r, so overall complexity is O(log n) — the same class as mod-isqrt-bisect.rs's bisection, not asymptotically faster, since the search starts far from the root. Overflow at x0 = n = u64::MAX is handled with a saturating add, whose off-by-one is harmless since the resulting guess remains a massive overestimate that the strict-decrease argument still corrects on the next step. All tests pass across low, mid, and high (u64::MAX-adjacent) ranges.
+
+**Depends on:** Integer Square Root (`mod-isqrt-bisect.rs`) — same problem, contrasting algorithm and stopping-condition reasoning
+**Unlocks:** —
+
+---
+
 ## 2026-07-10 — Integer Square Root
-**File:** `src/bin/mod-isqrt.rs`
+**File:** `src/bin/mod-isqrt-bisect.rs`
 
 isqrt(n) computes the largest r with r^2 <= n using only integer bisection, motivated directly by a floating-point sqrt precision bug flagged in the segmented sieve's notes. An early n/2 upper bound was shown to fail for n = 1, 2, 3, but the crudest possible bracket lo=0, hi=n turned out to cost the same O(log n) asymptotic complexity as any tighter bound, since log(sqrt(n)) = log(n)/2 is only a constant-factor difference. Hand-tracing bisection on n=2 surfaced two real stalls: a floor-rounded mid = (lo+hi)/2 combined with lo=mid on the non-overshoot branch never advances once hi = lo+1, and setting hi=mid on the overshoot branch is a no-op whenever mid already equals hi. Both were fixed together by discarding mid entirely on overshoot (hi = mid-1, since an overshooting mid can never be the answer) and rounding mid up rather than down, which as a side effect absorbs the final two-candidate check into the loop itself instead of needing a separate check after it stops. Overflow is handled by treating any checked-multiplication overflow of mid*mid as an automatic overshoot, sound because n itself is bounded by the same 64-bit range; a narrower edge case, n = u64::MAX causing hi-lo+1 to overflow on the very first iteration, is handled with a saturating add whose resulting off-by-one is harmless since the inflated mid is discarded by the overshoot branch regardless. Complexity is O(log n), an exponential improvement over a linear scan from 0.
 
 **Depends on:** — (self-contained bisection algorithm; motivated by, but not technically dependent on, the floating-point sqrt bug flagged in Segmented Sieve's notes)
-**Unlocks:** —
+**Unlocks:** Newton's Method for Integer Square Root (`mod-isqrt-newton.rs`) — contrasting algorithm for the same problem, quadratic convergence versus geometric
 
 ---
 
