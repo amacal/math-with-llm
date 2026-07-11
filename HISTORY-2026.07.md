@@ -6,6 +6,16 @@ Part of the session history series; see `CLAUDE.md`'s "Session history" section 
 
 ---
 
+## 2026-07-11 — Number Theory Step by Step, Section 2.1: Introduction to Primes
+**Source:** *Number Theory Step by Step* (Kuldeep Singh), Chapter 2, Section 2.1 (Exercises 1–13)
+
+Section 2.1 introduces primes and proves the Fundamental Theorem of Arithmetic (FTA): every integer n > 1 is either prime or factors uniquely into primes. Existence is proved by WOP-based descent — if n is composite it has a smallest divisor p1, which must be prime, and n/p1 < n, so the process terminates; uniqueness is proved by applying Corollary 2.4 (if a prime p divides a product of primes it equals one of them) to cancel matching factors from two supposed distinct factorisations until one side would reduce to a product of primes equal to 1, which is impossible. Proposition 2.2 — if p is prime and p divides a*b then p divides a or p divides b — is proved via Euclid's Lemma: if p does not divide a then gcd(a,p)=1 (since the only divisors of a prime are 1 and itself), and Euclid's Lemma then forces p to divide b. Corollaries 2.3 and 2.4 extend this by induction to products of n factors and to products of primes respectively; Corollary 2.4 is the key lemma that uniqueness rests on. All 13 exercises were completed in order: prime decompositions of ten numbers, gcd proofs with primes, product-notation evaluation (including the double product (5!)^3/(2^5*3^5) = 2000/9), error-spotting in invalid applications of Corollary 2.4, relative primality of p and p+2, divisibility-by-3 among p/p+2/p+4 via case analysis mod 3, five disproof problems, and the sigma and tau functions for primes. Trial division up to sqrt(n) is the implied factoring algorithm, giving O(sqrt(n)) complexity.
+
+**Depends on:** Extended Euclidean GCD (Euclid's Lemma, Bezout machinery reused in Proposition 2.2), Number Theory Step by Step Section 1.3 (Euclid's Lemma and mutual-divisibility technique), Number Theory Step by Step Section 1.4 (gcd machinery)
+**Unlocks:** Number Theory Step by Step Section 2.2 (Testing Numbers for Primality — floor/ceiling functions and the sqrt(n) trial division bound formalised)
+
+---
+
 ## 2026-07-10 — Continued Fractions
 **File:** `src/bin/gcd-euclidean-fraction.rs`
 

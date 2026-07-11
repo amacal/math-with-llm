@@ -26,6 +26,8 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Reviews are always Socratic — the user explains, you probe. Never re-teach unless they are genuinely stuck.
 
 ## Book study sessions
+- When looking up book content, always search the repo root for a local PDF first (`find . -name "*.pdf"`) and read it with `pdftotext` before going to any web source. Only fall back to a web search if no local file is found or it is unreadable.
+- Before starting the exercises for a section, read the section text from the PDF and walk through its key definitions, propositions, and proofs with the user using the Socratic method. The goal is that the user can state each main result in their own words and understand why it is true before they encounter it as a tool in an exercise. Do not skip this even if the section looks short.
 - When working through a book section's problem sets (Exercises N.N and any Supplementary Problems belonging to it), always proceed in the exact order the book presents them: the full Exercises list first, in ascending numeric order including sub-parts (a), (b), (c) in order, then the Supplementary Problems in ascending order. Do not skip around, reorder for perceived interest or difficulty, or jump ahead to a later question.
 - Do not close the (sub)chapter — i.e., do not run the Session closing ritual — until every problem assigned for the session, across both the Exercises and Supplementary Problems sets, has been completed in that order.
 
