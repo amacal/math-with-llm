@@ -25,6 +25,10 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Scope is strictly limited to problems and concepts already covered in this repo (the `.rs` files and their companion `.md` notes).
 - Reviews are always Socratic — the user explains, you probe. Never re-teach unless they are genuinely stuck.
 
+## Session planning
+- Once a topic is settled — whether chosen via the select agent below or specified directly by the user — spawn a **plan agent** (fork) using the prompt in `.skills/session-plan.md` before starting the Socratic walkthrough. It checks the topic's full prerequisite chain against existing `src/bin/*.md` notes and `HISTORY-YYYY.MM.md` entries, separates what should be cited (not re-derived) from what is genuinely new, flags any missing prerequisite that should block or delay the session, and — for book sections — confirms the exact Exercises/Supplementary Problems list and order straight from the PDF.
+- Run the actual Socratic session yourself, in the main conversation, using the plan agent's output. The plan agent only researches and plans; it never conducts the dialogue with the user, and it never substitutes for the Theory review rules above.
+
 ## Book study sessions
 - When looking up book content, always search the repo root for a local PDF first (`find . -name "*.pdf"`) and read it with `pdftotext` before going to any web source. Only fall back to a web search if no local file is found or it is unreadable.
 - Before starting the exercises for a section, read the section text from the PDF and walk through its key definitions, propositions, and proofs with the user using the Socratic method. The goal is that the user can state each main result in their own words and understand why it is true before they encounter it as a tool in an exercise. Do not skip this even if the section looks short.
@@ -41,7 +45,8 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Each problem is a file in `src/bin/`: lowercase, words separated by dashes.
 - Each problem has a companion notes file at the same path with `.md` extension. Cargo ignores non-`.rs` files.
 - The notes file captures: what was explored, edge cases discovered, complexity analysis, key insights from the session.
-- When asked to propose the next problem, scan `src/bin/` for existing `.rs` files first. Propose 3–5 options that:
+- When asked to propose the next problem — or when nothing specific has been requested — do not scan the repo manually. Spawn a **select agent** (fork) using the prompt in `.skills/session-select.md` instead; see "Session selection" below. The rules in this section are what that agent must follow, not a manual procedure for you to run inline.
+- Propose 3–5 options that:
   - Build on a previous problem (harder variant or extension), OR
   - Share the same underlying idea in a different domain, OR
   - Fill a clear gap in the covered territory.
@@ -49,6 +54,10 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Exception: a foundational concept that is *itself* a missing prerequisite for a natural future target is a valid — and preferred — proposal. When such a stepping-stone exists, name the larger target it unlocks and explain why the intermediate session is the right entry point rather than jumping directly. Prefer the smaller step when a direct jump would leave a conceptual gap.
 - For each proposal, briefly state *why* it's interesting given what's already been done.
 - Topic selection must be deliberate, not just the next connected problem. Explicitly consider cross-domain options (algorithms, probability, linear algebra, numerical methods) alongside natural extensions. Do not default to the chain.
+
+## Session selection
+- Whenever the next session's topic needs picking — the user asks what's next, or none is specified — spawn a **select agent** (fork) using the prompt in `.skills/session-select.md`. It investigates `src/bin/`, every `HISTORY-YYYY.MM.md` file, and (if a book study is in progress) the book's table of contents, then returns exactly 5 candidate topics spanning both the coding and book-study tracks, following the rules in "Problem history" and "Book study sessions" exactly, and never proposing anything already completed.
+- Present the agent's candidates to the user as an interactive choice yourself (e.g. via AskUserQuestion). The select agent investigates and reports; it does not decide or interact with the user.
 
 ## Memory
 - All persistent context lives in this file, in `src/bin/*.md` notes files, and in the `HISTORY-YYYY.MM.md` session history files.

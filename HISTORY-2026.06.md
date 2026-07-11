@@ -72,7 +72,7 @@ BSGS solves g^x = h mod p in O(sqrt(p) * log p) time and O(sqrt(p)) space. The k
 Pollard's Rho finds a non-trivial factor of a composite n in expected O(n^(1/4)) time and O(1) space. The core insight is that a collision mod p (a prime factor of n) suffices: if x = y mod p but x != y mod n, then p divides |x - y| and p divides n, forcing 1 < gcd(|x - y|, n) < n. The birthday paradox guarantees such a collision after O(sqrt(p)) draws from the residues mod p, giving O(n^(1/4)) overall since p can be as large as sqrt(n). Floyd's cycle detection finds the collision in O(1) space: the tortoise advances one step and the hare two, and they must meet once both are inside the sequence's inevitable cycle, using the pseudo-random mixing function f(x) = x^2 + c mod n. Failure modes — a full collision mod n, or a degenerate cycle — are handled by retrying with a different c, and even n is handled as a special case (return 2) since the quadratic sequence cannot generate a collision mod 2 through normal dynamics.
 
 **Depends on:** Miller-Rabin (primality check before factoring), Modular Exponentiation (used in Miller-Rabin), Euclidean GCD (gcd call at every step of the inner loop)
-**Unlocks:** Primitive Roots mod p — factors p-1 via Pollard's Rho to find the prime divisors needed for the Lagrange-based test
+**Unlocks:** Primitive Roots mod p — factors p-1 via Pollard's Rho to find the prime divisors needed for the Lagrange-based test; Trial Division Factorization (`mod-factorize-trial.rs`) — contrasted against as the O(sqrt(n)) trial-division alternative to this algorithm's O(n^(1/4)) cost
 
 ---
 
@@ -152,7 +152,7 @@ The modular inverse of a mod m is a thin wrapper over extended GCD: it exists ex
 Extended Euclidean GCD augments the ordinary algorithm to also produce Bezout coefficients x and y such that a*x + b*y = gcd(a, b). The coefficients are threaded through the same reduction steps used by the basic algorithm: each new remainder inherits updated coefficients by direct substitution, seeded with (x_a, y_a) = (1, 0) and (x_b, y_b) = (0, 1). The loop invariant holds at every step — a_current = a_initial * x_a + b_initial * y_a — which is what guarantees the final coefficients are correct once a_current reaches the gcd. An overflow edge case, when the quotient q exceeds i64::MAX, can only occur when b = 1, meaning the loop is about to exit anyway, so the discarded coefficient update never affects the result. Termination and complexity are identical to the basic Euclidean algorithm: O(log(min(a,b))) via Lame's theorem.
 
 **Depends on:** Euclidean GCD
-**Unlocks:** Modular Inverse — a thin wrapper that reads the Bezout coefficient directly off this algorithm; Number Theory Step by Step Section 1.3 (Bezout machinery reused for back-substitution), Section 1.4 (Linear Diophantine Equations); Continued Fractions (the incremental-state-threading design reused for computing convergents alongside a loop)
+**Unlocks:** Modular Inverse — a thin wrapper that reads the Bezout coefficient directly off this algorithm; Number Theory Step by Step Section 1.3 (Bezout machinery reused for back-substitution), Section 1.4 (Linear Diophantine Equations); Continued Fractions (the incremental-state-threading design reused for computing convergents alongside a loop); Trial Division Factorization (`mod-factorize-trial.rs`) — transitivity of divisibility justifies never backtracking the divisor search
 
 ---
 
