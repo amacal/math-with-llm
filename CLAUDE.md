@@ -57,7 +57,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 
 ## Session selection
 - Whenever the next session's topic needs picking — the user asks what's next, or none is specified — spawn a **select agent** (fork) using the prompt in `.skills/session-select.md`. It investigates `src/bin/`, every `HISTORY-YYYY.MM.md` file, and (if a book study is in progress) the book's table of contents, then returns exactly 5 candidate topics spanning both the coding and book-study tracks, following the rules in "Problem history" and "Book study sessions" exactly, and never proposing anything already completed.
-- Present the agent's candidates to the user as an interactive choice yourself (e.g. via AskUserQuestion). The select agent investigates and reports; it does not decide or interact with the user.
+- Present the agent's candidates to the user as a plain text list yourself — never via AskUserQuestion or any other interactive-choice tool, under any circumstances. The select agent investigates and reports; it does not decide or interact with the user.
 
 ## Memory
 - All persistent context lives in this file, in `src/bin/*.md` notes files, and in the `HISTORY-YYYY.MM.md` session history files.
