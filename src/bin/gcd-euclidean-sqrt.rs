@@ -1,8 +1,5 @@
 fn main() {
-    let terms = decompose(99194853094755497, 61305790721611591).unwrap();
-    println!("Decomposition of fib(83)/fib(82): {:?}", terms);
-
-    for (idx, &(p, q)) in convergents(&terms).unwrap().iter().enumerate() {
+    for (idx, &(p, q)) in sqrt2(50).unwrap().iter().enumerate() {
         println!("{}: {} / {} = {}", idx, p, q, (p as f64) / (q as f64));
     }
 }
@@ -24,22 +21,18 @@ fn convergents(terms: &[u64]) -> Option<Vec<(u64, u64)>> {
     return Some(pq);
 }
 
-fn decompose(mut a: u64, mut b: u64) -> Option<Vec<u64>> {
-    let mut quotients = Vec::new();
-
-    if b == 0 {
+fn sqrt2(n: usize) -> Option<Vec<(u64, u64)>> {
+    if n == 0 {
         return None;
     }
 
-    while b != 0 {
-        let temp = b;
-        quotients.push(a / b);
+    let mut terms = vec![1];
 
-        b = a % b;
-        a = temp;
+    for _ in 1..n {
+        terms.push(2);
     }
 
-    return Some(quotients);
+    return convergents(&terms);
 }
 
 #[cfg(test)]
@@ -47,20 +40,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_decompose() {
-        assert_eq!(decompose(17, 7), Some(vec![2, 2, 3]));
-        assert_eq!(decompose(13, 8), Some(vec![1, 1, 1, 1, 2]));
-    }
-
-    #[test]
-    fn test_decompose_zero() {
-        assert_eq!(decompose(0, 5), Some(vec![0]));
-        assert_eq!(decompose(7, 0), None);
-    }
-
-    #[test]
     fn test_convergents_17_by_7() {
-        let terms = decompose(17, 7).unwrap();
+        let terms = vec![2, 2, 3];
         let convergents = convergents(&terms).unwrap();
 
         assert_eq!(convergents[0], (1, 0));
@@ -71,7 +52,7 @@ mod tests {
 
     #[test]
     fn test_convergents_13_by_8() {
-        let terms = decompose(13, 8).unwrap();
+        let terms = vec![1, 1, 1, 1, 2];
         let convergents = convergents(&terms).unwrap();
 
         assert_eq!(convergents[0], (1, 0));
@@ -80,5 +61,28 @@ mod tests {
         assert_eq!(convergents[3], (3, 2));
         assert_eq!(convergents[4], (5, 3));
         assert_eq!(convergents[5], (13, 8));
+    }
+
+    #[test]
+    fn test_sqrt2_short() {
+        let convergents = sqrt2(5).unwrap();
+
+        assert_eq!(convergents[0], (1, 0));
+        assert_eq!(convergents[1], (1, 1));
+        assert_eq!(convergents[2], (3, 2));
+        assert_eq!(convergents[3], (7, 5));
+        assert_eq!(convergents[4], (17, 12));
+    }
+
+    #[test]
+    fn test_sqrt2_long() {
+        let convergents = sqrt2(50).unwrap();
+
+        for (idx, &(p, q)) in convergents.iter().enumerate() {
+            let p = p as i128;
+            let q = q as i128;
+
+            assert_eq!(p * p - 2 * q * q, if idx % 2 == 0 { 1 } else { -1 });
+        }
     }
 }

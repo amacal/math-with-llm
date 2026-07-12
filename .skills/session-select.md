@@ -2,9 +2,9 @@ Investigate the repo and propose exactly 5 candidate topics for the next session
 
 ## Steps
 
-1. **Build the "done" set.** List every `src/bin/*.rs` file. Read every `HISTORY-YYYY.MM.md` file (the alphabetically-last one is the most recent month, but earlier months matter too) and collect every Concept Title from every entry — both `**File:**` (coding) and `**Source:**` (book) sessions. Anything in this set is off-limits as a fresh proposal.
+1. **Build the "done" set.** Read `INDEX.txt` first — its `sessions` keys ARE the done set. List every `src/bin/*.rs` file to cross-check. Fall back to reading every `HISTORY-YYYY.MM.md` file in full only if INDEX.txt looks stale or incomplete (e.g. a `.rs` file exists with no matching `sessions` entry).
 
-2. **Build the dependency graph.** From the `Depends on:` / `Unlocks:` fields across all history files, work out which concepts are transitively "covered" (reachable from completed sessions) versus which are named as dependencies but never actually completed as their own session.
+2. **Build the dependency graph.** Read directly from `INDEX.txt`'s `depends_on_index` and `unlocks_index` maps — they already give this graph. Fall back to the raw `Depends on:` / `Unlocks:` fields across `HISTORY-YYYY.MM.md` files only if INDEX.txt is stale or you need a specific fact/citation, not just the graph shape.
 
 3. **Find the book-study position.** If any `**Source:**` entries exist, find the most recent one and identify its book, chapter, and section. Locate the book's PDF (`find . -name "*.pdf"` from the repo root) and read its table of contents (via `pdftotext`) to determine the immediate next section in book order. If the most recent book session did not complete every Exercise and Supplementary Problem for its section (check the notes/history text for this), the "next" book candidate is finishing that same section, not advancing — say so explicitly.
 

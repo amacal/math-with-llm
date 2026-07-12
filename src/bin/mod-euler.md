@@ -1,4 +1,4 @@
-# Euler's Theorem and Modular Inverse via Exponentiation
+# Euler's Theorem & Modular Inverse via Exponentiation
 
 ## Overview
 

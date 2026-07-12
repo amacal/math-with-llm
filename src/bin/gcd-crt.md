@@ -1,4 +1,4 @@
-# Chinese Remainder Theorem (CRT)
+# Chinese Remainder Theorem
 
 ## Overview
 

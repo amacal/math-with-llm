@@ -38,6 +38,20 @@ Verify that the most recently written notes file and history entry conform to ev
 
 6. **Unlocks backfill.** Check whether any prior history entry whose concept is listed in this entry's `Depends on` field has a blank or stale `Unlocks` field that should now name this concept. Flag any that need updating.
 
+**INDEX.txt — check consistency:**
+
+1. **New entry present.** The new session's Concept Title must appear as a key under `sessions`, with matching file-or-source, date, depends_on, and unlocks lists (bare concept titles, no parenthetical explanations).
+
+2. **depends_on_index updated.** For every concept in this session's Depends-on list, this session's Concept Title must appear in that concept's list in `depends_on_index`.
+
+3. **unlocks_index updated.** For every concept in this session's Unlocks list, this session's Concept Title must appear in that concept's list in `unlocks_index`.
+
+4. **Resolved flags removed.** If this session's own Concept Title was previously flagged "(not yet its own session)" anywhere in `unlocks_index`, that flag must now be gone.
+
+5. **Backfill reflected on BOTH sides.** If step 6 above (history Unlocks backfill) found a stale field that needed updating, confirm it was fixed in TWO places, not one: the backfilled concept's own `unlocks` list under `sessions`, AND its appearances in `unlocks_index`. A fix applied only to `unlocks_index` while the `sessions` entry still shows the old/stale text is itself a violation — check both explicitly, don't just spot-check one.
+
+Flag as a violation any of the above left stale or inconsistent.
+
 ## Output format
 
 List each violation as: **[File:Line] Rule violated — quoted offending text**. If no violations are found, say so explicitly and give the word count of the notes file.
