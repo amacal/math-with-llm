@@ -82,7 +82,7 @@ Pollard's Rho finds a non-trivial factor of a composite n in expected O(n^(1/4))
 RSA is built on three observations: n = p*q is easy to compute but hard to factor; phi(n) = (p-1)(q-1) is easy given p and q but hard from n alone; and Euler's theorem guarantees m^(d*e) = m mod n whenever d*e = 1 mod phi(n) and gcd(m, n) = 1 — a condition that m < min(p, q) conveniently guarantees but does not require. The public exponent e is chosen with gcd(e, phi(n)) = 1, and the private exponent d is its modular inverse mod phi(n), computed via extended GCD. Encryption is c = m^e mod n and decryption is m = c^d mod n; the roles of e and d are symmetric, which is why signing (encrypt with d, verify with e) is mathematically equivalent to the encryption scheme. Textbook RSA is deterministic and vulnerable to dictionary attacks on small message spaces — real deployments require random padding (OAEP) on top of this mathematical core. Complexity is keygen O(log n), encryption O(log e), decryption O(log n); the intentional asymmetry matches usage, since encryption is the high-frequency operation performed by everyone who holds the public key.
 
 **Depends on:** Miller-Rabin Primality Test (primality check on p and q), Euler's Totient Function (computing phi(n)), Euler's Theorem & Modular Inverse via Exponentiation (correctness proof), Modular Exponentiation (encrypt/decrypt), Modular Inverse (computing d from e), Extended Euclidean GCD (the algorithm underlying Modular Inverse)
-**Unlocks:** —
+**Unlocks:** Wiener's Attack on RSA (`mod-rsa-wiener.rs`) — attacks this exact key relation when d is chosen too small
 
 ---
 
@@ -92,7 +92,7 @@ RSA is built on three observations: n = p*q is easy to compute but hard to facto
 The Fermat test fails against Carmichael numbers, composites where a^(n-1) = 1 mod n for every coprime base a. The smallest is 561 = 3 x 11 x 17; it fools Fermat because (p-1) divides (n-1) for each prime factor p (Korselt's criterion), which follows from CRT plus Fermat's little theorem applied to each prime factor separately. Miller-Rabin strengthens Fermat by exploiting the fact that x^2 = 1 mod p has exactly two solutions (+-1) when p is prime — a consequence of primality forcing divisibility onto one of (x-1) or (x+1). Writing n-1 = 2^s * d with d odd, the sequence a^d, a^(2d), ..., a^(n-1) either starts at 1 or passes through -1 for a genuine prime, and a third square root of 1 anywhere in the sequence proves compositeness. A base that fails to detect a composite is called a strong liar, and Rabin proved at most 1/4 of all bases are strong liars for any composite, so k independent bases reduce the false-positive rate to (1/4)^k. Complexity is O(log n) per base.
 
 **Depends on:** Modular Exponentiation, Euler's Theorem & Modular Inverse via Exponentiation, Chinese Remainder Theorem (for the Carmichael number analysis)
-**Unlocks:** RSA Cryptosystem, Pollard's Rho Factoring Algorithm, Baby-Step Giant-Step (Discrete Logarithm), Primitive Roots mod p (primality checks throughout), Number Theoretic Transform (NTT) (two-square-roots-of-1 fact)
+**Unlocks:** RSA Cryptosystem, Pollard's Rho Factoring Algorithm, Baby-Step Giant-Step (Discrete Logarithm), Primitive Roots mod p (primality checks throughout), Number Theoretic Transform (NTT) (two-square-roots-of-1 fact), Wiener's Attack on RSA (primality check on p and q inside key generation)
 
 ---
 
@@ -112,7 +112,7 @@ Euler's theorem states that for any a with gcd(a, n) = 1, a^phi(n) = 1 mod n. Th
 Computing a^b mod m in O(log b) uses the square-and-multiply method. The binary representation of b determines which powers of a contribute to the product, and consecutive powers are related by squaring, so a single least-significant-bit-first pass suffices. Two running values are maintained: `power` (the current power of the base) and `result` (the accumulated product of powers at set bit positions), both reduced mod m after every multiplication to keep intermediates bounded, with u128 used for the intermediate product to avoid overflow before reduction. The loop invariant is that after n bits are processed, `result` equals base^(exp & (2^n - 1)) mod m and `power` equals base^(2^n) mod m, so once all bits are consumed the mask covers the full exponent and the invariant gives the answer. Edge cases: exp = 0 returns 1, modulus = 1 returns 0, and modulus = 0 returns None.
 
 **Depends on:** Euclidean GCD (modular arithmetic foundation — the reduction identity (a*b) mod m = ((a mod m)*(b mod m)) mod m underpins every multiplication step)
-**Unlocks:** Euler's Theorem & Modular Inverse via Exponentiation, Miller-Rabin Primality Test, Baby-Step Giant-Step (Discrete Logarithm), RSA Cryptosystem, Primitive Roots mod p — the core exponentiation primitive reused throughout the modular-arithmetic track
+**Unlocks:** Euler's Theorem & Modular Inverse via Exponentiation, Miller-Rabin Primality Test, Baby-Step Giant-Step (Discrete Logarithm), RSA Cryptosystem, Primitive Roots mod p, Wiener's Attack on RSA (encrypt/decrypt round-trip in the toy key pairs) — the core exponentiation primitive reused throughout the modular-arithmetic track
 
 ---
 
@@ -122,7 +122,7 @@ Computing a^b mod m in O(log b) uses the square-and-multiply method. The binary 
 Euler's totient function phi(n) counts the integers in [1, n] coprime to n. The key structural property is multiplicativity: when gcd(m, n) = 1, phi(m*n) = phi(m) * phi(n), and combined with the prime-power formula phi(p^k) = p^k - p^(k-1), this gives a product formula over the prime factorization of n. The O(sqrt(n)) complexity relies on the fact that any n > 1 remaining after trial division must itself be prime — if it were composite (n = a*b), at least one factor would be at most sqrt(n) and would already have been divided out by an earlier iteration. The implementation uses p*p <= current n (not the original n) as the loop guard, since n shrinks as factors are removed during the run.
 
 **Depends on:** Euclidean GCD (coprimality, the factorization argument)
-**Unlocks:** Euler's Theorem & Modular Inverse via Exponentiation, RSA Cryptosystem (computing phi(n))
+**Unlocks:** Euler's Theorem & Modular Inverse via Exponentiation, RSA Cryptosystem (computing phi(n)), Wiener's Attack on RSA (the phi(n) = n - p - q + 1 expansion and the prime-power formula, both reused directly)
 
 ---
 
@@ -152,7 +152,7 @@ The modular inverse of a mod m is a thin wrapper over extended GCD: it exists ex
 Extended Euclidean GCD augments the ordinary algorithm to also produce Bezout coefficients x and y such that a*x + b*y = gcd(a, b). The coefficients are threaded through the same reduction steps used by the basic algorithm: each new remainder inherits updated coefficients by direct substitution, seeded with (x_a, y_a) = (1, 0) and (x_b, y_b) = (0, 1). The loop invariant holds at every step — a_current = a_initial * x_a + b_initial * y_a — which is what guarantees the final coefficients are correct once a_current reaches the gcd. An overflow edge case, when the quotient q exceeds i64::MAX, can only occur when b = 1, meaning the loop is about to exit anyway, so the discarded coefficient update never affects the result. Termination and complexity are identical to the basic Euclidean algorithm: O(log(min(a,b))) via Lame's theorem.
 
 **Depends on:** Euclidean GCD
-**Unlocks:** Modular Inverse — a thin wrapper that reads the Bezout coefficient directly off this algorithm; Number Theory Step by Step, Section 1.3: Euclidean Algorithm (Bezout machinery reused for back-substitution), Number Theory Step by Step, Section 1.4: Linear Diophantine Equations; Continued Fractions (the incremental-state-threading design reused for computing convergents alongside a loop); Trial Division Factorization (`mod-factorize-trial.rs`) — transitivity of divisibility justifies never backtracking the divisor search
+**Unlocks:** Modular Inverse — a thin wrapper that reads the Bezout coefficient directly off this algorithm; Number Theory Step by Step, Section 1.3: Euclidean Algorithm (Bezout machinery reused for back-substitution), Number Theory Step by Step, Section 1.4: Linear Diophantine Equations; Continued Fractions (the incremental-state-threading design reused for computing convergents alongside a loop); Trial Division Factorization (`mod-factorize-trial.rs`) — transitivity of divisibility justifies never backtracking the divisor search; Wiener's Attack on RSA (`mod-rsa-wiener.rs`) — exposed a real i64 Bezout-coefficient overflow once phi(n) approached u64::MAX
 
 ---
 
