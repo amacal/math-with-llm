@@ -6,6 +6,16 @@ Part of the session history series; see `CLAUDE.md`'s "Session history" section 
 
 ---
 
+## 2026-07-13 — Linear Congruential Generator
+**File:** `src/bin/rand-lcg.rs`
+
+The Linear Congruential Generator produces a pseudorandom sequence via x_(n+1) = (a*x_n + c) mod m, and this session's central question was when it achieves full period, visiting every one of its m states exactly once before repeating. Hand-tracing m=8 across all four candidates coprime to 8 (a=1,3,5,7) showed empirically, then matched against the classical Hull-Dobell theorem (1962), that full period requires gcd(c,m)=1, every prime factor of m dividing a-1, and 4 dividing a-1 whenever 4 divides m, a fixed condition on the number 4 rather than one that scales with m, a point initially mis-generalized to 2^63 for m=2^64 before being corrected against the theorem's literal wording. The session also connected two prior results: the pigeonhole-plus-determinism argument from the Pell's equation session, generalized here to show that any choice of a, c, m eventually cycles even without full period, and an entropy bound showing that since a and c are fixed public constants, the entire output stream carries at most log2(m) bits of unpredictability traceable to the seed, since the invertible step map lets one observed state reconstruct the whole sequence forward and backward. A genuine implementation bug surfaced when the first version of the u64 case used the literal 18446744073709551615 (u64::MAX, equal to 2^64-1) instead of 2^64 itself, silently changing the modulus to an odd number and defeating the intended free-wraparound optimization; it was found and fixed by switching to a T=0 sentinel meaning "skip the modulo, rely purely on u64 wraparound." Complexity is O(1) time and space per generated value, independent of m, since wrapping_mul and wrapping_add operate on fixed-width 64-bit words regardless of the modulus chosen.
+
+**Depends on:** Euclidean GCD, Modular Inverse, Pell's Equation via Continued Fractions
+**Unlocks:** —
+
+---
+
 ## 2026-07-13 — Wiener's Attack on RSA
 **File:** `src/bin/mod-rsa-wiener.rs`
 
@@ -32,7 +42,7 @@ This session implements the Euclidean-algorithm-driven generator flagged as unim
 Pell's equation asks for integer solutions to x^2 - D*y^2 = 1 for non-square D, solved here by expanding sqrt(D) as a continued fraction via a general (m,d,a) recurrence and reading the fundamental solution off a convergent. The key correctness fact is that the (m,d) state space is finite (m bounded by sqrt(D), since d_n*d_(n+1) = D - m_(n+1)^2 forces m_(n+1)^2 <= D) and the recurrence depends only on the current state, so by the pigeonhole principle the expansion must become periodic, with a cited classical fact (Galois' reduced-quadratic-irrational theorem) guaranteeing the period always starts at index 1 for sqrt(D) specifically. An identity discovered empirically for D=7 and confirmed against D=13 and D=61 but not proved in this session, p_k^2 - D*q_k^2 = (-1)^(k+1)*d_(k+1), locates the fundamental solution at k=r-1 when the period r is even, or k=2r-1 when r is odd (since 2r is always even, a sharp session insight noted that k=2r-1 actually works unconditionally for both parities). A real bug surfaced from the perfect-square edge case: d hitting exactly 0 caused an unsigned-subtraction underflow one step later rather than a clean division-by-zero, fixed by checking isqrt(D)^2==D upfront and returning None. The float-free floor test needed for each partial quotient reuses and generalizes the bisection technique from Integer Square Root, splitting on sign before squaring since squaring an inequality is only valid once both sides are confirmed nonnegative. Testing against seven known fundamental solutions (D=2,3,5,6,7,13,61, spanning both parities of r and the famous large D=61 Fermat-challenge example) caught two further bugs: an initial tuple-ordering mistake, and a modulo-based index shortcut that collapsed the r-1 and 2r-1 cases together since they differ by exactly r and so share the same value mod r. Complexity is O(r*log(D)) time, with r proven finite by pigeonhole but not given a tight closed-form bound in D in this session (the classical result, cited not derived, is r=O(sqrt(D)*log(D))).
 
 **Depends on:** Continued Fractions (convergent recurrence, p_k^2-2q_k^2=+-1 observation generalized here), Integer Square Root (bisection technique generalized into the float-free partial-quotient search)
-**Unlocks:** —
+**Unlocks:** Linear Congruential Generator (`rand-lcg.rs`) — the pigeonhole-plus-determinism eventual-periodicity argument reused there
 
 ---
 

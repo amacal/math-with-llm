@@ -7,6 +7,14 @@
 # actually been completed as its own session — exactly the gap the select-agent looks for.
 
 sessions:
+  "Linear Congruential Generator":
+    file: src/bin/rand-lcg.rs
+    date: 2026-07-13
+    depends_on:
+      - "Euclidean GCD"
+      - "Modular Inverse"
+      - "Pell's Equation via Continued Fractions"
+    unlocks: —
   "Wiener's Attack on RSA":
     file: src/bin/mod-rsa-wiener.rs
     date: 2026-07-13
@@ -34,7 +42,8 @@ sessions:
     depends_on:
       - "Continued Fractions"
       - "Integer Square Root"
-    unlocks: —
+    unlocks:
+      - "Linear Congruential Generator"
   "Trial Division Factorization":
     file: src/bin/mod-factorize-trial.rs
     date: 2026-07-11
@@ -258,6 +267,7 @@ sessions:
       - "Number Theoretic Transform (NTT)"
       - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
       - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+      - "Linear Congruential Generator"
   "Extended Euclidean GCD":
     file: src/bin/gcd-euclidean-extended.rs
     date: 2026-06-11
@@ -289,6 +299,7 @@ sessions:
       - "Pollard's Rho Factoring Algorithm"
       - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
       - "Continued Fractions"
+      - "Linear Congruential Generator"
 
 # depends_on_index: X -> what already-completed work builds on X (i.e. names X in its own depends_on list).
 depends_on_index:
@@ -315,6 +326,7 @@ depends_on_index:
     - "Extended Euclidean GCD"
     - "Binary GCD (Stein's Algorithm)"
     - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+    - "Linear Congruential Generator"
   "Euler's Theorem & Modular Inverse via Exponentiation":
     - "Number Theoretic Transform (NTT)"
     - "Primitive Roots mod p"
@@ -341,6 +353,7 @@ depends_on_index:
     - "Wiener's Attack on RSA"
   "Karatsuba Multiplication":
     - "Number Theoretic Transform (NTT)"
+  "Linear Congruential Generator": —
   "Miller-Rabin Primality Test":
     - "Number Theoretic Transform (NTT)"
     - "Primitive Roots mod p"
@@ -363,6 +376,7 @@ depends_on_index:
     - "Baby-Step Giant-Step (Discrete Logarithm)"
     - "RSA Cryptosystem"
     - "Chinese Remainder Theorem"
+    - "Linear Congruential Generator"
   "Naive Polynomial Multiplication (Linear Convolution)":
     - "Number Theoretic Transform (NTT)"
   "Number Theoretic Transform (NTT)":
@@ -374,6 +388,8 @@ depends_on_index:
     - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
   "Number Theory Step by Step, Section 2.1: Introduction to Primes":
     - "Trial Division Factorization"
+  "Pell's Equation via Continued Fractions":
+    - "Linear Congruential Generator"
   "Pollard's Rho Factoring Algorithm":
     - "Trial Division Factorization"
     - "Primitive Roots mod p"
@@ -404,6 +420,10 @@ unlocks_index:
     - "Euclidean GCD"
   "Karatsuba Multiplication":
     - "Big Integer Arithmetic (Schoolbook)"
+  "Linear Congruential Generator":
+    - "Euclidean GCD"
+    - "Modular Inverse"
+    - "Pell's Equation via Continued Fractions"
   "Miller-Rabin Primality Test":
     - "Chinese Remainder Theorem"
     - "Modular Exponentiation"
