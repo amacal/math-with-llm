@@ -17,7 +17,7 @@ metadata:
   purpose: "compact LLM-readable learning knowledge graph"
   schema_version: 2
   generated_at: "2026-07-16"
-  session_count: 32
+  session_count: 33
   note: "Rebuilt from scratch against HISTORY-2026.06.md and HISTORY-2026.07.md (source of truth) plus every src/bin/*.md notes file, not by mechanically relabeling the prior depends_on/unlocks fields. See CLAUDE.md for the schema this file follows."
 
 # ---------------------------------------------------------------------------
@@ -25,17 +25,19 @@ metadata:
 # ---------------------------------------------------------------------------
 selection_context:
   recent_sessions:
+    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     - "Newton's Method for General Root-Finding"
     - "Linear Congruential Generator"
     - "Wiener's Attack on RSA"
     - "Continued-Fraction Term Generation via the Euclidean Algorithm"
     - "Pell's Equation via Continued Fractions"
-    - "Trial Division Factorization"
   active_branches:
+    - "Quadratic Residues & the Structure of (Z/pZ)*"
     - "Root-Finding & Numerical Methods"
     - "Continued Fractions, Diophantine Approximation & Pell's Equation"
     - "Primality, Factorization & Public-Key Cryptography"
   branch_frontiers:
+    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     - "Newton's Method for General Root-Finding"
     - "Linear Congruential Generator"
     - "Wiener's Attack on RSA"
@@ -46,7 +48,9 @@ selection_context:
     - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
   explicit_unfinished_targets:
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
   reusable_recent_capabilities:
+    - "compute-legendre-symbol"
     - "compute-integer-sqrt-exactly"
     - "compute-integer-sqrt-via-newton"
     - "find-roots-of-differentiable-functions"
@@ -57,18 +61,52 @@ selection_context:
     - "factor-integers-by-trial-division"
   candidate_signals:
     continuation:
-      - "Root-Finding & Numerical Methods is the most recently active branch (Newton's Method for General Root-Finding, 2026-07-16); its internal chain (bisection -> Newton isqrt -> general Newton) has no explicitly named next step in the repo, but a derivative-free (secant-style) or multi-dimensional generalization is the shape suggested by the existing chain — this is an inferred continuation, not a named target."
+      - "Root-Finding & Numerical Methods is the most recently active branch before today (Newton's Method for General Root-Finding, 2026-07-16); its internal chain (bisection -> Newton isqrt -> general Newton) has no explicitly named next step in the repo, but a derivative-free (secant-style) or multi-dimensional generalization is the shape suggested by the existing chain — this is an inferred continuation, not a named target."
+      - "Quadratic Residues & the Structure of (Z/pZ)* is brand new as of today (2026-07-16); its own notes file explicitly names Tonelli-Shanks (modular square root extraction) as the natural next step building directly on Euler's Criterion, making it an explicitly-named continuation rather than an inferred one."
     consolidation:
       - "The Continued Fractions / Pell's-equation branch and the RSA / cryptanalysis branch were already combined once, in Wiener's Attack on RSA — no unexplored consolidation between two specific branches is named explicitly elsewhere in the repo."
     new_branch:
-      - "— (the only explicit future target, Number Theory Step by Step Section 2.2, continues an already-active branch rather than opening a new one)"
+      - "Quadratic Residues & the Structure of (Z/pZ)* was opened today by Quadratic Residues & the Legendre Symbol via Euler's Criterion — the first session in the repo to address quadratic residues, built on Modular Exponentiation, Modular Inverse, Euler's Theorem, Miller-Rabin, and Primitive Roots mod p, but not itself a continuation of any single one of them."
     explicit_commitment:
-      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality — the only topic explicitly named as future work anywhere in HISTORY-2026.06.md, HISTORY-2026.07.md, or src/bin/*.md"
+      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality — named as future work in Section 2.1's own session evidence."
+      - "Tonelli-Shanks Algorithm for Modular Square Roots — named as future work directly in src/bin/mod-legendre.md's Overview, as the natural next step after Euler's Criterion."
 
 # ---------------------------------------------------------------------------
 # sessions: primary record, one entry per completed session, most recent first.
 # ---------------------------------------------------------------------------
 sessions:
+  "Quadratic Residues & the Legendre Symbol via Euler's Criterion":
+    kind: implementation
+    file: src/bin/mod-legendre.rs
+    source: —
+    date: 2026-07-16
+    prerequisites:
+      - "Modular Exponentiation"
+      - "Modular Inverse"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Miller-Rabin Primality Test"
+      - "Primitive Roots mod p"
+    uses_concepts:
+      - "Modular Exponentiation"
+      - "Modular Inverse"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Miller-Rabin Primality Test"
+      - "Primitive Roots mod p"
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks: —
+    future_targets:
+      - "Tonelli-Shanks Algorithm for Modular Square Roots"
+    summary: "Proved the squaring map mod p is exactly two-to-one (giving exactly (p-1)/2 quadratic residues), then proved Euler's Criterion — a^((p-1)/2) mod p determines residue status — using a primitive root to settle the converse direction, and implemented the Legendre symbol test via modular exponentiation."
+    concepts:
+      - "quadratic-residues"
+      - "group-theory"
+      - "modular-arithmetic"
+      - "number-theory"
+    capabilities:
+      - "compute-legendre-symbol"
+
   "Newton's Method for General Root-Finding":
     kind: implementation
     file: src/bin/root-newton-general.rs
@@ -470,6 +508,7 @@ sessions:
       - "Sieve of Eratosthenes"
     unlocks:
       - "Number Theoretic Transform (NTT)"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     future_targets: —
     summary: "Proved every prime p has a primitive root via a counting argument, and found one in O(p^(1/4) log p) by checking g^((p-1)/q) for each distinct prime factor q of p-1, generalizing BSGS's safe-prime shortcut."
     concepts:
@@ -698,6 +737,7 @@ sessions:
       - "Primitive Roots mod p"
       - "Number Theoretic Transform (NTT)"
       - "Wiener's Attack on RSA"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     future_targets: —
     summary: "Strengthened Fermat's test against Carmichael numbers by exploiting that x^2=1 mod p has only two roots for a genuine prime p, bounding the false-positive rate at (1/4)^k over k bases."
     concepts:
@@ -729,6 +769,7 @@ sessions:
       - "RSA Cryptosystem"
       - "Primitive Roots mod p"
       - "Number Theoretic Transform (NTT)"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     future_targets: —
     summary: "Proved a^phi(n)=1 mod n via Lagrange's theorem on the group (Z/nZ)*, giving Fermat's little theorem as the prime case and a^(phi(n)-1) as a second way to compute modular inverses."
     concepts:
@@ -756,6 +797,7 @@ sessions:
       - "RSA Cryptosystem"
       - "Primitive Roots mod p"
       - "Wiener's Attack on RSA"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     future_targets: —
     summary: "Computed a^b mod m in O(log b) via square-and-multiply, maintaining the invariant result=a^(exp & (2^n-1)) mod m and power=a^(2^n) mod m after n bits."
     concepts:
@@ -834,6 +876,7 @@ sessions:
       - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
       - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
       - "Linear Congruential Generator"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     future_targets: —
     summary: "Computed the modular inverse of a mod m as the Bezout coefficient x from extended GCD, existing exactly when gcd(a,m)=1, normalized into [0,m)."
     concepts:
@@ -934,6 +977,13 @@ future_targets:
       - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
     evidence:
       - "HISTORY-2026.07.md: Section 2.1's Unlocks field names it directly (\"floor/ceiling functions and the sqrt(n) trial division bound formalised\")."
+  "Tonelli-Shanks Algorithm for Modular Square Roots":
+    status: not-completed
+    mentioned_by:
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    evidence:
+      - "src/bin/mod-legendre.md Overview: \"Computing an actual x with x squared congruent to a modulo p is a separate, harder algorithm, standardly called Tonelli-Shanks in the literature ... it remains open as a natural next step building on the machinery developed here.\""
+      - "HISTORY-2026.07.md: this session's not_completed field names it directly."
 
 # ---------------------------------------------------------------------------
 # branches: clusters discovered from the actual prerequisite/derived_from graph, not a forced taxonomy.
@@ -954,6 +1004,13 @@ branches:
     frontier:
       - "Binary GCD (Stein's Algorithm)"
     explicit_future_targets: —
+  "Quadratic Residues & the Structure of (Z/pZ)*":
+    sessions:
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    frontier:
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    explicit_future_targets:
+      - "Tonelli-Shanks Algorithm for Modular Square Roots"
   "Primality, Factorization & Public-Key Cryptography":
     sessions:
       - "Miller-Rabin Primality Test"
@@ -1022,6 +1079,7 @@ branches:
 open_gaps:
   explicit_future_targets:
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
   missing_intermediate_topics: —
   implementation_capability_gaps: —
   unresolved_proofs_in_completed_sessions:
@@ -1057,6 +1115,7 @@ prerequisite_index:
       - "Baby-Step Giant-Step (Discrete Logarithm)"
       - "RSA Cryptosystem"
       - "Linear Congruential Generator"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   "Euler's Totient Function":
     required_by:
       - "Euler's Theorem & Modular Inverse via Exponentiation"
@@ -1068,17 +1127,24 @@ prerequisite_index:
       - "Baby-Step Giant-Step (Discrete Logarithm)"
       - "Primitive Roots mod p"
       - "RSA Cryptosystem"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   "Euler's Theorem & Modular Inverse via Exponentiation":
     required_by:
       - "Miller-Rabin Primality Test"
       - "RSA Cryptosystem"
       - "Primitive Roots mod p"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   "Miller-Rabin Primality Test":
     required_by:
       - "RSA Cryptosystem"
       - "Pollard's Rho Factoring Algorithm"
       - "Baby-Step Giant-Step (Discrete Logarithm)"
       - "Primitive Roots mod p"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+  "Primitive Roots mod p":
+    required_by:
+      - "Number Theoretic Transform (NTT)"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   "RSA Cryptosystem":
     required_by:
       - "Wiener's Attack on RSA"
@@ -1091,9 +1157,6 @@ prerequisite_index:
   "Sieve of Eratosthenes":
     required_by:
       - "Segmented Sieve"
-  "Primitive Roots mod p":
-    required_by:
-      - "Number Theoretic Transform (NTT)"
   "Naive Polynomial Multiplication (Linear Convolution)":
     required_by:
       - "Number Theoretic Transform (NTT)"
@@ -1205,6 +1268,7 @@ concept_index:
     - "Miller-Rabin Primality Test"
     - "Number Theoretic Transform (NTT)"
     - "Primitive Roots mod p"
+    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   lagranges-theorem:
     - "Euler's Theorem & Modular Inverse via Exponentiation"
     - "Primitive Roots mod p"
@@ -1221,6 +1285,7 @@ concept_index:
     - "Modular Exponentiation"
     - "Modular Inverse"
     - "RSA Cryptosystem"
+    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   newtons-method:
     - "Newton's Method for General Root-Finding"
     - "Newton's Method for Integer Square Root"
@@ -1240,6 +1305,7 @@ concept_index:
     - "Segmented Sieve"
     - "Trial Division Factorization"
     - "Wiener's Attack on RSA"
+    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   numerical-methods:
     - "Integer Square Root"
     - "Newton's Method for General Root-Finding"
@@ -1268,6 +1334,8 @@ concept_index:
     - "RSA Cryptosystem"
   quadratic-convergence:
     - "Newton's Method for Integer Square Root"
+  quadratic-residues:
+    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   root-finding:
     - "Newton's Method for General Root-Finding"
   sieve-methods:
@@ -1301,6 +1369,8 @@ capability_index:
     - "Integer Square Root"
   compute-integer-sqrt-via-newton:
     - "Newton's Method for Integer Square Root"
+  compute-legendre-symbol:
+    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   compute-modular-inverse:
     - "Modular Inverse"
   compute-modular-inverse-via-exponentiation:
@@ -1351,6 +1421,7 @@ capability_index:
 # ---------------------------------------------------------------------------
 completed_by_date:
   "2026-07-16":
+    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     - "Newton's Method for General Root-Finding"
   "2026-07-13":
     - "Linear Congruential Generator"
@@ -1449,3 +1520,9 @@ edges:
     confidence: explicit
     evidence:
       - "src/bin/mod-bsgs.md \"Finding a generator\" section: the safe-prime two-check shortcut (g^2, g^((p-1)/2)) is explicitly named as the special case that Primitive Roots mod p later generalizes to any prime via Lagrange's theorem."
+  - from: "Miller-Rabin Primality Test"
+    to: "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    type: related
+    confidence: explicit
+    evidence:
+      - "src/bin/mod-legendre.md: the fact that x^2=1 (mod p) has exactly two roots, first proved in Miller-Rabin's notes, is cited (not re-derived) and used twice — once to show the squaring map is exactly two-to-one, once to show a^((p-1)/2) is confined to {1,-1}."
