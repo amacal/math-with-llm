@@ -6,6 +6,16 @@ Part of the session history series; see `CLAUDE.md`'s "Session history" section 
 
 ---
 
+## 2026-07-16 — Newton's Method for General Root-Finding
+**File:** `src/bin/root-newton-general.rs`
+
+Generalizing the tangent-line construction from the isqrt session to an arbitrary differentiable f, the update rule x1 = x0 - f(x0)/f'(x0) was derived from point-slope form and checked to reduce exactly to the isqrt-specific (x0 + n/x0)/2 when f(x) = x^2 - n. A hand-worked counterexample showed the isqrt session's unconditional convergence proof does not generalize: starting f(x) = x^3 - x at x0 = 1/sqrt5 produces an exact eternal two-cycle x0, -x0, x0, -x0 (verified via f(x0)/f'(x0) = 2*x0 and the odd/even symmetry of f and f'), never landing on any of the three real roots -1, 0, 1, despite f'(x) never hitting zero along the way; the mechanism is a sign change in f''(x) = 6x at the inflection point x=0, contrasted with x^2-n's constant, sign-unchanging curvature. Taylor's theorem, introduced from scratch for the first time in this repo, generalized the quadratic-convergence proof to e1 = (f''(x0)/(2*f'(x0))) * e0^2, matching the isqrt-specific e1 = e0^2/(2*x0) exactly when f''=2 and f'(x0)=2*x0, and implying O(log log(1/eps)) iterations to reach a target tolerance versus bisection's O(log(1/eps)). The most significant finding came from implementation: testing a double root f(x)=(x-1)^2 revealed that checking |f(x)| < eps only guarantees precision eps^(1/k) for a root of multiplicity k (sqrt(eps) for k=2, looser again for k=4), since f behaves like C*(x-root)^k near such a root, whereas the step-size check |x1-x0| < eps does not suffer this degradation, since the distance between consecutive iterates stays proportional to the true error regardless of multiplicity; the final implementation therefore relies solely on the step-size check, verified empirically to reach about 7.8e-7 precision in 7 iterations against a requested 1e-6 tolerance on that same double-root case. All 10 tests pass, covering a simple polynomial root, both simple roots and the non-convergent case of x^3-x, and the double-root precision case. Complexity is O(log log(1/eps)) once inside a convergent regime, a genuinely better class than bisection's O(log(1/eps)), though no such bound applies to inputs like the x^3-x oscillation, which instead exhausts the mandatory iteration cap.
+
+**Depends on:** Newton's Method for Integer Square Root
+**Unlocks:** —
+
+---
+
 ## 2026-07-13 — Linear Congruential Generator
 **File:** `src/bin/rand-lcg.rs`
 
@@ -82,7 +92,7 @@ Continued fractions rewrite a/b as a nested tower of integer parts and reciproca
 Newton's method computes isqrt(n) by iterating x1 = (x0 + n/x0)/2, derived from scratch as the x-intercept of the tangent line to f(x) = x^2 - n at the current guess x0, and shown to converge quadratically (e1 = e0^2/(2*x0), versus bisection's geometric e_(k+1) = c*e_k) via the substitution s = sqrt(n), e0 = x0 - s. Hand-tracing the integer-truncated version on n = 8 (8, 4, 3, 2, then back to 3) revealed the sequence never settles at a fixed point but enters a 2-3 cycle, which falsified the naive invariant "x0 >= sqrt(n)" (the final value 2 is below sqrt(8) ~= 2.828) and motivated the real invariant x0 >= r = floor(sqrt(n)) instead, together with a stopping rule of x1 >= x0 (not x1 == x0), returning x0. The invariant's lower bound follows from AM-GM ((a+b)/2 >= sqrt(a*b)) applied to x0 and n/x0, whose product is n; the upper-bound half (the sequence strictly decreases while x0 > r) follows because x0 > r forces x0 >= r+1, hence x0^2 > n by the definition of r, hence n/x0 < x0. Complexity has two phases: an initial halving phase indistinguishable from bisection (since n/x0 is tiny while x0 >> r, taking about (1/2)*log2(n) steps), followed by a much smaller O(log log n) quadratic tail once x0 nears r, so overall complexity is O(log n) — the same class as mod-isqrt-bisect.rs's bisection, not asymptotically faster, since the search starts far from the root. Overflow at x0 = n = u64::MAX is handled with a saturating add, whose off-by-one is harmless since the resulting guess remains a massive overestimate that the strict-decrease argument still corrects on the next step. All tests pass across low, mid, and high (u64::MAX-adjacent) ranges.
 
 **Depends on:** Integer Square Root (`mod-isqrt-bisect.rs`) — same problem, contrasting algorithm and stopping-condition reasoning
-**Unlocks:** —
+**Unlocks:** Newton's Method for General Root-Finding (`root-newton-general.rs`) — generalizes the tangent-line derivation and quadratic-convergence proof from f(x) = x^2 - n to arbitrary differentiable f
 
 ---
 

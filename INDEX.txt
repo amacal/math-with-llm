@@ -7,6 +7,12 @@
 # actually been completed as its own session — exactly the gap the select-agent looks for.
 
 sessions:
+  "Newton's Method for General Root-Finding":
+    file: src/bin/root-newton-general.rs
+    date: 2026-07-16
+    depends_on:
+      - "Newton's Method for Integer Square Root"
+    unlocks: —
   "Linear Congruential Generator":
     file: src/bin/rand-lcg.rs
     date: 2026-07-13
@@ -78,7 +84,8 @@ sessions:
     date: 2026-07-10
     depends_on:
       - "Integer Square Root"
-    unlocks: —
+    unlocks:
+      - "Newton's Method for General Root-Finding"
   "Integer Square Root":
     file: src/bin/mod-isqrt-bisect.rs
     date: 2026-07-10
@@ -379,6 +386,8 @@ depends_on_index:
     - "Linear Congruential Generator"
   "Naive Polynomial Multiplication (Linear Convolution)":
     - "Number Theoretic Transform (NTT)"
+  "Newton's Method for Integer Square Root":
+    - "Newton's Method for General Root-Finding"
   "Number Theoretic Transform (NTT)":
     - "Multi-Modulus NTT with CRT Reconstruction"
   "Number Theory Step by Step, Section 1.3: Euclidean Algorithm":
@@ -434,6 +443,8 @@ unlocks_index:
   "Multi-Modulus NTT with CRT Reconstruction":
     - "Number Theoretic Transform (NTT)"
     - "Chinese Remainder Theorem"
+  "Newton's Method for General Root-Finding":
+    - "Newton's Method for Integer Square Root"
   "Newton's Method for Integer Square Root":
     - "Integer Square Root"
   "Number Theoretic Transform (NTT)":
