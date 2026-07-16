@@ -1,4 +1,6 @@
-fn main() {}
+fn main() {
+    println!("root of x^3 + x at 5.0 = {}", find_root(|x| x * x * x + x, |x| 3.0 * x * x + 1.0, 5.0, 1e-6, 100).unwrap());
+}
 
 type Function = fn(f64) -> f64;
 

@@ -1,0 +1,1451 @@
+# INDEX.yml — derived, compact knowledge graph over HISTORY-YYYY.MM.md and src/bin/*.md.
+# Non-authoritative: if this ever disagrees with the history or notes files, they win — rebuild this file from them.
+# Every session is keyed by its exact Concept Title (the string used in its HISTORY heading), never by filename,
+# since book-study sessions have no filename. Empty list fields use "—", matching HISTORY-YYYY.MM.md convention.
+# reuses_code is "—" for every session by design: this repo's hard constraint forbids code reuse across
+# src/bin/*.rs files (each problem reimplements what it needs), so no session ever literally shares code with
+# another. code_reuse_index is therefore empty on principle, not from incomplete auditing.
+# Schema: see CLAUDE.md's "Fast index (INDEX.yml)" section for field semantics and the confidence/evidence model.
+
+metadata:
+  generated_from:
+    - HISTORY-2026.06.md
+    - HISTORY-2026.07.md
+    - src/bin/*.md
+    - src/bin/*.rs
+  authoritative: false
+  purpose: "compact LLM-readable learning knowledge graph"
+  schema_version: 2
+  generated_at: "2026-07-16"
+  session_count: 32
+  note: "Rebuilt from scratch against HISTORY-2026.06.md and HISTORY-2026.07.md (source of truth) plus every src/bin/*.md notes file, not by mechanically relabeling the prior depends_on/unlocks fields. See CLAUDE.md for the schema this file follows."
+
+# ---------------------------------------------------------------------------
+# selection_context: evidence for an LLM picking the next session. Signals, not a recommendation.
+# ---------------------------------------------------------------------------
+selection_context:
+  recent_sessions:
+    - "Newton's Method for General Root-Finding"
+    - "Linear Congruential Generator"
+    - "Wiener's Attack on RSA"
+    - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+    - "Pell's Equation via Continued Fractions"
+    - "Trial Division Factorization"
+  active_branches:
+    - "Root-Finding & Numerical Methods"
+    - "Continued Fractions, Diophantine Approximation & Pell's Equation"
+    - "Primality, Factorization & Public-Key Cryptography"
+  branch_frontiers:
+    - "Newton's Method for General Root-Finding"
+    - "Linear Congruential Generator"
+    - "Wiener's Attack on RSA"
+    - "Trial Division Factorization"
+    - "Multi-Modulus NTT with CRT Reconstruction"
+    - "Pell's Equation via Continued Fractions"
+    - "Segmented Sieve"
+    - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+  explicit_unfinished_targets:
+    - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+  reusable_recent_capabilities:
+    - "compute-integer-sqrt-exactly"
+    - "compute-integer-sqrt-via-newton"
+    - "find-roots-of-differentiable-functions"
+    - "generate-pseudorandom-sequences"
+    - "break-rsa-with-small-private-exponent"
+    - "generate-continued-fraction-terms-algorithmically"
+    - "solve-pells-equation"
+    - "factor-integers-by-trial-division"
+  candidate_signals:
+    continuation:
+      - "Root-Finding & Numerical Methods is the most recently active branch (Newton's Method for General Root-Finding, 2026-07-16); its internal chain (bisection -> Newton isqrt -> general Newton) has no explicitly named next step in the repo, but a derivative-free (secant-style) or multi-dimensional generalization is the shape suggested by the existing chain — this is an inferred continuation, not a named target."
+    consolidation:
+      - "The Continued Fractions / Pell's-equation branch and the RSA / cryptanalysis branch were already combined once, in Wiener's Attack on RSA — no unexplored consolidation between two specific branches is named explicitly elsewhere in the repo."
+    new_branch:
+      - "— (the only explicit future target, Number Theory Step by Step Section 2.2, continues an already-active branch rather than opening a new one)"
+    explicit_commitment:
+      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality — the only topic explicitly named as future work anywhere in HISTORY-2026.06.md, HISTORY-2026.07.md, or src/bin/*.md"
+
+# ---------------------------------------------------------------------------
+# sessions: primary record, one entry per completed session, most recent first.
+# ---------------------------------------------------------------------------
+sessions:
+  "Newton's Method for General Root-Finding":
+    kind: implementation
+    file: src/bin/root-newton-general.rs
+    source: —
+    date: 2026-07-16
+    prerequisites:
+      - "Newton's Method for Integer Square Root"
+    uses_concepts:
+      - "Newton's Method for Integer Square Root"
+      - "Integer Square Root"
+    reuses_code: —
+    derived_from:
+      - "Newton's Method for Integer Square Root"
+    related_to: —
+    unlocks: —
+    future_targets: —
+    summary: "Generalized the isqrt tangent-line update to x1 = x0 - f(x0)/f'(x0) for any differentiable f, proved quadratic convergence via Taylor's theorem, and found a genuine non-convergent counterexample (f(x)=x^3-x oscillating forever)."
+    concepts:
+      - "newtons-method"
+      - "taylor-series"
+      - "root-finding"
+      - "numerical-methods"
+    capabilities:
+      - "find-roots-of-differentiable-functions"
+
+  "Linear Congruential Generator":
+    kind: implementation
+    file: src/bin/rand-lcg.rs
+    source: —
+    date: 2026-07-13
+    prerequisites:
+      - "Euclidean GCD"
+      - "Modular Inverse"
+    uses_concepts:
+      - "Euclidean GCD"
+      - "Modular Inverse"
+    reuses_code: —
+    derived_from: —
+    related_to:
+      - "Pell's Equation via Continued Fractions"
+    unlocks: —
+    future_targets: —
+    summary: "Implemented x_(n+1) = (a*x_n + c) mod m and derived the Hull-Dobell full-period conditions by hand for m=8, generalizing to any power-of-two modulus."
+    concepts:
+      - "pseudorandom-generators"
+      - "modular-arithmetic"
+      - "number-theory"
+    capabilities:
+      - "generate-pseudorandom-sequences"
+
+  "Wiener's Attack on RSA":
+    kind: implementation
+    file: src/bin/mod-rsa-wiener.rs
+    source: —
+    date: 2026-07-13
+    prerequisites:
+      - "RSA Cryptosystem"
+      - "Continued Fractions"
+      - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+    uses_concepts:
+      - "RSA Cryptosystem"
+      - "Continued Fractions"
+      - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+      - "Euler's Totient Function"
+      - "Integer Square Root"
+      - "Extended Euclidean GCD"
+      - "Modular Exponentiation"
+      - "Miller-Rabin Primality Test"
+    reuses_code: —
+    derived_from:
+      - "RSA Cryptosystem"
+    related_to: —
+    unlocks: —
+    future_targets: —
+    summary: "Recovered RSA's private exponent d and factored n from the public key alone, whenever d < n^(1/4)/sqrt(2), by matching e/n against its continued-fraction convergents via Legendre's theorem."
+    concepts:
+      - "cryptanalysis"
+      - "continued-fractions"
+      - "number-theory"
+    capabilities:
+      - "break-rsa-with-small-private-exponent"
+
+  "Continued-Fraction Term Generation via the Euclidean Algorithm":
+    kind: implementation
+    file: src/bin/gcd-euclidean-fraction.rs
+    source: —
+    date: 2026-07-12
+    prerequisites:
+      - "Continued Fractions"
+      - "Euclidean GCD"
+    uses_concepts:
+      - "Continued Fractions"
+      - "Euclidean GCD"
+    reuses_code: —
+    derived_from:
+      - "Continued Fractions"
+      - "Euclidean GCD"
+    related_to: —
+    unlocks:
+      - "Wiener's Attack on RSA"
+    future_targets: —
+    summary: "Implemented the algorithmic continued-fraction term generator flagged as unimplemented theory in the Continued Fractions session, by retaining every quotient of the Euclidean algorithm's division loop instead of discarding all but the last."
+    concepts:
+      - "continued-fractions"
+      - "gcd"
+      - "number-theory"
+    capabilities:
+      - "generate-continued-fraction-terms-algorithmically"
+
+  "Pell's Equation via Continued Fractions":
+    kind: implementation
+    file: src/bin/gcd-euclidean-pell.rs
+    source: —
+    date: 2026-07-12
+    prerequisites:
+      - "Continued Fractions"
+      - "Integer Square Root"
+    uses_concepts:
+      - "Continued Fractions"
+      - "Integer Square Root"
+    reuses_code: —
+    derived_from:
+      - "Continued Fractions"
+    related_to: —
+    unlocks: —
+    future_targets: —
+    summary: "Found the fundamental solution to x^2-D*y^2=1 by expanding sqrt(D) via the (m,d,a) recurrence, proving eventual periodicity by pigeonhole, and locating the solution at k=r-1 or k=2r-1 depending on period parity."
+    concepts:
+      - "pells-equation"
+      - "continued-fractions"
+      - "pigeonhole-principle"
+      - "number-theory"
+    capabilities:
+      - "solve-pells-equation"
+
+  "Trial Division Factorization":
+    kind: implementation
+    file: src/bin/mod-factorize-trial.rs
+    source: —
+    date: 2026-07-11
+    prerequisites:
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    uses_concepts:
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+      - "Integer Square Root"
+      - "Extended Euclidean GCD"
+    reuses_code: —
+    derived_from:
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    related_to:
+      - "Pollard's Rho Factoring Algorithm"
+    unlocks: —
+    future_targets: —
+    summary: "Turned the WOP-based existence proof from Section 2.1 into a working O(sqrt(n)) factorization algorithm, proving independently that the search index never needs to backtrack."
+    concepts:
+      - "factorization"
+      - "number-theory"
+    capabilities:
+      - "factor-integers-by-trial-division"
+
+  "Number Theory Step by Step, Section 2.1: Introduction to Primes":
+    kind: book-study
+    file: —
+    source: "Number Theory Step by Step (Kuldeep Singh), Chapter 2, Section 2.1"
+    date: 2026-07-11
+    prerequisites:
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+    uses_concepts:
+      - "Extended Euclidean GCD"
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+    reuses_code: —
+    derived_from:
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+    related_to: —
+    unlocks:
+      - "Trial Division Factorization"
+    future_targets:
+      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+    summary: "Proved the Fundamental Theorem of Arithmetic (existence via WOP-descent, uniqueness via Euclid's Lemma) and completed all 13 exercises."
+    concepts:
+      - "number-theory"
+      - "factorization"
+      - "fundamental-theorem-of-arithmetic"
+    capabilities:
+      - "prove-fundamental-theorem-of-arithmetic"
+
+  "Continued Fractions":
+    kind: implementation
+    file: src/bin/gcd-euclidean-sqrt.rs
+    source: —
+    date: 2026-07-10
+    prerequisites:
+      - "Euclidean GCD"
+    uses_concepts:
+      - "Euclidean GCD"
+      - "Extended Euclidean GCD"
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Pell's Equation via Continued Fractions"
+      - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+      - "Wiener's Attack on RSA"
+    future_targets: —
+    summary: "Proved that a/b's continued-fraction terms are exactly the Euclidean algorithm's quotients, derived the convergent recurrence p_k=a_k*p_(k-1)+p_(k-2), and verified sqrt(2)'s convergents satisfy Pell's equation p_k^2-2q_k^2=+-1."
+    concepts:
+      - "continued-fractions"
+      - "pells-equation"
+      - "number-theory"
+    capabilities:
+      - "compute-convergents"
+      - "approximate-irrationals-exactly"
+
+  "Newton's Method for Integer Square Root":
+    kind: implementation
+    file: src/bin/mod-isqrt-newton.rs
+    source: —
+    date: 2026-07-10
+    prerequisites:
+      - "Integer Square Root"
+    uses_concepts:
+      - "Integer Square Root"
+    reuses_code: —
+    derived_from:
+      - "Integer Square Root"
+    related_to: —
+    unlocks:
+      - "Newton's Method for General Root-Finding"
+    future_targets: —
+    summary: "Derived x1=(x0+n/x0)/2 as the tangent-line update for f(x)=x^2-n, proved quadratic convergence via AM-GM, and found the truncated integer version settles into a 2-3 cycle rather than a fixed point."
+    concepts:
+      - "newtons-method"
+      - "numerical-methods"
+      - "quadratic-convergence"
+    capabilities:
+      - "compute-integer-sqrt-via-newton"
+
+  "Integer Square Root":
+    kind: implementation
+    file: src/bin/mod-isqrt-bisect.rs
+    source: —
+    date: 2026-07-10
+    prerequisites: —
+    uses_concepts: —
+    reuses_code: —
+    derived_from: —
+    related_to:
+      - "Segmented Sieve"
+    unlocks:
+      - "Newton's Method for Integer Square Root"
+      - "Pell's Equation via Continued Fractions"
+      - "Trial Division Factorization"
+      - "Wiener's Attack on RSA"
+      - "Newton's Method for General Root-Finding"
+    future_targets: —
+    summary: "Computed isqrt(n) via integer-only bisection on the trivial bracket [0,n], fixing two off-by-one stalls with a ceiling-rounded midpoint and a hi=mid-1 discard rule."
+    concepts:
+      - "bisection"
+      - "numerical-methods"
+    capabilities:
+      - "compute-integer-sqrt-exactly"
+
+  "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations":
+    kind: book-study
+    file: —
+    source: "Number Theory Step by Step (Kuldeep Singh), Chapter 1, Section 1.4"
+    date: 2026-07-08
+    prerequisites:
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+      - "Extended Euclidean GCD"
+    uses_concepts:
+      - "Extended Euclidean GCD"
+      - "Modular Inverse"
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+    reuses_code: —
+    derived_from:
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+    related_to: —
+    unlocks:
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    future_targets: —
+    summary: "Built the full theory of ax+by=c on Bezout's identity (Propositions 1.16-1.18, Corollary 1.19) and completed all 16 Exercises 1.4 plus all 24 Supplementary Problems 1, including a corrected book error in Exercise 14."
+    concepts:
+      - "diophantine-equations"
+      - "bezout-identity"
+      - "number-theory"
+    capabilities:
+      - "solve-linear-diophantine-equations"
+
+  "Multi-Modulus NTT with CRT Reconstruction":
+    kind: implementation
+    file: src/bin/poly-mul-crt.rs
+    source: —
+    date: 2026-07-05
+    prerequisites:
+      - "Number Theoretic Transform (NTT)"
+      - "Chinese Remainder Theorem"
+    uses_concepts:
+      - "Number Theoretic Transform (NTT)"
+      - "Chinese Remainder Theorem"
+    reuses_code: —
+    derived_from:
+      - "Number Theoretic Transform (NTT)"
+      - "Chinese Remainder Theorem"
+    related_to: —
+    unlocks: —
+    future_targets: —
+    summary: "Multiplied polynomials whose coefficients exceed any single NTT prime by running NTT mod three primes and CRT-reconstructing each coefficient, exact whenever c[k] < p1*p2*p3 (~4.6e26)."
+    concepts:
+      - "fft-ntt"
+      - "chinese-remainder-theorem"
+      - "polynomial-multiplication"
+    capabilities:
+      - "multiply-polynomials-beyond-single-modulus"
+
+  "Number Theory Step by Step, Section 1.3: Euclidean Algorithm":
+    kind: book-study
+    file: —
+    source: "Number Theory Step by Step (Kuldeep Singh), Chapter 1, Section 1.3"
+    date: 2026-07-05
+    prerequisites:
+      - "Extended Euclidean GCD"
+    uses_concepts:
+      - "Extended Euclidean GCD"
+      - "Modular Inverse"
+      - "Euclidean GCD"
+    reuses_code: —
+    derived_from: —
+    related_to:
+      - "Euclidean GCD"
+      - "Modular Inverse"
+    unlocks:
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    future_targets: —
+    summary: "Proved Bezout's Identity via well-ordering, built the Euclidean Algorithm and its back-substitution reverse, and proved Euclid's Lemma plus a multiplicativity lemma across 19 exercises."
+    concepts:
+      - "number-theory"
+      - "bezout-identity"
+      - "gcd"
+      - "euclids-lemma"
+    capabilities:
+      - "prove-euclidean-algorithm-facts-by-hand"
+
+  "Number Theoretic Transform (NTT)":
+    kind: implementation
+    file: src/bin/poly-mul-ntt.rs
+    source: —
+    date: 2026-07-04
+    prerequisites:
+      - "Primitive Roots mod p"
+      - "Naive Polynomial Multiplication (Linear Convolution)"
+    uses_concepts:
+      - "Primitive Roots mod p"
+      - "Naive Polynomial Multiplication (Linear Convolution)"
+      - "Miller-Rabin Primality Test"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Modular Inverse"
+    reuses_code: —
+    derived_from:
+      - "Naive Polynomial Multiplication (Linear Convolution)"
+    related_to:
+      - "Karatsuba Multiplication"
+    unlocks:
+      - "Multi-Modulus NTT with CRT Reconstruction"
+    future_targets: —
+    summary: "Multiplied polynomials in O(n log n) by evaluating at powers of a primitive n-th root of unity mod p, splitting even/odd coefficients recursively the way FFT does over the reals."
+    concepts:
+      - "fft-ntt"
+      - "divide-and-conquer"
+      - "group-theory"
+      - "polynomial-multiplication"
+    capabilities:
+      - "multiply-polynomials-in-nlogn"
+
+  "Primitive Roots mod p":
+    kind: implementation
+    file: src/bin/mod-primitive-root.rs
+    source: —
+    date: 2026-07-01
+    prerequisites:
+      - "Miller-Rabin Primality Test"
+      - "Pollard's Rho Factoring Algorithm"
+      - "Modular Exponentiation"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+    uses_concepts:
+      - "Miller-Rabin Primality Test"
+      - "Pollard's Rho Factoring Algorithm"
+      - "Modular Exponentiation"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Sieve of Eratosthenes"
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+    reuses_code: —
+    derived_from:
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+    related_to:
+      - "Sieve of Eratosthenes"
+    unlocks:
+      - "Number Theoretic Transform (NTT)"
+    future_targets: —
+    summary: "Proved every prime p has a primitive root via a counting argument, and found one in O(p^(1/4) log p) by checking g^((p-1)/q) for each distinct prime factor q of p-1, generalizing BSGS's safe-prime shortcut."
+    concepts:
+      - "group-theory"
+      - "lagranges-theorem"
+      - "factorization"
+      - "primitive-roots"
+    capabilities:
+      - "find-primitive-root-mod-p"
+
+  "Naive Polynomial Multiplication (Linear Convolution)":
+    kind: implementation
+    file: src/bin/poly-mul-naive.rs
+    source: —
+    date: 2026-06-30
+    prerequisites: —
+    uses_concepts: —
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Number Theoretic Transform (NTT)"
+    future_targets: —
+    summary: "Computed polynomial multiplication as linear convolution, c[k]=sum a[i]*b[k-i], in O(n*m), and distinguished it from the cyclic convolution NTT computes natively."
+    concepts:
+      - "polynomial-multiplication"
+      - "convolution"
+    capabilities:
+      - "multiply-polynomials-naively"
+
+  "Segmented Sieve":
+    kind: implementation
+    file: src/bin/sieve-segmented.rs
+    source: —
+    date: 2026-06-30
+    prerequisites:
+      - "Sieve of Eratosthenes"
+    uses_concepts:
+      - "Sieve of Eratosthenes"
+    reuses_code: —
+    derived_from:
+      - "Sieve of Eratosthenes"
+    related_to:
+      - "Integer Square Root"
+    unlocks: —
+    future_targets: —
+    summary: "Sieved primes in a window [L,R] using only O(sqrt(R)) space by precomputing small primes up to sqrt(R) and crossing out their multiples inside the window."
+    concepts:
+      - "sieve-methods"
+      - "number-theory"
+    capabilities:
+      - "enumerate-primes-in-large-range-window"
+
+  "Sieve of Eratosthenes":
+    kind: implementation
+    file: src/bin/sieve-eratosthenes.rs
+    source: —
+    date: 2026-06-30
+    prerequisites: —
+    uses_concepts: —
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Segmented Sieve"
+      - "Primitive Roots mod p"
+    future_targets: —
+    summary: "Found all primes up to n in O(n log log n) by crossing out multiples of each prime starting at p*p, with the log log n bound following from Mertens' theorem."
+    concepts:
+      - "sieve-methods"
+      - "mertens-theorem"
+    capabilities:
+      - "enumerate-primes-up-to-n"
+
+  "Karatsuba Multiplication":
+    kind: implementation
+    file: src/bin/big-uint-karatsuba.rs
+    source: —
+    date: 2026-06-30
+    prerequisites:
+      - "Big Integer Arithmetic (Schoolbook)"
+    uses_concepts:
+      - "Big Integer Arithmetic (Schoolbook)"
+    reuses_code: —
+    derived_from:
+      - "Big Integer Arithmetic (Schoolbook)"
+    related_to: —
+    unlocks:
+      - "Number Theoretic Transform (NTT)"
+    future_targets: —
+    summary: "Multiplied big integers in O(n^log2(3)) by recovering the cross term z1=(A_lo+A_hi)(B_lo+B_hi)-z0-z2 to cut the four schoolbook sub-multiplications down to three."
+    concepts:
+      - "divide-and-conquer"
+      - "big-integer-arithmetic"
+      - "master-theorem"
+    capabilities:
+      - "multiply-big-integers-subquadratic"
+
+  "Big Integer Arithmetic (Schoolbook)":
+    kind: implementation
+    file: src/bin/big-uint-naive.rs
+    source: —
+    date: 2026-06-28
+    prerequisites: —
+    uses_concepts: —
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Karatsuba Multiplication"
+    future_targets: —
+    summary: "Represented arbitrary-precision unsigned integers as base-2^64 Vec<u64> with a no-trailing-zeros invariant, implementing add/sub/compare and O(n*m) schoolbook multiplication."
+    concepts:
+      - "big-integer-arithmetic"
+      - "positional-number-systems"
+    capabilities:
+      - "arbitrary-precision-arithmetic"
+
+  "Baby-Step Giant-Step (Discrete Logarithm)":
+    kind: implementation
+    file: src/bin/mod-bsgs.rs
+    source: —
+    date: 2026-06-18
+    prerequisites:
+      - "Modular Exponentiation"
+      - "Modular Inverse"
+      - "Miller-Rabin Primality Test"
+    uses_concepts:
+      - "Modular Exponentiation"
+      - "Modular Inverse"
+      - "Miller-Rabin Primality Test"
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Primitive Roots mod p"
+    future_targets: —
+    summary: "Solved g^x=h mod p in O(sqrt(p)*log p) by decomposing x=k*m+y with m=ceil(sqrt(p)), matching baby-step and giant-step tables via a hash map."
+    concepts:
+      - "discrete-logarithm"
+      - "group-theory"
+      - "meet-in-the-middle"
+    capabilities:
+      - "compute-discrete-log-sqrt-time"
+
+  "Pollard's Rho Factoring Algorithm":
+    kind: implementation
+    file: src/bin/mod-pollard-rho.rs
+    source: —
+    date: 2026-06-18
+    prerequisites:
+      - "Miller-Rabin Primality Test"
+      - "Euclidean GCD"
+    uses_concepts:
+      - "Miller-Rabin Primality Test"
+      - "Modular Exponentiation"
+      - "Euclidean GCD"
+    reuses_code: —
+    derived_from: —
+    related_to:
+      - "Trial Division Factorization"
+    unlocks:
+      - "Primitive Roots mod p"
+    future_targets: —
+    summary: "Found a non-trivial factor of composite n in expected O(n^(1/4)) via a birthday-paradox collision mod an unknown prime factor, detected in O(1) space with Floyd's cycle detection."
+    concepts:
+      - "factorization"
+      - "probabilistic-algorithms"
+      - "cycle-detection"
+      - "birthday-paradox"
+    capabilities:
+      - "factor-machine-sized-integers-fast"
+
+  "RSA Cryptosystem":
+    kind: implementation
+    file: src/bin/mod-rsa.rs
+    source: —
+    date: 2026-06-17
+    prerequisites:
+      - "Miller-Rabin Primality Test"
+      - "Euler's Totient Function"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Modular Exponentiation"
+      - "Modular Inverse"
+    uses_concepts:
+      - "Miller-Rabin Primality Test"
+      - "Euler's Totient Function"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Modular Exponentiation"
+      - "Modular Inverse"
+      - "Extended Euclidean GCD"
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Wiener's Attack on RSA"
+    future_targets: —
+    summary: "Built textbook RSA on n=p*q, phi(n)=(p-1)(q-1), and Euler's theorem, choosing e coprime to phi(n) and computing d as its modular inverse via extended GCD."
+    concepts:
+      - "public-key-cryptography"
+      - "modular-arithmetic"
+      - "number-theory"
+    capabilities:
+      - "implement-textbook-rsa"
+
+  "Miller-Rabin Primality Test":
+    kind: implementation
+    file: src/bin/mod-miller-rabin.rs
+    source: —
+    date: 2026-06-16
+    prerequisites:
+      - "Modular Exponentiation"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+    uses_concepts:
+      - "Modular Exponentiation"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Chinese Remainder Theorem"
+    reuses_code: —
+    derived_from: —
+    related_to:
+      - "Chinese Remainder Theorem"
+    unlocks:
+      - "RSA Cryptosystem"
+      - "Pollard's Rho Factoring Algorithm"
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+      - "Primitive Roots mod p"
+      - "Number Theoretic Transform (NTT)"
+      - "Wiener's Attack on RSA"
+    future_targets: —
+    summary: "Strengthened Fermat's test against Carmichael numbers by exploiting that x^2=1 mod p has only two roots for a genuine prime p, bounding the false-positive rate at (1/4)^k over k bases."
+    concepts:
+      - "primality-testing"
+      - "group-theory"
+      - "probabilistic-algorithms"
+      - "chinese-remainder-theorem"
+    capabilities:
+      - "test-primality-fast"
+
+  "Euler's Theorem & Modular Inverse via Exponentiation":
+    kind: implementation
+    file: src/bin/mod-euler.rs
+    source: —
+    date: 2026-06-16
+    prerequisites:
+      - "Euler's Totient Function"
+      - "Modular Exponentiation"
+    uses_concepts:
+      - "Euler's Totient Function"
+      - "Modular Exponentiation"
+      - "Modular Inverse"
+    reuses_code: —
+    derived_from: —
+    related_to:
+      - "Modular Inverse"
+    unlocks:
+      - "Miller-Rabin Primality Test"
+      - "RSA Cryptosystem"
+      - "Primitive Roots mod p"
+      - "Number Theoretic Transform (NTT)"
+    future_targets: —
+    summary: "Proved a^phi(n)=1 mod n via Lagrange's theorem on the group (Z/nZ)*, giving Fermat's little theorem as the prime case and a^(phi(n)-1) as a second way to compute modular inverses."
+    concepts:
+      - "group-theory"
+      - "lagranges-theorem"
+      - "modular-arithmetic"
+    capabilities:
+      - "compute-modular-inverse-via-exponentiation"
+      - "apply-eulers-theorem"
+
+  "Modular Exponentiation":
+    kind: implementation
+    file: src/bin/mod-exponent.rs
+    source: —
+    date: 2026-06-14
+    prerequisites: —
+    uses_concepts: —
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Miller-Rabin Primality Test"
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+      - "RSA Cryptosystem"
+      - "Primitive Roots mod p"
+      - "Wiener's Attack on RSA"
+    future_targets: —
+    summary: "Computed a^b mod m in O(log b) via square-and-multiply, maintaining the invariant result=a^(exp & (2^n-1)) mod m and power=a^(2^n) mod m after n bits."
+    concepts:
+      - "exponentiation"
+      - "modular-arithmetic"
+      - "binary-representation"
+    capabilities:
+      - "fast-modular-exponentiation"
+
+  "Euler's Totient Function":
+    kind: implementation
+    file: src/bin/mod-totient.rs
+    source: —
+    date: 2026-06-14
+    prerequisites: —
+    uses_concepts:
+      - "Euclidean GCD"
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "RSA Cryptosystem"
+      - "Wiener's Attack on RSA"
+    future_targets: —
+    summary: "Computed phi(n) in O(sqrt(n)) via trial division and the multiplicativity property phi(m*n)=phi(m)*phi(n) for coprime m,n, combined with phi(p^k)=p^k-p^(k-1)."
+    concepts:
+      - "number-theory"
+      - "factorization"
+    capabilities:
+      - "compute-eulers-totient"
+
+  "Chinese Remainder Theorem":
+    kind: implementation
+    file: src/bin/gcd-crt.rs
+    source: —
+    date: 2026-06-11
+    prerequisites:
+      - "Modular Inverse"
+    uses_concepts:
+      - "Modular Inverse"
+      - "Extended Euclidean GCD"
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Miller-Rabin Primality Test"
+      - "Multi-Modulus NTT with CRT Reconstruction"
+    future_targets: —
+    summary: "Solved x≡a1(mod m1), x≡a2(mod m2) for coprime moduli by writing x=a1+k*m1 and solving for k via the modular inverse of m1 mod m2, with uniqueness following from m1*m2 dividing any two solutions' difference."
+    concepts:
+      - "modular-arithmetic"
+      - "chinese-remainder-theorem"
+      - "number-theory"
+    capabilities:
+      - "solve-simultaneous-congruences"
+
+  "Modular Inverse":
+    kind: implementation
+    file: src/bin/mod-inverse.rs
+    source: —
+    date: 2026-06-11
+    prerequisites:
+      - "Extended Euclidean GCD"
+    uses_concepts:
+      - "Extended Euclidean GCD"
+    reuses_code: —
+    derived_from:
+      - "Extended Euclidean GCD"
+    related_to: —
+    unlocks:
+      - "Chinese Remainder Theorem"
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+      - "RSA Cryptosystem"
+      - "Number Theoretic Transform (NTT)"
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+      - "Linear Congruential Generator"
+    future_targets: —
+    summary: "Computed the modular inverse of a mod m as the Bezout coefficient x from extended GCD, existing exactly when gcd(a,m)=1, normalized into [0,m)."
+    concepts:
+      - "modular-arithmetic"
+      - "bezout-identity"
+      - "gcd"
+    capabilities:
+      - "compute-modular-inverse"
+
+  "Extended Euclidean GCD":
+    kind: implementation
+    file: src/bin/gcd-euclidean-extended.rs
+    source: —
+    date: 2026-06-11
+    prerequisites:
+      - "Euclidean GCD"
+    uses_concepts:
+      - "Euclidean GCD"
+    reuses_code: —
+    derived_from:
+      - "Euclidean GCD"
+    related_to: —
+    unlocks:
+      - "Modular Inverse"
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+      - "Continued Fractions"
+      - "Trial Division Factorization"
+      - "Wiener's Attack on RSA"
+      - "RSA Cryptosystem"
+    future_targets: —
+    summary: "Augmented Euclidean GCD to also produce Bezout coefficients x,y with a*x+b*y=gcd(a,b), by threading coefficient pairs through the same reduction loop."
+    concepts:
+      - "gcd"
+      - "bezout-identity"
+      - "number-theory"
+    capabilities:
+      - "compute-bezout-coefficients"
+
+  "Binary GCD (Stein's Algorithm)":
+    kind: implementation
+    file: src/bin/gcd-binary.rs
+    source: —
+    date: 2026-06-11
+    prerequisites:
+      - "Euclidean GCD"
+    uses_concepts:
+      - "Euclidean GCD"
+    reuses_code: —
+    derived_from: —
+    related_to:
+      - "Euclidean GCD"
+    unlocks: —
+    future_targets: —
+    summary: "Computed GCD using only subtraction and bit-shifts instead of division, alternating a guaranteed-even subtraction step with a bit-halving step to match Euclidean GCD's O(log(min(a,b))) bound."
+    concepts:
+      - "gcd"
+      - "bit-manipulation"
+    capabilities:
+      - "compute-gcd-without-division"
+
+  "Euclidean GCD":
+    kind: implementation
+    file: src/bin/gcd-euclidean-basic.rs
+    source: —
+    date: 2026-06-10
+    prerequisites: —
+    uses_concepts: —
+    reuses_code: —
+    derived_from: —
+    related_to: —
+    unlocks:
+      - "Extended Euclidean GCD"
+      - "Binary GCD (Stein's Algorithm)"
+      - "Continued Fractions"
+      - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+      - "Euler's Totient Function"
+      - "Linear Congruential Generator"
+      - "Pollard's Rho Factoring Algorithm"
+    future_targets: —
+    summary: "Established gcd(a,b)=gcd(b,a mod b) by proving the two pairs share identical common-divisor sets, giving O(log(min(a,b))) via Lame's theorem."
+    concepts:
+      - "gcd"
+      - "number-theory"
+    capabilities:
+      - "compute-gcd"
+
+# ---------------------------------------------------------------------------
+# future_targets: canonical global list of explicitly-named, not-yet-completed topics.
+# A target is removed from this section the moment it receives its own completed session.
+# ---------------------------------------------------------------------------
+future_targets:
+  "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality":
+    status: not-completed
+    mentioned_by:
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    evidence:
+      - "HISTORY-2026.07.md: Section 2.1's Unlocks field names it directly (\"floor/ceiling functions and the sqrt(n) trial division bound formalised\")."
+
+# ---------------------------------------------------------------------------
+# branches: clusters discovered from the actual prerequisite/derived_from graph, not a forced taxonomy.
+# frontier = completed sessions in the branch with no completed descendant inside the same branch,
+# or the branch's most recently dated session.
+# ---------------------------------------------------------------------------
+branches:
+  "GCD, Modular Arithmetic & Number Theory Core":
+    sessions:
+      - "Euclidean GCD"
+      - "Extended Euclidean GCD"
+      - "Binary GCD (Stein's Algorithm)"
+      - "Modular Inverse"
+      - "Chinese Remainder Theorem"
+      - "Modular Exponentiation"
+      - "Euler's Totient Function"
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+    frontier:
+      - "Binary GCD (Stein's Algorithm)"
+    explicit_future_targets: —
+  "Primality, Factorization & Public-Key Cryptography":
+    sessions:
+      - "Miller-Rabin Primality Test"
+      - "RSA Cryptosystem"
+      - "Pollard's Rho Factoring Algorithm"
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+      - "Primitive Roots mod p"
+      - "Trial Division Factorization"
+      - "Wiener's Attack on RSA"
+    frontier:
+      - "Wiener's Attack on RSA"
+      - "Trial Division Factorization"
+    explicit_future_targets: —
+  "Big Integer Arithmetic & Fast Polynomial Multiplication":
+    sessions:
+      - "Big Integer Arithmetic (Schoolbook)"
+      - "Karatsuba Multiplication"
+      - "Naive Polynomial Multiplication (Linear Convolution)"
+      - "Number Theoretic Transform (NTT)"
+      - "Multi-Modulus NTT with CRT Reconstruction"
+    frontier:
+      - "Multi-Modulus NTT with CRT Reconstruction"
+    explicit_future_targets: —
+  "Sieve Methods":
+    sessions:
+      - "Sieve of Eratosthenes"
+      - "Segmented Sieve"
+    frontier:
+      - "Segmented Sieve"
+    explicit_future_targets: —
+  "Continued Fractions, Diophantine Approximation & Pell's Equation":
+    sessions:
+      - "Continued Fractions"
+      - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+      - "Pell's Equation via Continued Fractions"
+    frontier:
+      - "Pell's Equation via Continued Fractions"
+    explicit_future_targets: —
+  "Root-Finding & Numerical Methods":
+    sessions:
+      - "Integer Square Root"
+      - "Newton's Method for Integer Square Root"
+      - "Newton's Method for General Root-Finding"
+    frontier:
+      - "Newton's Method for General Root-Finding"
+    explicit_future_targets: —
+  "Randomness":
+    sessions:
+      - "Linear Congruential Generator"
+    frontier:
+      - "Linear Congruential Generator"
+    explicit_future_targets: —
+  "Book Study: Number Theory Step by Step":
+    sessions:
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    frontier:
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    explicit_future_targets:
+      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+
+# ---------------------------------------------------------------------------
+# open_gaps: conservative, evidence-only. No invented curriculum.
+# ---------------------------------------------------------------------------
+open_gaps:
+  explicit_future_targets:
+    - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+  missing_intermediate_topics: —
+  implementation_capability_gaps: —
+  unresolved_proofs_in_completed_sessions:
+    - claim: "p_k^2 - D*q_k^2 = (-1)^(k+1)*d_(k+1), used in Pell's Equation via Continued Fractions to locate the fundamental solution"
+      status: "confirmed empirically for D=7,13,61; not proved from first principles"
+      evidence:
+        - "src/bin/gcd-euclidean-pell.md: \"From convergents to a solution\" section, explicitly flagged as \"genuinely open work for a future session\"."
+    - claim: "Tight closed-form bound r = O(sqrt(D)*log(D)) on the period length of sqrt(D)'s continued-fraction expansion"
+      status: "cited from the literature, not derived in-repo"
+      evidence:
+        - "src/bin/gcd-euclidean-pell.md: Complexity section."
+
+# ---------------------------------------------------------------------------
+# prerequisite_index: X -> sessions whose `prerequisites` field names X. Genuine prerequisites only.
+# ---------------------------------------------------------------------------
+prerequisite_index:
+  "Euclidean GCD":
+    required_by:
+      - "Extended Euclidean GCD"
+      - "Binary GCD (Stein's Algorithm)"
+      - "Continued Fractions"
+      - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+      - "Linear Congruential Generator"
+      - "Pollard's Rho Factoring Algorithm"
+  "Extended Euclidean GCD":
+    required_by:
+      - "Modular Inverse"
+      - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+  "Modular Inverse":
+    required_by:
+      - "Chinese Remainder Theorem"
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+      - "RSA Cryptosystem"
+      - "Linear Congruential Generator"
+  "Euler's Totient Function":
+    required_by:
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "RSA Cryptosystem"
+  "Modular Exponentiation":
+    required_by:
+      - "Euler's Theorem & Modular Inverse via Exponentiation"
+      - "Miller-Rabin Primality Test"
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+      - "Primitive Roots mod p"
+      - "RSA Cryptosystem"
+  "Euler's Theorem & Modular Inverse via Exponentiation":
+    required_by:
+      - "Miller-Rabin Primality Test"
+      - "RSA Cryptosystem"
+      - "Primitive Roots mod p"
+  "Miller-Rabin Primality Test":
+    required_by:
+      - "RSA Cryptosystem"
+      - "Pollard's Rho Factoring Algorithm"
+      - "Baby-Step Giant-Step (Discrete Logarithm)"
+      - "Primitive Roots mod p"
+  "RSA Cryptosystem":
+    required_by:
+      - "Wiener's Attack on RSA"
+  "Pollard's Rho Factoring Algorithm":
+    required_by:
+      - "Primitive Roots mod p"
+  "Big Integer Arithmetic (Schoolbook)":
+    required_by:
+      - "Karatsuba Multiplication"
+  "Sieve of Eratosthenes":
+    required_by:
+      - "Segmented Sieve"
+  "Primitive Roots mod p":
+    required_by:
+      - "Number Theoretic Transform (NTT)"
+  "Naive Polynomial Multiplication (Linear Convolution)":
+    required_by:
+      - "Number Theoretic Transform (NTT)"
+  "Number Theoretic Transform (NTT)":
+    required_by:
+      - "Multi-Modulus NTT with CRT Reconstruction"
+  "Chinese Remainder Theorem":
+    required_by:
+      - "Multi-Modulus NTT with CRT Reconstruction"
+  "Number Theory Step by Step, Section 1.3: Euclidean Algorithm":
+    required_by:
+      - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+  "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations":
+    required_by:
+      - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+  "Number Theory Step by Step, Section 2.1: Introduction to Primes":
+    required_by:
+      - "Trial Division Factorization"
+  "Integer Square Root":
+    required_by:
+      - "Newton's Method for Integer Square Root"
+      - "Pell's Equation via Continued Fractions"
+  "Continued Fractions":
+    required_by:
+      - "Pell's Equation via Continued Fractions"
+      - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+      - "Wiener's Attack on RSA"
+  "Continued-Fraction Term Generation via the Euclidean Algorithm":
+    required_by:
+      - "Wiener's Attack on RSA"
+  "Newton's Method for Integer Square Root":
+    required_by:
+      - "Newton's Method for General Root-Finding"
+
+# ---------------------------------------------------------------------------
+# code_reuse_index: intentionally empty. See the header note — this repo forbids code reuse across
+# src/bin/*.rs files by hard constraint, so no session's reuses_code field is ever non-empty.
+# ---------------------------------------------------------------------------
+code_reuse_index: {}
+
+# ---------------------------------------------------------------------------
+# concept_index: normalized concept -> sessions.
+# ---------------------------------------------------------------------------
+concept_index:
+  bezout-identity:
+    - "Extended Euclidean GCD"
+    - "Modular Inverse"
+    - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+    - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+  big-integer-arithmetic:
+    - "Big Integer Arithmetic (Schoolbook)"
+    - "Karatsuba Multiplication"
+  binary-representation:
+    - "Modular Exponentiation"
+  birthday-paradox:
+    - "Pollard's Rho Factoring Algorithm"
+  bisection:
+    - "Integer Square Root"
+  bit-manipulation:
+    - "Binary GCD (Stein's Algorithm)"
+  chinese-remainder-theorem:
+    - "Chinese Remainder Theorem"
+    - "Miller-Rabin Primality Test"
+    - "Multi-Modulus NTT with CRT Reconstruction"
+  continued-fractions:
+    - "Continued Fractions"
+    - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+    - "Pell's Equation via Continued Fractions"
+    - "Wiener's Attack on RSA"
+  convolution:
+    - "Naive Polynomial Multiplication (Linear Convolution)"
+  cryptanalysis:
+    - "Wiener's Attack on RSA"
+  cycle-detection:
+    - "Pollard's Rho Factoring Algorithm"
+  diophantine-equations:
+    - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+  discrete-logarithm:
+    - "Baby-Step Giant-Step (Discrete Logarithm)"
+  divide-and-conquer:
+    - "Karatsuba Multiplication"
+    - "Number Theoretic Transform (NTT)"
+  euclids-lemma:
+    - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+  exponentiation:
+    - "Modular Exponentiation"
+  factorization:
+    - "Euler's Totient Function"
+    - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    - "Pollard's Rho Factoring Algorithm"
+    - "Primitive Roots mod p"
+    - "Trial Division Factorization"
+  fft-ntt:
+    - "Multi-Modulus NTT with CRT Reconstruction"
+    - "Number Theoretic Transform (NTT)"
+  fundamental-theorem-of-arithmetic:
+    - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+  gcd:
+    - "Binary GCD (Stein's Algorithm)"
+    - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+    - "Euclidean GCD"
+    - "Extended Euclidean GCD"
+    - "Modular Inverse"
+    - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+  group-theory:
+    - "Baby-Step Giant-Step (Discrete Logarithm)"
+    - "Euler's Theorem & Modular Inverse via Exponentiation"
+    - "Miller-Rabin Primality Test"
+    - "Number Theoretic Transform (NTT)"
+    - "Primitive Roots mod p"
+  lagranges-theorem:
+    - "Euler's Theorem & Modular Inverse via Exponentiation"
+    - "Primitive Roots mod p"
+  master-theorem:
+    - "Karatsuba Multiplication"
+  meet-in-the-middle:
+    - "Baby-Step Giant-Step (Discrete Logarithm)"
+  mertens-theorem:
+    - "Sieve of Eratosthenes"
+  modular-arithmetic:
+    - "Chinese Remainder Theorem"
+    - "Euler's Theorem & Modular Inverse via Exponentiation"
+    - "Linear Congruential Generator"
+    - "Modular Exponentiation"
+    - "Modular Inverse"
+    - "RSA Cryptosystem"
+  newtons-method:
+    - "Newton's Method for General Root-Finding"
+    - "Newton's Method for Integer Square Root"
+  number-theory:
+    - "Chinese Remainder Theorem"
+    - "Continued Fractions"
+    - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+    - "Euclidean GCD"
+    - "Euler's Totient Function"
+    - "Extended Euclidean GCD"
+    - "Linear Congruential Generator"
+    - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+    - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+    - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    - "Pell's Equation via Continued Fractions"
+    - "RSA Cryptosystem"
+    - "Segmented Sieve"
+    - "Trial Division Factorization"
+    - "Wiener's Attack on RSA"
+  numerical-methods:
+    - "Integer Square Root"
+    - "Newton's Method for General Root-Finding"
+    - "Newton's Method for Integer Square Root"
+  pells-equation:
+    - "Continued Fractions"
+    - "Pell's Equation via Continued Fractions"
+  pigeonhole-principle:
+    - "Pell's Equation via Continued Fractions"
+  polynomial-multiplication:
+    - "Multi-Modulus NTT with CRT Reconstruction"
+    - "Naive Polynomial Multiplication (Linear Convolution)"
+    - "Number Theoretic Transform (NTT)"
+  positional-number-systems:
+    - "Big Integer Arithmetic (Schoolbook)"
+  primality-testing:
+    - "Miller-Rabin Primality Test"
+  primitive-roots:
+    - "Primitive Roots mod p"
+  probabilistic-algorithms:
+    - "Miller-Rabin Primality Test"
+    - "Pollard's Rho Factoring Algorithm"
+  pseudorandom-generators:
+    - "Linear Congruential Generator"
+  public-key-cryptography:
+    - "RSA Cryptosystem"
+  quadratic-convergence:
+    - "Newton's Method for Integer Square Root"
+  root-finding:
+    - "Newton's Method for General Root-Finding"
+  sieve-methods:
+    - "Segmented Sieve"
+    - "Sieve of Eratosthenes"
+  taylor-series:
+    - "Newton's Method for General Root-Finding"
+
+capability_index:
+  apply-eulers-theorem:
+    - "Euler's Theorem & Modular Inverse via Exponentiation"
+  approximate-irrationals-exactly:
+    - "Continued Fractions"
+  arbitrary-precision-arithmetic:
+    - "Big Integer Arithmetic (Schoolbook)"
+  break-rsa-with-small-private-exponent:
+    - "Wiener's Attack on RSA"
+  compute-bezout-coefficients:
+    - "Extended Euclidean GCD"
+  compute-convergents:
+    - "Continued Fractions"
+  compute-discrete-log-sqrt-time:
+    - "Baby-Step Giant-Step (Discrete Logarithm)"
+  compute-eulers-totient:
+    - "Euler's Totient Function"
+  compute-gcd:
+    - "Euclidean GCD"
+  compute-gcd-without-division:
+    - "Binary GCD (Stein's Algorithm)"
+  compute-integer-sqrt-exactly:
+    - "Integer Square Root"
+  compute-integer-sqrt-via-newton:
+    - "Newton's Method for Integer Square Root"
+  compute-modular-inverse:
+    - "Modular Inverse"
+  compute-modular-inverse-via-exponentiation:
+    - "Euler's Theorem & Modular Inverse via Exponentiation"
+  enumerate-primes-in-large-range-window:
+    - "Segmented Sieve"
+  enumerate-primes-up-to-n:
+    - "Sieve of Eratosthenes"
+  factor-integers-by-trial-division:
+    - "Trial Division Factorization"
+  factor-machine-sized-integers-fast:
+    - "Pollard's Rho Factoring Algorithm"
+  fast-modular-exponentiation:
+    - "Modular Exponentiation"
+  find-primitive-root-mod-p:
+    - "Primitive Roots mod p"
+  find-roots-of-differentiable-functions:
+    - "Newton's Method for General Root-Finding"
+  generate-continued-fraction-terms-algorithmically:
+    - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+  generate-pseudorandom-sequences:
+    - "Linear Congruential Generator"
+  implement-textbook-rsa:
+    - "RSA Cryptosystem"
+  multiply-big-integers-subquadratic:
+    - "Karatsuba Multiplication"
+  multiply-polynomials-beyond-single-modulus:
+    - "Multi-Modulus NTT with CRT Reconstruction"
+  multiply-polynomials-in-nlogn:
+    - "Number Theoretic Transform (NTT)"
+  multiply-polynomials-naively:
+    - "Naive Polynomial Multiplication (Linear Convolution)"
+  prove-euclidean-algorithm-facts-by-hand:
+    - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+  prove-fundamental-theorem-of-arithmetic:
+    - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+  solve-linear-diophantine-equations:
+    - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+  solve-pells-equation:
+    - "Pell's Equation via Continued Fractions"
+  solve-simultaneous-congruences:
+    - "Chinese Remainder Theorem"
+  test-primality-fast:
+    - "Miller-Rabin Primality Test"
+
+# ---------------------------------------------------------------------------
+# completed_by_date: newest first. Every session appears exactly once.
+# ---------------------------------------------------------------------------
+completed_by_date:
+  "2026-07-16":
+    - "Newton's Method for General Root-Finding"
+  "2026-07-13":
+    - "Linear Congruential Generator"
+    - "Wiener's Attack on RSA"
+  "2026-07-12":
+    - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+    - "Pell's Equation via Continued Fractions"
+  "2026-07-11":
+    - "Trial Division Factorization"
+    - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+  "2026-07-10":
+    - "Continued Fractions"
+    - "Newton's Method for Integer Square Root"
+    - "Integer Square Root"
+  "2026-07-08":
+    - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+  "2026-07-05":
+    - "Multi-Modulus NTT with CRT Reconstruction"
+    - "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+  "2026-07-04":
+    - "Number Theoretic Transform (NTT)"
+  "2026-07-01":
+    - "Primitive Roots mod p"
+  "2026-06-30":
+    - "Naive Polynomial Multiplication (Linear Convolution)"
+    - "Segmented Sieve"
+    - "Sieve of Eratosthenes"
+    - "Karatsuba Multiplication"
+  "2026-06-28":
+    - "Big Integer Arithmetic (Schoolbook)"
+  "2026-06-18":
+    - "Baby-Step Giant-Step (Discrete Logarithm)"
+    - "Pollard's Rho Factoring Algorithm"
+  "2026-06-17":
+    - "RSA Cryptosystem"
+  "2026-06-16":
+    - "Miller-Rabin Primality Test"
+    - "Euler's Theorem & Modular Inverse via Exponentiation"
+  "2026-06-14":
+    - "Modular Exponentiation"
+    - "Euler's Totient Function"
+  "2026-06-11":
+    - "Chinese Remainder Theorem"
+    - "Modular Inverse"
+    - "Extended Euclidean GCD"
+    - "Binary GCD (Stein's Algorithm)"
+  "2026-06-10":
+    - "Euclidean GCD"
+
+# ---------------------------------------------------------------------------
+# edges: non-obvious, inferred, ambiguous, or historically-important relationships that a session
+# field alone would understate. Not a duplicate of the session fields above — see each session's
+# related_to for the lighter-weight version of some of these.
+# ---------------------------------------------------------------------------
+edges:
+  - from: "Trial Division Factorization"
+    to: "Pollard's Rho Factoring Algorithm"
+    type: related
+    confidence: explicit
+    evidence:
+      - "HISTORY-2026.07.md: Trial Division entry, \"contrasted explicitly against the O(n^(1/4)) cost of the Pollard's-Rho-based factorize\" — a same-problem comparison, not a prerequisite; trial division is the simpler of the two algorithms."
+  - from: "Pell's Equation via Continued Fractions"
+    to: "Linear Congruential Generator"
+    type: related
+    confidence: explicit
+    evidence:
+      - "HISTORY-2026.07.md: LCG entry, \"the pigeonhole-plus-determinism argument from the Pell's equation session, generalized here\" — a borrowed side-argument for LCG's eventual-periodicity remark, not a prerequisite for its core Hull-Dobell result."
+  - from: "Segmented Sieve"
+    to: "Integer Square Root"
+    type: related
+    confidence: explicit
+    evidence:
+      - "src/bin/mod-isqrt-bisect.md Overview: \"motivated directly by a floating-point sqrt precision bug flagged in the segmented sieve's notes\"."
+      - "HISTORY-2026.07.md: Integer Square Root's own Depends-on field says \"motivated by, but not technically dependent on\" — historical inspiration, not a prerequisite."
+  - from: "Karatsuba Multiplication"
+    to: "Number Theoretic Transform (NTT)"
+    type: related
+    confidence: explicit
+    evidence:
+      - "src/bin/poly-mul-ntt.md Complexity section: contrasts NTT's T(n)=2T(n/2)+O(n) Master-theorem boundary case against Karatsuba's T(n)=3T(n/2)+O(n) recursive-work-dominates case."
+  - from: "Sieve of Eratosthenes"
+    to: "Primitive Roots mod p"
+    type: related
+    confidence: explicit
+    evidence:
+      - "src/bin/mod-primitive-root.md Complexity section: reuses the Mertens'-theorem density argument from the sieve session to bound the candidate search, without requiring the sieve algorithm itself."
+  - from: "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+    to: "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    type: derived_from
+    confidence: explicit
+    evidence:
+      - "HISTORY-2026.07.md: Section 1.4's Supplementary Problem 1.23 explicitly flags prime factorization as \"not yet covered as a proven theorem\" in this repo; Section 2.1, three days later, closes exactly that gap by proving the Fundamental Theorem of Arithmetic."
+  - from: "Baby-Step Giant-Step (Discrete Logarithm)"
+    to: "Primitive Roots mod p"
+    type: derived_from
+    confidence: explicit
+    evidence:
+      - "src/bin/mod-bsgs.md \"Finding a generator\" section: the safe-prime two-check shortcut (g^2, g^((p-1)/2)) is explicitly named as the special case that Primitive Roots mod p later generalizes to any prime via Lagrange's theorem."

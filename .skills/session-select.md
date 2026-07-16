@@ -2,9 +2,9 @@ Investigate the repo and propose exactly 5 candidate topics for the next session
 
 ## Steps
 
-1. **Build the "done" set.** Read `INDEX.txt` first — its `sessions` keys ARE the done set. List every `src/bin/*.rs` file to cross-check. Fall back to reading every `HISTORY-YYYY.MM.md` file in full only if INDEX.txt looks stale or incomplete (e.g. a `.rs` file exists with no matching `sessions` entry).
+1. **Build the "done" set.** Read `INDEX.yml` first — its `sessions` keys ARE the done set. List every `src/bin/*.rs` file to cross-check. Fall back to reading every `HISTORY-YYYY.MM.yml` file in full only if INDEX.yml looks stale or incomplete (e.g. a `.rs` file exists with no matching `sessions` entry).
 
-2. **Build the dependency graph.** Read directly from `INDEX.txt`'s `depends_on_index` and `unlocks_index` maps — they already give this graph. Fall back to the raw `Depends on:` / `Unlocks:` fields across `HISTORY-YYYY.MM.md` files only if INDEX.txt is stale or you need a specific fact/citation, not just the graph shape.
+2. **Build the dependency graph.** Read directly from `INDEX.yml`'s `prerequisite_index` map and each session's `derived_from`/`unlocks` fields — they already give this graph, with genuine prerequisites kept separate from softer `uses_concepts`/`related_to` links. Use `branches` and `open_gaps` for the structural "what's underexplored" question. HISTORY-YYYY.MM.yml carries no dependency field at all (by design), so if INDEX.yml looks stale, re-derive the graph by reading `src/bin/*.md`/`*.rs` directly rather than looking for a `Depends on`/`Unlocks` field anywhere in HISTORY. Use HISTORY only for session-event citations (a specific bug, a specific abandoned approach) when you need one.
 
 3. **Find the book-study position.** If any `**Source:**` entries exist, find the most recent one and identify its book, chapter, and section. Locate the book's PDF (`find . -name "*.pdf"` from the repo root) and read its table of contents (via `pdftotext`) to determine the immediate next section in book order. If the most recent book session did not complete every Exercise and Supplementary Problem for its section (check the notes/history text for this), the "next" book candidate is finishing that same section, not advancing — say so explicitly.
 

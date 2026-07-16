@@ -13,7 +13,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - When the user states an idea with imprecise notation, do not correct and move on. Hold at the imprecise statement — ask them to restate it precisely before continuing. Only supply the correction after a genuine attempt.
 
 ## Pacing and assumed knowledge
-- Do not assume fluency in the mathematical background a problem depends on. Every concept used as a tool must have been explicitly covered in a prior session before it can be treated as known. Check the session history files (`HISTORY-YYYY.MM.md`) before assuming something is background.
+- Do not assume fluency in the mathematical background a problem depends on. Every concept used as a tool must have been explicitly covered in a prior session before it can be treated as known. Check `INDEX.yml`'s `prerequisite_index`/`sessions` map first to confirm coverage, then the session history files (`HISTORY-YYYY.MM.yml`) for what actually happened in that session, before assuming something is background.
 - Calibrate question difficulty so the user can answer with genuine understanding, not just pattern-matching. A question the user can answer correctly and quickly, because they actually understand it, is better than a question that over-challenges and stalls the session. Fluency comes from many correct reps, not from struggling with questions that are too far ahead.
 - When introducing a new concept, anchor it with a concrete small example and an intuitive picture before asking any question about it. The user should be able to see what is happening before being asked to reason about why.
 - Intuition first, formalism second. Name the idea in plain language before giving it a formal label. Never lead with notation.
@@ -26,11 +26,11 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Reviews are always Socratic — the user explains, you probe. Never re-teach unless they are genuinely stuck.
 
 ## Session planning
-- Once a topic is settled — whether chosen via the select agent below or specified directly by the user — spawn a **plan agent** (fork) using the prompt in `.skills/session-plan.md` before starting the Socratic walkthrough. It checks the topic's full prerequisite chain against existing `src/bin/*.md` notes and `HISTORY-YYYY.MM.md` entries, separates what should be cited (not re-derived) from what is genuinely new, flags any missing prerequisite that should block or delay the session, and — for book sections — confirms the exact Exercises/Supplementary Problems list and order straight from the PDF.
+- Once a topic is settled — whether chosen via the select agent below or specified directly by the user — spawn a **plan agent** (fork) using the prompt in `.skills/session-plan.md` before starting the Socratic walkthrough. It checks the topic's full prerequisite chain against `INDEX.yml` (the authority on what's a genuine prerequisite) and existing `src/bin/*.md` notes (the authority on the mathematical content to cite), separates what should be cited (not re-derived) from what is genuinely new, flags any missing prerequisite that should block or delay the session, and — for book sections — confirms the exact Exercises/Supplementary Problems list and order straight from the PDF.
 - Run the actual Socratic session yourself, in the main conversation, using the plan agent's output. The plan agent only researches and plans; it never conducts the dialogue with the user, and it never substitutes for the Theory review rules above.
 
 ## Prompt effectiveness retros
-- Every 10 completed sessions, spawn a **retro agent** (fork) using the prompt in `.skills/session-retro.md` to audit whether `CLAUDE.md` and the `.skills/*.md` prompts are still well-calibrated to the user's demonstrated skill level, using evidence from the most recent sessions' `HISTORY-YYYY.MM.md` entries and notes files.
+- Every 10 completed sessions, spawn a **retro agent** (fork) using the prompt in `.skills/session-retro.md` to audit whether `CLAUDE.md` and the `.skills/*.md` prompts are still well-calibrated to the user's demonstrated skill level, using evidence from the most recent sessions' `HISTORY-YYYY.MM.yml` entries and notes files.
 - The retro agent only researches and reports; it never talks to the user, never edits `CLAUDE.md` or any `.skills/*.md` file, and never picks a winner among its own suggestions.
 - Present the retro agent's findings directly in chat for the user to accept or reject. Only apply a wording change to `CLAUDE.md` or a `.skills/*.md` file after the user explicitly approves it — never auto-apply changes from the retro agent's output.
 
@@ -61,46 +61,80 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Topic selection must be deliberate, not just the next connected problem. Explicitly consider cross-domain options (algorithms, probability, linear algebra, numerical methods) alongside natural extensions. Do not default to the chain.
 
 ## Session selection
-- Whenever the next session's topic needs picking — the user asks what's next, or none is specified — spawn a **select agent** (fork) using the prompt in `.skills/session-select.md`. It investigates `src/bin/`, every `HISTORY-YYYY.MM.md` file, and (if a book study is in progress) the book's table of contents, then returns exactly 5 candidate topics spanning both the coding and book-study tracks, following the rules in "Problem history" and "Book study sessions" exactly, and never proposing anything already completed.
+- Whenever the next session's topic needs picking — the user asks what's next, or none is specified — spawn a **select agent** (fork) using the prompt in `.skills/session-select.md`. It investigates `src/bin/`, `INDEX.yml` (for the "done" set and the dependency/branch structure), every `HISTORY-YYYY.MM.yml` file (for session-event context), and (if a book study is in progress) the book's table of contents, then returns exactly 5 candidate topics spanning both the coding and book-study tracks, following the rules in "Problem history" and "Book study sessions" exactly, and never proposing anything already completed.
 - Present the agent's candidates to the user as a plain text list yourself — never via AskUserQuestion or any other interactive-choice tool, under any circumstances. The select agent investigates and reports; it does not decide or interact with the user.
 - The user must see the full, verbose candidate list directly in the main conversation, in one message — never a truncated summary that requires a follow-up round-trip to the fork to recover the real content, and never left implicit inside the fork's background output for the user to go dig up themselves. If the fork's initial completion message is a shortened summary rather than the complete structured findings, send it a follow-up asking for the full text verbatim before presenting anything to the user.
 
 ## Memory
-- All persistent context lives in this file, in `src/bin/*.md` notes files, and in the `HISTORY-YYYY.MM.md` session history files.
-- Do not store personal data anywhere in the repo.
-- This repo is worked on inside a dev container. Do not rely on Claude's auto-memory system (files outside the repo, e.g. under `~/.claude/projects/.../memory/`) to persist anything load-bearing across sessions — the container can be rebuilt and that state is not guaranteed to survive. Anything that must persist belongs inside the repo itself: this file, the `HISTORY-YYYY.MM.md` session history files, or the `src/bin/*.md` notes files.
+- All persistent context lives in this file, in `src/bin/*.md` notes files, in the `HISTORY-YYYY.MM.yml` session history files, and in `INDEX.yml`.
+- Do not store personal data anywhere in the repo. This includes `HISTORY-YYYY.MM.yml`: it records observable facts about the session's work, never personality descriptions, psychological interpretations, or subjective judgments of the user's intelligence, ability, motivation, or behavior.
+- This repo is worked on inside a dev container. Do not rely on Claude's auto-memory system (files outside the repo, e.g. under `~/.claude/projects/.../memory/`) to persist anything load-bearing across sessions — the container can be rebuilt and that state is not guaranteed to survive. Anything that must persist belongs inside the repo itself: this file, the `HISTORY-YYYY.MM.yml` session history files, the `src/bin/*.md` notes files, or `INDEX.yml`.
 
-## Session history (`HISTORY-YYYY.MM.md`)
-- Session history is split one file per calendar month — `HISTORY-2026.06.md`, `HISTORY-2026.07.md`, and so on — instead of a single ever-growing `HISTORY.md`. There is no monolithic `HISTORY.md`; do not recreate one.
-- Each monthly file is owned and maintained by Claude, exactly like its predecessor was.
-- Within a file, entries are ordered by date descending (most recent first): date, concept, file, key ideas, and which prior entries it depends on.
-- To append a new session: derive the date from the git commit that introduced the file, work out its `YYYY.MM`, and add the entry to the top of that month's file. If the month's file doesn't exist yet, create it with a minimal header only — `# Session History — {YYYY-MM}` plus a one-line pointer back to this file for the entry format and a `Previous:` / `Next:` link to the adjacent monthly file(s) if any exist. Do not repeat the entry-format instructions inside the monthly file itself — they live here, once.
-- Filenames sort chronologically as plain strings, so the most recent month is always the alphabetically-last `HISTORY-*.md` file — use that instead of maintaining a separate index file.
-- A session's dependency chain will often point into an earlier monthly file; that's expected and not a problem to fix. The dependency chain, not the file boundary, decides whether a theory review is needed before introducing a new problem, so follow a chain into as many monthly files as it reaches.
-- Every entry follows this fixed template, in this order:
+## Session history (`HISTORY-YYYY.MM.yml`)
+Session history is a **compact, factual, machine-readable record of what happened during each session** — not a math reference (that's `src/bin/*.md`) and not a relationship graph (that's `INDEX.yml`). It answers "what happened in this session," never "why is this correct" or "what does this connect to."
+
+- Session history is split one valid-YAML file per calendar month — `HISTORY-2026.06.yml`, `HISTORY-2026.07.yml`, and so on — instead of a single ever-growing file. There is no monolithic history file; do not recreate one.
+- Each monthly file is owned and maintained by Claude. Top-level shape: `month` (`"YYYY-MM"`), `previous` and `next` (the adjacent monthly filenames, or `—` if none exist yet), and `entries` — a list ordered newest first.
+- To append a new session: derive the date from the git commit that introduced the file (or today's date if just created), work out its `YYYY.MM`, and prepend a new item to that month's `entries` list. If the month's file doesn't exist yet, create it with `month` set, `previous` pointing at the prior monthly file, `next: —`, and an empty `entries` list, then backfill the *prior* file's own `next` field to point forward — that `next` backfill is a formatting correction on the old file, not a relationship judgment, so it's allowed under the immutability rule below.
+- Filenames sort chronologically as plain strings, so the most recent month is always the alphabetically-last `HISTORY-*.yml` file.
+- Every entry follows this fixed shape — no field is ever omitted, and every empty field is written as `—` (never an empty list, never omitted, never mixed with real list values):
+  ```yaml
+  - date: YYYY-MM-DD
+    title: "Exact Concept Title"
+    session:
+      file: src/bin/{filename}.rs   # or — for book-study sessions
+      source: —                     # or "Book Title, Chapter N, Section N.N" for book-study sessions
+      status: completed
+      attempted:
+        - ...
+      explored:
+        - ...
+      tried:
+        - ...
+      corrections:
+        - ...
+      bugs_found:
+        - ...                       # always — for book-study sessions: no code, no software defects possible
+      completed:
+        - ...
+      not_completed:
+        - ...
+      open_questions:
+        - ...
+      notes:
+        - ...
   ```
-  ## {YYYY-MM-DD} — {Concept Title}
-  **File:** `src/bin/{filename}.rs`
+- **Field semantics — apply strictly, do not blend fields together:**
+  - `attempted` — the concrete goal or problem taken on this session. Factual and concise.
+  - `explored` — questions, alternatives, examples, or designs investigated during the session, whether or not they succeeded. Record investigation, not just successful work. A short factual reference to a named result is fine (e.g. "Compared observed periods against the Hull-Dobell conditions"); never reproduce the theorem, proof, or derivation itself — that belongs in the notes file.
+  - `tried` — concrete approaches actually attempted, successful and unsuccessful alike. Do not fold a failed attempt only into `corrections`; preserve what was actually tried even if it didn't work.
+  - `corrections` — incorrect assumptions, wrong approaches, or mistaken interpretations explicitly corrected during the session, stated as factual before/after wording. Never an evaluative, psychological, or personality statement — a correction is about an assumption, never about the person who held it.
+  - `bugs_found` — actual implementation, test, arithmetic, overflow, indexing, or design bugs found during the session, with the resolution when known. Do not list a general mathematical misunderstanding here unless it directly caused a software defect.
+  - `completed` — concrete outcomes completed this session ("implemented X", "added N tests for Y", "verified Z against a worked example"). Never vague statements like "understood the topic," "learned the algorithm," or "gained insight."
+  - `not_completed` — work explicitly deferred, abandoned, or intentionally left unfinished. Never silently drop unfinished work just because the session ended.
+  - `open_questions` — questions that genuinely remained unresolved at the end of the session, or were explicitly raised and not answered. Never generate a "natural next step" merely because it would be mathematically reasonable — only record what was actually asked or left hanging.
+  - `notes` — small factual session details that don't fit elsewhere (a file rename, a reused implementation pattern, a specific test range covered). Use sparingly.
+- **What must never appear in a HISTORY entry:**
+  - Textbook-style mathematical exposition — full algorithm descriptions, proofs, theorem statements, complete correctness or complexity derivations. Those belong in the companion `src/bin/*.md` notes file; HISTORY may name a result in passing (as investigation evidence) but never reproduces it.
+  - A `Depends on` or `Unlocks` field, or anything resembling one. Prerequisite structure and forward relationships are `INDEX.yml`'s responsibility, derived primarily from `src/bin/*.md`/`*.rs`, not read out of HISTORY.
+  - Personal information, personality descriptions, psychological interpretations, statements like "the user tends to...", inferred learning style, or any subjective assessment of intelligence, ability, motivation, or behavior. Record only observable facts about the session and the repository work.
+- **Historical immutability rule.** Treat HISTORY as append-oriented session evidence. After an entry is written, modify it only to: correct a factual error, fix formatting, correct a filename, correct the session date, or add something genuinely part of that same session that was accidentally omitted. Do **not** modify an old entry because a new dependency was discovered, a later session reused it, a new future target appeared, or the current understanding of the knowledge graph changed — those are `INDEX.yml` concerns, and `INDEX.yml` is explicitly allowed to change retrospectively; HISTORY is not.
+- A session derived from outside reading (a book, paper, etc.) uses `source` in place of `file` (`file: —`); everything else about the entry follows the same rules and fixed field set as an implementation session, and `bugs_found` is always `—` since a book-study session produces no code.
+- Claude may rename or consolidate a concept's Title across every place it is referenced — its own HISTORY `title` field (a factual-reference correction, allowed under the immutability rule), its notes file's `# Title` heading, and `INDEX.yml` — when a clearer or more consistent name has emerged. A rename must be propagated everywhere it appears in the same pass; a title inconsistent between two files is a correctness bug to fix, not a stylistic quirk to leave alone.
 
-  {One paragraph, roughly 5-8 sentences: the core idea in one sentence, the key
-  fact or invariant that makes it correct, any real bug or edge case found
-  during the session, and the complexity result.}
-
-  **Depends on:** {comma-separated concept names, or "—" if none}
-  **Unlocks:** {comma-separated concept names this enables, or "—" if not yet known}
-  ```
-- Write the summary paragraph in plain ASCII math (`a^k mod n`, not `$$a^k \pmod n$$`) and flowing prose with no "Key result:" style labels — the session history files are a scannable index, not a teaching document, so they skip the `$$` display-math rule that applies to `src/bin/*.md`.
-- Keep entries comparable in length to each other — roughly 5-8 sentences each. If a session genuinely needs more (a large synthesis session), trim to the load-bearing facts rather than including everything from the notes file; the full detail belongs in the notes file, not here.
-- The `Unlocks` field is often unknown when an entry is first written. Whenever a later session's `Depends on` references an earlier concept, go back and backfill that earlier entry's `Unlocks` field — regardless of which monthly file it lives in — rather than leaving it silently blank once the forward link is known.
-- A session derived from outside reading (a book, paper, etc.) rather than a `src/bin` problem uses `**Source:** {Book Title}, Chapter {N}, Section {N.N}` in place of the `**File:**` line. Everything else about the entry — dating, ordering, the summary paragraph, Depends on/Unlocks — follows the same rules as a src/bin session.
-- Claude may rename or consolidate a concept's Title across every place it is referenced — its own HISTORY heading, every `Depends on`/`Unlocks` field that names it in any monthly file, its notes file's `# Title` heading, and `INDEX.txt` — when a clearer or more consistent name has emerged (e.g. an early shorthand reference turns out to undersell what the session actually covers once later sessions build on it, or two entries have drifted into using different shorthand for the same concept). A rename must be propagated everywhere it appears in the same pass; a title that's inconsistent between two files is a correctness bug to fix, not a stylistic quirk to leave alone.
-
-## Fast index (INDEX.txt)
-- `INDEX.txt` at the repo root is a derived, compact view over every `HISTORY-YYYY.MM.md` entry, written as plain text in a YAML-like key/value style (not strict YAML, just its shape): a `sessions` map (Concept Title → file-or-source, date, depends_on, unlocks), a `depends_on_index` map (X → what already-completed work depends on X), and an `unlocks_index` map (X → which sessions name X as an unlock), keyed uniformly by Concept Title so book-study sessions (no filename) and coding sessions share one key space. Concept-title keys and list items are double-quoted since many titles contain commas or colons. Lists are written as `-`-prefixed block items on their own indented lines, not inline `[...]` arrays; an empty depends_on/unlocks is written as `—`, matching the same convention `HISTORY-YYYY.MM.md` uses for "none."
-- It is derived and non-authoritative. `HISTORY-YYYY.MM.md` and `src/bin/*.md` remain the source of truth; if INDEX.txt ever disagrees with them, they win, and INDEX.txt should be rebuilt from them. It exists purely to avoid re-scanning every history file for a structural question (what's done, what depends on what, what's an open stepping-stone).
-- `unlocks_index` flags every X that is named as an unlock but is not itself a `sessions` key with "(not yet its own session)" — these are exactly the stepping-stone gaps the select-agent looks for.
-- Update INDEX.txt in the same pass as any HISTORY-YYYY.MM.md edit: a new session's entry, or an Unlocks backfill on an earlier entry. This is the write agent's job (see "Session closing ritual" below), not a separately-triggered task. When backfilling an earlier entry's Unlocks field, update that same concept's `unlocks` list under `sessions` too, not just `unlocks_index` — both must agree.
-- The select agent and plan agent should consult INDEX.txt first for structural/graph questions, falling back to full `HISTORY-*.md` or `src/bin/*.md` scanning only when they need actual prose content — a specific fact to cite, exact wording of a result — rather than just the shape of the dependency graph.
+## Fast index (INDEX.yml)
+- `INDEX.yml` at the repo root is a derived, compact, valid-YAML knowledge graph — the repository's current structural interpretation: completed sessions, typed relationships, prerequisites, concept/code reuse, branches, open gaps, future targets, and current selection context. It is derived and non-authoritative: `src/bin/*.md`/`*.rs` are the primary evidence for relationships, `HISTORY-YYYY.MM.yml` supplies session-event context (what was tried, what was deferred, what questions were left open — never a `Depends on`/`Unlocks` field to read directly, since HISTORY no longer carries one), and if INDEX.yml ever disagrees with those sources, they win — rebuild INDEX.yml from them, never edit it to make the disagreement go away. Unlike HISTORY, INDEX.yml is explicitly allowed to change retrospectively as understanding of the relationships improves — that asymmetry is the whole point of splitting the two files. It exists to avoid re-scanning every history file for a structural question (what's done, what genuinely requires what, what's reused, what's an open stepping-stone) — never mechanically relabel a stale relationship just because it was already there.
+- It replaces the single overloaded `depends_on` field from the old `INDEX.txt` with distinct relationship types, because chronology, code reuse, historical inspiration, and genuine conceptual prerequisites are different things and collapsing them produces false prerequisites (a harder algorithm implemented earlier is not a prerequisite of a simpler one implemented later just because it happened first). Every session under `sessions:` (keyed by its exact Concept Title, quoted, never by filename) carries: `kind` (`implementation` or `book-study`), `file`/`source`, `date`, then the relationship fields —
+  - `prerequisites`: topics normally necessary to understand *before* this session. Apply the test "would this session be materially harder to follow without X" — never chronology alone, and never list an advanced algorithm as a prerequisite of a simpler one just because it was implemented first.
+  - `uses_concepts`: earlier sessions actively applied here (a cited fact, a reused proof technique) without necessarily being required first.
+  - `reuses_code`: earlier sessions whose implementation is literally reused. This repo's hard constraint against code reuse across `src/bin/*.rs` files (see "Hard constraints" below) means this field is `—` for every session, by design — every session reimplements what it needs.
+  - `derived_from`: direct algorithmic/mathematical continuations (a generalization, a thin wrapper, an alternative algorithm for the exact same problem when one was explicitly built from the other).
+  - `related_to`: meaningful non-prerequisite relationships — contrast between two algorithms for the same problem, a borrowed side-argument, historical inspiration — used sparingly, not as a catch-all.
+  - `unlocks` / `future_targets`: topics this session prepares the user for; `future_targets` holds only topics *explicitly* named as future work in HISTORY's `open_questions`/`not_completed` fields or in notes, with `status: not-completed` — never a bare-string flag like "(not yet its own session)" baked into an identifier. A future target is removed from the canonical `future_targets:` section the moment it gets its own completed session.
+  - `summary`, `concepts`, `capabilities`: a one-sentence factual summary, normalized concept tags, and practical abilities gained — used to build the `concept_index`/`capability_index` lookup maps.
+- Global sections beyond `sessions` — `selection_context`, `branches` (actual clusters, not a forced taxonomy, each with a `frontier` of completed-but-not-yet-extended sessions), `open_gaps`, `prerequisite_index`, `code_reuse_index`, `concept_index`, `capability_index`, `completed_by_date`, and `edges` (for non-obvious/inferred/historical relationships with a `confidence` and short `evidence` list, so a weak inference is never presented as a fact) — are all derived from the `sessions` map; keep them consistent with it rather than letting them drift.
+- Rebuild INDEX.yml in full whenever a new HISTORY entry is added, rather than hand-patching individual reverse-index entries — full regeneration from `src/bin/*.md`/`*.rs` (primary) and HISTORY (session-event context) is what keeps every derived section (prerequisite_index, concept_index, branches, etc.) self-consistent by construction. This is the write agent's job (see "Session closing ritual" below), not a separately-triggered task. Because INDEX.yml — unlike HISTORY — is allowed to change retrospectively, a full rebuild may also revise an earlier session's `prerequisites`/`derived_from`/`unlocks`/`related_to` fields if a later session's evidence changes the honest classification; that revision belongs entirely in INDEX.yml and must never be mirrored back into the corresponding HISTORY entry.
+- The select agent and plan agent should consult INDEX.yml first for structural/graph questions — `prerequisite_index` for genuine prerequisites, `future_targets` for explicit stepping-stone gaps, `branches`/`open_gaps` for where the frontier is — falling back to `src/bin/*.md` for mathematical detail or `HISTORY-*.yml` for session-event evidence (prior attempts, known failed approaches, bugs already encountered, work already deferred) only when they need that specific kind of content rather than just the shape of the graph.
 
 ## Notes files ownership
 - All `src/**.md` files are owned and maintained by Claude, not the user.
@@ -113,7 +147,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Write in full prose paragraphs, not bullet points. Each paragraph should build an argument across multiple sentences before stopping. This applies everywhere in a notes file, including worked examples — do not switch to a bulleted trace just because the content is a step-by-step computation.
 - All math goes on its own display line using `$$...$$`. Do not use inline math inside sentences — keep prose and formulas visually separate. This includes notation like divisibility: never write `p | n` inline; spell it out in prose as "p divides n" (or put the divisibility statement in its own `$$` block if it needs to stand alone as a formula). Multiple closely related equations may share one display line separated by `\qquad` when they express a group of facts of the same kind (e.g. definitions of several variables at once).
 - Every formula gets a sentence before it that explains why you are about to write it, and a sentence after that says what it means, not just what it says.
-- `$$...$$` math formatting is for `.md` files under `src/bin/` only. The `HISTORY-YYYY.MM.md` session history files and terminal output (chat responses) use plain ASCII math notation instead — see the "Teaching style" section above for the no-LaTeX-in-chat rule, and the "Session history" section below for why history files specifically skip `$$`.
+- `$$...$$` math formatting is for `.md` files under `src/bin/` only. The `HISTORY-YYYY.MM.yml` session history files are short factual bullets, not prose paragraphs, and should rarely contain a formula at all; where a short fragment is unavoidable, use plain ASCII math notation, matching the no-LaTeX-in-chat rule under "Teaching style" above — see the "Session history" section below for the full field-by-field rules on what belongs in a HISTORY entry.
 - When a proof technique appears for the first time (e.g. proving set equality via two directions, proof by contradiction, induction), explain the technique in plain language before applying it. Do not assume the reader has seen it before.
 - Write as a patient student explaining to a peer — slow, explicit, treating nothing as obvious. A reader who has never seen the argument should be able to follow every step.
 - Avoid one-sentence paragraphs. If a thought needs only one sentence, it probably belongs attached to the paragraph before or after it.
@@ -128,20 +162,31 @@ Every notes file follows this section order. Headings are sentence case (`## Wor
 5. `## Complexity` — always immediately follows Correctness.
 6. `## Edge cases` — include whenever there is a genuine edge case worth calling out (zero/negative/degenerate inputs, overflow boundaries, probabilistic failure modes). Give it its own section rather than folding it into a paragraph of Correctness or Complexity.
 7. `## Worked example` — always the last section, always full prose, always a concrete non-trivial input traced by hand.
-- Do not add `## Depends on` or `## Unlocks` sections to a notes file — that information lives solely in the session history files (`HISTORY-YYYY.MM.md`) so there is one source of truth for the dependency chain. If a specific fact from a prior session is reused, cite it inline in prose where it's used instead.
+- Do not add `## Depends on` or `## Unlocks` sections to a notes file — relationship structure lives solely in `INDEX.yml` so there is one source of truth for the dependency chain. If a specific fact from a prior session is reused, cite it inline in prose where it's used instead.
 - Target roughly 700-1500 words for a standard single-concept session — comparable in depth to its siblings, not wildly shorter or longer. Judge size by word count, not line count: every notes file in this repo writes each paragraph as one unwrapped markdown line, so `wc -l` under-counts content depth badly (a 1000-word paragraph and a 100-word paragraph can both be "one line"). Two documented exceptions to the target band exist, and both must be justified explicitly in the file rather than left to drift silently:
   - A session that genuinely synthesizes several prior concepts (e.g. Number Theoretic Transform, Primitive Roots mod p — each pulling in five or more earlier sessions) may run longer. Say so in the Overview.
   - A session that is genuinely a thin wrapper over one previously-proven algorithm (e.g. Modular Inverse over Extended Euclidean GCD, CRT over Modular Inverse) may run shorter. Do not pad a thin wrapper with filler just to hit the target — say in the Overview or Complexity section that it is a thin wrapper and why, and let it stay short.
 
 ## Session closing ritual
 At the end of every session, after the correctness and complexity wrap-up, always provide:
-1. **Skill assessment** — briefly evaluate the user's mathematical and programming performance in that session. Note what they handled well, where precision slipped, and what the difficulty level revealed about their current standing.
+1. **Skill assessment** — briefly evaluate the user's mathematical and programming performance in that session. Note what they handled well, where precision slipped, and what the difficulty level revealed about their current standing. This is spoken to the user in chat; it is never written into HISTORY or any other persisted file (see "Session history"'s ban on personality/psychological content above).
 2. **Book recommendations** — suggest 3 books most relevant to the topic(s) covered. Prefer books that match the computational and algorithmic depth of this repo over pure-math textbooks.
 
 Do not skip this for short or easy sessions.
 
-After the skill assessment and book recommendations, handle the written artifacts using two sequential agent calls:
-1. Spawn a **write agent** (fork) using the prompt in `.skills/session-close.md`. This agent writes the notes file and history entry, keeping the raw file I/O out of your context.
+### Session history
+After the skill assessment and book recommendations, close out the persisted record:
+1. Create or update the companion `src/bin/*.md` notes file, per "Notes files ownership" and "Notes writing style" above.
+2. Add exactly one new entry to the correct monthly `HISTORY-YYYY.MM.yml` file, prepended to that month's `entries` list.
+3. Record only observable session events, using the fixed field schema from "Session history" above — `attempted`, `explored`, `tried`, `corrections`, `bugs_found`, `completed`, `not_completed`, `open_questions`, `notes`.
+4. Do not write a mini textbook summary into the entry — mathematical exposition belongs in the notes file, cited by fact if reused.
+5. Do not add a `Depends on` or `Unlocks` field to the entry, or anything resembling one.
+6. Do not retrospectively edit any earlier HISTORY entry because of this session — not to add a dependency, not because this session reused it, not because a future target changed. Update `INDEX.yml` instead; see the "Historical immutability rule."
+
+Then update `INDEX.yml` — it is responsible for the current structural interpretation (prerequisites, concept/code reuse, branches, open gaps, future targets, selection context), inspecting all HISTORY files, `src/bin/*.md`, and `src/bin/*.rs` as needed.
+
+Handle all of the above using two sequential agent calls:
+1. Spawn a **write agent** (fork) using the prompt in `.skills/session-close.md`. This agent writes the notes file, the new HISTORY entry, and regenerates `INDEX.yml`, keeping the raw file I/O out of your context.
 2. Once the write agent finishes, spawn a **verify agent** (fork) using the prompt in `.skills/session-verify.md`. This agent audits the output and reports any CLAUDE.md violations. If violations are found, fix them directly (do not spawn another agent for this).
 
 ## Workflow

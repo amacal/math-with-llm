@@ -1,0 +1,420 @@
+# HISTORY-2026.07.yml — chronological, factual session-event log for 2026-07.
+# See CLAUDE.md's "Session history" section for the schema and field semantics.
+# This file is evidence of WHAT HAPPENED during each session, not a math reference and not a
+# relationship graph. Mathematical detail lives in src/bin/*.md; prerequisites/relationships live
+# in INDEX.yml. Entries are append-oriented: see CLAUDE.md's "Historical immutability rule" before
+# editing an existing entry.
+month: "2026-07"
+previous: HISTORY-2026.06.yml
+next: —
+entries:
+  - date: 2026-07-16
+    title: "Newton's Method for General Root-Finding"
+    session:
+      file: src/bin/root-newton-general.rs
+      source: —
+      status: completed
+      attempted:
+        - Generalize the isqrt Newton update to an arbitrary differentiable f with a supplied derivative f'.
+        - Determine whether Newton's method converges unconditionally for a general f.
+      explored:
+        - Derived the general update rule x1 = x0 - f(x0)/f'(x0) from point-slope form and checked it reduces to the isqrt-specific formula for f(x) = x^2 - n.
+        - Investigated convergence behavior for f(x) = x^3 - x starting away from any of its three roots.
+        - Introduced Taylor's theorem to generalize the quadratic-convergence proof beyond the isqrt-specific case.
+        - Investigated what a function-value stopping check versus a step-size stopping check each actually guarantee near a root of multiplicity k.
+      tried:
+        - Started the x^3 - x iteration at x0 = 1/sqrt(5).
+        - Checked convergence using a function-value stopping criterion (|f(x)| < eps).
+        - Checked convergence using a step-size stopping criterion (|x1 - x0| < eps).
+        - Tested against a double root, f(x) = (x-1)^2.
+      corrections:
+        - Initially expected Newton's method to converge to the nearest root of x^3 - x; found instead that starting at x0 = 1/sqrt(5) produces an exact eternal two-cycle x0, -x0, x0, -x0 that never reaches any of the three real roots.
+        - Initially assumed a function-value stopping check (|f(x)| < eps) guarantees eps precision; corrected after testing against the double root f(x) = (x-1)^2, which only guaranteed eps^(1/k) precision near a root of multiplicity k.
+      bugs_found:
+        - The function-value-based stopping check under-guaranteed precision near a multiplicity-k root (only eps^(1/k), not eps); replaced with a step-size check (|x1-x0| < eps), which does not degrade with multiplicity.
+      completed:
+        - Implemented a general Newton root-finder taking f and f' as closures, with a hard iteration cap.
+        - Added 10 tests covering a simple polynomial root, both simple roots and the non-convergent case of x^3 - x, and the double-root precision case.
+        - Verified empirically that the double-root case reaches about 7.8e-7 precision in 7 iterations against a requested tolerance of 1e-6, using the step-size check.
+      not_completed:
+        - Did not trace the second iteration of the cube-root-of-2 worked example fully by hand.
+      open_questions: —
+      notes:
+        - Confirmed the general update rule specializes exactly to the isqrt-specific formula when f(x) = x^2 - n.
+
+  - date: 2026-07-13
+    title: "Linear Congruential Generator"
+    session:
+      file: src/bin/rand-lcg.rs
+      source: —
+      status: completed
+      attempted:
+        - Implement LCG variants for fixed-width integer state spaces (u8, u16, u64).
+        - Determine when the generator visits every state exactly once before repeating (full period).
+      explored:
+        - Hand-traced all four multipliers coprime to 8 for modulus m=8.
+        - Compared observed periods against the Hull-Dobell conditions.
+        - Connected the finite deterministic state evolution to the eventual-cycling argument from the Pell's Equation session.
+        - Considered how an invertible step map affects predictability of the output stream.
+      tried:
+        - Used ordinary modular arithmetic for the u8 and u16 cases.
+        - Initially represented the full-width u64 modulus using the literal u64::MAX.
+      corrections:
+        - Initially treated u64::MAX as equivalent to modulus 2^64; corrected this because u64::MAX = 2^64 - 1.
+        - Initially assumed the Hull-Dobell factor-4 condition scales with the modulus; corrected it to a fixed condition on the number 4 itself, independent of modulus size.
+      bugs_found:
+        - The initial u64 implementation used the literal 18446744073709551615 (u64::MAX) as the modulus instead of 2^64 itself, silently making the modulus odd and defeating the intended free-wraparound optimization; fixed by using a zero-sentinel meaning "skip the modulo, rely on native u64 wraparound."
+      completed:
+        - Implemented u8, u16, and u64 LCG variants.
+        - Exhaustively verified full-period behavior for the u8 and u16 moduli.
+      not_completed:
+        - Did not add a direct-enumeration full-period test for the u64 (2^64) modulus case, since iterating through 2^64 states is computationally infeasible; relies on the Hull-Dobell argument alone.
+      open_questions: —
+      notes:
+        - Native u64 wraparound was used to model modulus 2^64 without an explicit % operation.
+
+  - date: 2026-07-13
+    title: "Wiener's Attack on RSA"
+    session:
+      file: src/bin/mod-rsa-wiener.rs
+      source: —
+      status: completed
+      attempted:
+        - Recover RSA's private exponent d and factor n from the public key alone, exploiting a small d.
+      explored:
+        - Investigated the algebraic relationship among e, d, and phi(n) implied by RSA key generation.
+        - Compared the session's derived bound on d against the published literature bound.
+        - Checked Legendre's theorem concretely against previously computed sqrt(2) convergents (17/12 and 10/7).
+      tried:
+        - Chose RSA primes near 2^30 to keep phi(n) within the existing extended-GCD implementation's i64 range.
+        - Tested a large-d case (d = 200000) expected to fall outside the derived bound.
+        - Recovered candidate p, q via Vieta's formulas and a discriminant perfect-square check for each continued-fraction convergent of e/n.
+      corrections:
+        - Initially called the continued-fraction generator on the private exponent d instead of the public modulus n; corrected once recognized this used information a real attacker would not have.
+      bugs_found:
+        - The existing extended-GCD routine's i64 Bezout coefficients overflowed once phi(n) approached u64::MAX with primes near 2^32; worked around by choosing smaller primes near 2^30 instead of widening the coefficient type.
+        - Squaring p+q before subtracting 4n could overflow u64; fixed by widening that multiplication to u128, matching the existing pattern in mod_exp.
+        - An early version called the continued-fraction generator on the private exponent d instead of n, which "solved" the attack using information the attacker would not have; caught before being mistaken for a working implementation.
+      completed:
+        - Implemented the attack: convergent search, phi(n) candidate recovery, and p/q recovery via the quadratic discriminant.
+        - Verified against a worked example with p=97, q=101, d=7, recovering the exact factors from the public key alone.
+        - Confirmed the large-d test case (d=200000) returns no candidate, as expected given the derived bound.
+      not_completed:
+        - Did not widen the extended-GCD Bezout-coefficient type to i128; used smaller primes instead as a scope decision.
+      open_questions: —
+      notes:
+        - Derived bound d < n^(1/4)/sqrt(2), looser than the literature's n^(1/4)/3 but the same order of magnitude.
+
+  - date: 2026-07-12
+    title: "Continued-Fraction Term Generation via the Euclidean Algorithm"
+    session:
+      file: src/bin/gcd-euclidean-fraction.rs
+      source: —
+      status: completed
+      attempted:
+        - Implement an algorithmic generator for the continued-fraction terms of a/b, replacing the hand-computed term lists used in the prior Continued Fractions session.
+      explored:
+        - Investigated whether this function should treat its two arguments symmetrically the way gcd(a,b) does.
+        - Considered whether a < b needs special-case handling.
+      tried:
+        - Attempted to import gcd's swap-invariance rule onto this function.
+      corrections:
+        - Initially assumed the gcd-style argument-swap rule applied here; corrected after showing a/b and b/a answer genuinely different questions, so no swap or reordering is needed.
+      bugs_found: —
+      completed:
+        - Implemented `decompose`, generating continued-fraction terms via the Euclidean algorithm's division-with-remainder loop.
+        - Verified decompose(17,7) against the hand-derived expansion from the prior session.
+        - Renamed the old gcd-euclidean-fraction.rs (sqrt(2) example, Pell-identity test oracle) to gcd-euclidean-sqrt.rs to free the filename for this session's file.
+      not_completed: —
+      open_questions: —
+      notes:
+        - Confirmed a=0 is a valid input producing the single-term result [0]; only b=0 is rejected.
+
+  - date: 2026-07-12
+    title: "Pell's Equation via Continued Fractions"
+    session:
+      file: src/bin/gcd-euclidean-pell.rs
+      source: —
+      status: completed
+      attempted:
+        - Find the fundamental solution to x^2 - D*y^2 = 1 for non-square D by expanding sqrt(D) as a continued fraction.
+      explored:
+        - Derived a general (m,d,a) recurrence for expanding sqrt(D), generalizing the sqrt(2)-specific hand rationalization from the Continued Fractions session.
+        - Investigated why the (m,d) state space is finite and why the expansion must become periodic.
+        - Checked an empirically observed identity, p_k^2 - D*q_k^2 = (-1)^(k+1)*d_(k+1), against D=7, then D=13 and D=61.
+        - Investigated whether the fundamental solution sits at k=r-1 or k=2r-1, depending on the parity of the period r.
+      tried:
+        - Reused and generalized the bisection technique from Integer Square Root as a float-free floor test for each partial quotient.
+        - Tested against seven known fundamental solutions (D=2,3,5,6,7,13,61).
+      corrections: —
+      bugs_found:
+        - d hitting exactly 0 at a perfect-square D caused an unsigned-subtraction underflow one step later rather than a clean division-by-zero; fixed by checking isqrt(D)^2==D upfront and returning None.
+        - An initial tuple-ordering mistake in the (m,d,a) recurrence was caught by testing against known fundamental solutions.
+        - A modulo-based index shortcut incorrectly collapsed the k=r-1 and k=2r-1 cases together, since they differ by exactly r and share the same value mod r; corrected once shown unsound.
+      completed:
+        - Implemented the (m,d,a) recurrence and fundamental-solution recovery via the convergent recurrence.
+        - Added tests against seven known fundamental solutions, including the D=61 Fermat-challenge case.
+      not_completed:
+        - Did not prove the p_k^2 - D*q_k^2 = (-1)^(k+1)*d_(k+1) identity from first principles; treated it as an empirically confirmed conjecture.
+        - Did not derive a tight closed-form bound on the period length r as a function of D; cited the literature's r=O(sqrt(D)*log(D)) without deriving it.
+      open_questions: —
+      notes:
+        - The D=61 test case's numerators/denominators reach into the billions, still within u64.
+
+  - date: 2026-07-11
+    title: "Trial Division Factorization"
+    session:
+      file: src/bin/mod-factorize-trial.rs
+      source: —
+      status: completed
+      attempted:
+        - Implement complete prime factorization using trial division, without using the existing Pollard's-Rho-based factorizer.
+      explored:
+        - Investigated whether the trial-division search index ever needs to backtrack.
+        - Investigated the practical search bound for a composite's smallest divisor.
+        - Ran the factorizer across the 100 integers immediately below u64::MAX to empirically test the O(sqrt(n)) worst case.
+      tried:
+        - Derived independently (rather than citing) that the search index only ever moves forward.
+        - Derived independently that a composite's smallest divisor never exceeds its square root.
+      corrections: —
+      bugs_found: —
+      completed:
+        - Implemented trial-division factorization with a forward-only search index and a square-root search bound.
+        - Ran the factorizer over the 100 integers just below u64::MAX; found three were prime themselves and one had 2^61-1 (a Mersenne prime) as its largest factor, each requiring the full ~2^32 search, while another factored into many small primes and finished quickly.
+      not_completed: —
+      open_questions: —
+      notes:
+        - Reused the checked-multiplication-overflow-as-automatic-stop pattern from mod-isqrt-bisect.rs for the square-root bound check.
+
+  - date: 2026-07-11
+    title: "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+    session:
+      file: —
+      source: "Number Theory Step by Step (Kuldeep Singh), Chapter 2, Section 2.1"
+      status: completed
+      attempted:
+        - Complete Section 2.1 (Introduction to Primes), Exercises 1-13, in book order.
+      explored:
+        - Worked through the Well-Ordering-Principle-based existence proof and the Corollary-2.4-based uniqueness proof for the Fundamental Theorem of Arithmetic.
+        - Worked through Proposition 2.2 (Euclid's Lemma) and its extension to products of n factors (Corollaries 2.3, 2.4).
+      tried: —
+      corrections: —
+      bugs_found: —
+      completed:
+        - Completed all 13 exercises in order: prime decompositions of ten numbers, gcd proofs with primes, product-notation evaluation, error-spotting in invalid applications of Corollary 2.4, relative primality of p and p+2, divisibility-by-3 case analysis mod 3, five disproof problems, and sigma/tau functions for primes.
+      not_completed: —
+      open_questions: —
+      notes:
+        - Section 1.4's Supplementary Problem 1.23 had flagged prime factorization as not yet covered as a proven theorem in this repo; this session closes that gap.
+
+  - date: 2026-07-10
+    title: "Continued Fractions"
+    session:
+      file: src/bin/gcd-euclidean-sqrt.rs
+      source: —
+      status: completed
+      attempted:
+        - Determine the relationship between a rational number's continued-fraction expansion and the Euclidean algorithm's quotients, and implement the convergent recurrence.
+      explored:
+        - Investigated whether the continued-fraction terms of a/b are merely analogous to, or exactly equal to, the Euclidean algorithm's quotients on (a,b).
+        - Derived the convergent recurrence p_k = a_k*p_(k-1) + p_(k-2) by substituting a_(k-1) -> a_(k-1) + 1/a_k into the previous truncation.
+        - Hand-derived sqrt(2)'s continued-fraction expansion via rationalization and checked its convergents against Pell's equation.
+      tried:
+        - Hand-computed a term list for 13/8 to test the convergent recurrence.
+      corrections:
+        - The initial hand-derived term list for 13/8 was too short (three terms instead of five) and internally inconsistent with its expected convergent; corrected by re-running the Euclidean algorithm by hand.
+      bugs_found: —
+      completed:
+        - Implemented the convergent recurrence (`convergents`) and the sqrt(2) approximation (`sqrt2`).
+        - Verified sqrt(2)'s convergents satisfy p_k^2 - 2*q_k^2 = +-1 exactly, by hand and in code.
+      not_completed:
+        - Did not implement a standalone function deriving a rational number's continued-fraction terms from the Euclidean algorithm; used hand-computed term lists for the rational-number tests instead.
+      open_questions: —
+      notes:
+        - This session synthesizes three results (quotient equivalence, convergent recurrence, sqrt(2) example) rather than one, running longer than a typical single-concept session.
+
+  - date: 2026-07-10
+    title: "Newton's Method for Integer Square Root"
+    session:
+      file: src/bin/mod-isqrt-newton.rs
+      source: —
+      status: completed
+      attempted:
+        - Compute isqrt(n) via Newton's method (tangent-line iteration on f(x) = x^2 - n) instead of bisection.
+      explored:
+        - Derived the update rule x1 = (x0 + n/x0)/2 from the tangent-line x-intercept.
+        - Investigated the effect of integer truncation on convergence.
+        - Compared quadratic convergence against bisection's geometric error decay.
+      tried:
+        - Hand-traced the truncated integer iteration starting from x0=8 for n=8.
+        - Used a stopping condition of x1 >= x0 rather than waiting for x1 == x0.
+      corrections:
+        - Initially expected the invariant "x0 stays at or above sqrt(n)"; corrected to "x0 stays at or above r = isqrt(n)" after the n=8 trace showed x0=2 falling below the real-valued sqrt(8) ~= 2.828.
+        - Initially expected the sequence to settle at a fixed point; corrected after the n=8 trace showed it instead enters a 2-3 cycle under truncation.
+      bugs_found: —
+      completed:
+        - Implemented Newton's-method isqrt with the x1 >= x0 stopping rule and a saturating-add overflow guard at x0=n=u64::MAX.
+        - Tested across low, mid, and high (u64::MAX-adjacent) input ranges.
+      not_completed: —
+      open_questions: —
+      notes:
+        - Confirmed the practical benefit over bisection is a smaller constant, not a different complexity class, since the first steps behave like bisection.
+
+  - date: 2026-07-10
+    title: "Integer Square Root"
+    session:
+      file: src/bin/mod-isqrt-bisect.rs
+      source: —
+      status: completed
+      attempted:
+        - Compute isqrt(n) using only integer bisection, with no floating-point sqrt call.
+      explored:
+        - Investigated candidate search brackets, including n/2 as an upper bound.
+        - Hand-traced bisection on n=2 to look for off-by-one behavior.
+      tried:
+        - Tried an n/2 upper bound.
+        - Tried a floor-rounded midpoint mid=(lo+hi)/2 with an hi=mid overshoot rule.
+      corrections:
+        - Initially expected an n/2 upper bound to be safe; corrected after finding it fails for n=1, 2, and 3.
+      bugs_found:
+        - A floor-rounded midpoint combined with lo=mid on the non-overshoot branch stalled once hi=lo+1, since floor division kept sending mid back to lo; fixed by rounding the midpoint up instead.
+        - An hi=mid overshoot rule left the bracket unchanged whenever mid already equaled hi; fixed by discarding mid entirely on overshoot (hi=mid-1).
+      completed:
+        - Implemented isqrt via bisection on the bracket [0,n], with a ceiling-rounded midpoint and hi=mid-1 overshoot rule.
+        - Handled overflow via checked multiplication (mid*mid) treated as automatic overshoot, and a saturating add for n=u64::MAX.
+      not_completed: —
+      open_questions: —
+      notes:
+        - Motivated by a floating-point sqrt precision concern flagged in Segmented Sieve's notes, though not technically dependent on that session.
+
+  - date: 2026-07-08
+    title: "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+    session:
+      file: —
+      source: "Number Theory Step by Step (Kuldeep Singh), Chapter 1, Section 1.4"
+      status: completed
+      attempted:
+        - Complete Section 1.4 (Linear Diophantine Equations): all 16 Exercises and all 24 Supplementary Problems 1, in book order.
+      explored:
+        - Worked through Propositions 1.16-1.18 and Corollary 1.19 building the general solution to ax+by=c.
+        - Checked a counterexample (6x+10y=8) against Proposition 1.16's formula to motivate Proposition 1.18.
+        - Applied the theory to constrained word problems (coins, stamps, hotdogs and buns, ATM notes, a fish-and-chips receipt) requiring inequality constraints on the free parameter.
+        - Checked Exercise 14's printed general solution against Exercise 1(b)'s own numbers.
+        - Worked Supplementary Problem 1.23 (a^n divides b^n implies a divides b) without using prime factorization.
+      tried: —
+      corrections:
+        - Exercise 14's printed general solution to akx+bky=c used step sizes b/k and a/k; these were shown to be non-integer in general against Exercise 1(b)'s numbers, and corrected to x=x0+bt, y=y0-at once gcd(ak,bk)=k was established via mutual divisibility.
+      bugs_found: —
+      completed:
+        - Completed all 16 Exercises 1.4 and all 24 Supplementary Problems 1 in order.
+        - Flagged and corrected the book's printed general solution in Exercise 14.
+        - Proved Supplementary Problem 1.23 and Problem 1.24.
+      not_completed:
+        - Flagged that this repo had not yet covered prime factorization as a proven theorem (needed an alternative gcd-decomposition proof for Problem 1.23 instead).
+      open_questions: —
+      notes:
+        - One of the largest sessions in the repo (40 problems); this entry is trimmed to load-bearing facts rather than recapping every exercise.
+
+  - date: 2026-07-05
+    title: "Multi-Modulus NTT with CRT Reconstruction"
+    session:
+      file: src/bin/poly-mul-crt.rs
+      source: —
+      status: completed
+      attempted:
+        - Extend single-prime NTT to multiply polynomials whose output coefficients exceed any single NTT prime, using CRT reconstruction across three primes.
+      explored:
+        - Investigated the maximum output-coefficient bound n*B^2 and compared it against each of the three chosen NTT primes.
+      tried:
+        - Ran NTT independently modulo three primes (998244353, 985661441, 469762049) and chained two CRT calls per output coefficient.
+      corrections: —
+      bugs_found:
+        - The inverse NTT divided by mod_inverse(p-1,p) instead of mod_inverse(n,p) (n=16, the transform size); this was masked by the small test prime p=17 (where p-1=16) and only surfaced with a production-sized prime.
+        - The CRT chaining loop passed the raw p1-only residues into every CRT call instead of the running combined residue, causing the second call to ignore the p2 information entirely; fixed by threading the running combined value through the loop.
+      completed:
+        - Implemented multi-modulus NTT with two-step CRT chaining, widened to u128 throughout.
+        - Verified against a worked example multiplying two degree-2 polynomials with p1=5, p2=17, p3=97.
+      not_completed: —
+      open_questions: —
+      notes: —
+
+  - date: 2026-07-05
+    title: "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+    session:
+      file: —
+      source: "Number Theory Step by Step (Kuldeep Singh), Chapter 1, Section 1.3"
+      status: completed
+      attempted:
+        - Complete Section 1.3 (Euclidean Algorithm), Exercises 1-19, in book order.
+      explored:
+        - Worked the well-ordering proof of Bezout's Identity.
+        - Worked gcd(156,18)=6 by hand and back-substituted to find Bezout coefficients, in the book's back-substitution style rather than the forward-threaded style already coded in gcd-euclidean-extended.rs.
+        - Worked Euclid's Lemma via a prime-factorization argument (198|5x => 198|x).
+        - Worked Exercises 12, 15, 17, 19 via set-equality-in-both-directions and mutual-divisibility techniques.
+      tried: —
+      corrections:
+        - Recurring precision slip: mixed up which quantity a divisibility statement applies to (claiming "d|x, d|y" instead of "d|a, d|b"); corrected during the exercises.
+        - Recurring precision slip: asserted "gcd(ma,mb)=mg" directly from a linear combination when only the weaker "gcd(ma,mb) divides mg" follows from that combination alone; corrected during the exercises.
+      bugs_found: —
+      completed:
+        - Completed all 19 exercises in order, including Exercise 12(ii)'s multiplicativity lemma and Exercise 17's gcd(ma,mb)=mg proof.
+      not_completed: —
+      open_questions: —
+      notes:
+        - The back-substitution worked example reused the same Bezout machinery already implemented in gcd-euclidean-extended.rs, run by hand in the book's presentation style.
+
+  - date: 2026-07-04
+    title: "Number Theoretic Transform (NTT)"
+    session:
+      file: src/bin/poly-mul-ntt.rs
+      source: —
+      status: completed
+      attempted:
+        - Implement polynomial multiplication in O(n log n) via evaluation at roots of unity mod p, instead of direct convolution.
+      explored:
+        - Investigated constructing a primitive n-th root of unity h=g^((p-1)/n) from a primitive root g.
+        - Investigated why the even/odd-split recursion requires n to be a power of two, checking concretely with p=7, h=3 (order 6, not a power of 2).
+        - Derived the orthogonality identity used to justify the inverse transform.
+      tried:
+        - Implemented the recursion in place via an (offset, stride) addressing scheme instead of allocating fresh sub-arrays.
+      corrections:
+        - Initially checked the recursion's base case as size==1 instead of size==0, causing it to stop one level too early.
+        - Initially assumed E's and O's outputs occupy contiguous halves of the local array; corrected once the in-place offset/stride scheme was shown to interleave them instead.
+      bugs_found:
+        - Base case checked as size==1 instead of size==0, skipping a real combine step.
+        - Combine-step read positions assumed contiguous halves rather than the actual interleaved offset+stride layout.
+        - A read/write clobbering hazard: one iteration's write to a "high" position landed on a position a later iteration still needed to read; fixed by computing all outputs into a scratch buffer before copying back.
+        - The twiddle factor root^k was computed as a single fixed value per call instead of advancing with the loop index; fixed by precomputing a table of h^0..h^(n-1) and walking it by +stride per iteration.
+        - Zero-padding at the convolution level initially risked adding leading rather than trailing zero coefficients, which would silently multiply the polynomial by a power of x.
+      completed:
+        - Implemented the recursive forward and inverse NTT with an in-place (offset, stride) scheme.
+        - Verified against a worked example: forward-transforming and inverting P(x)=1+2x+3x^2+x^3 with p=5, h=2.
+      not_completed: —
+      open_questions: —
+      notes: —
+
+  - date: 2026-07-01
+    title: "Primitive Roots mod p"
+    session:
+      file: src/bin/mod-primitive-root.rs
+      source: —
+      status: completed
+      attempted:
+        - Prove every prime p has a primitive root and find one efficiently.
+      explored:
+        - Hand-compared the multiplicative cycles of g=3 and g=2 modulo p=7.
+        - Investigated the counting argument for existence, checking totals for p=7 (3+2=5 falls short of the group size 6).
+        - Investigated how the safe-prime-specific BSGS shortcut generalizes to the Lagrange-based test for any p.
+      tried:
+        - Searched candidates g=2,3,4,... in order rather than starting at g=1 or scanning downward from p-1.
+      corrections:
+        - Initially misstated the primitive-root rejection direction (thought g was rejected when a check failed rather than when it equaled 1); corrected once the iff characterization was worked through carefully.
+      bugs_found:
+        - The `factorize` function treated any nontrivial Pollard's-Rho factor as prime without recursively checking it, silently returning composite entries (e.g. 55=5x11 for input 15785); fixed by recursively splitting until every result passes a primality check.
+        - The `primitive_root` function never verified p itself was prime before searching, producing group-theoretically meaningless results for composite p; fixed by running the Miller-Rabin test at the top of the function.
+      completed:
+        - Implemented `factorize` (recursive Pollard's-Rho splitting with primality verification) and `primitive_root` (candidate search with the Lagrange-based iff test).
+        - Verified against a worked example: p=7, factorize(6)=[2,3], search rejects g=2 and accepts g=3.
+      not_completed: —
+      open_questions: —
+      notes: —

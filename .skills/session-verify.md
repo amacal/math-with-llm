@@ -2,7 +2,7 @@ Verify that the most recently written notes file and history entry conform to ev
 
 ## What to check
 
-**Identify the files.** Find the most recently modified `src/bin/*.md` notes file and its corresponding entry in the appropriate `HISTORY-YYYY.MM.md`.
+**Identify the files.** Find the most recently modified `src/bin/*.md` notes file and its corresponding entry in the appropriate `HISTORY-YYYY.MM.yml`.
 
 **Notes file — check each rule:**
 
@@ -26,29 +26,37 @@ Verify that the most recently written notes file and history entry conform to ev
 
 **History entry — check each rule:**
 
-1. **Placement.** The entry must be at the top of the entries section (most recent first). Flag if it is not.
+1. **Placement.** The entry must be at the top (index 0) of the correct monthly file's `entries` list (most recent first). Flag if it is not.
 
-2. **Template completeness.** Must have: date heading, `**File:**` or `**Source:**` line, one paragraph, `**Depends on:**`, `**Unlocks:**`. Flag any missing field.
+2. **Schema completeness.** Must have `date`, `title`, and a `session` block with every fixed field present: `file`, `source`, `status`, `attempted`, `explored`, `tried`, `corrections`, `bugs_found`, `completed`, `not_completed`, `open_questions`, `notes`. Flag any missing field — every field must be present even when empty.
 
-3. **Paragraph length.** 5–8 sentences. Flag if shorter or longer.
+3. **Empty-field convention.** Every empty field must be exactly `—`, never an empty list and never omitted. Flag any list that mixes `—` with real entries, and flag `bugs_found` if it isn't `—` on a book-study entry (no code, so no software defects are possible).
 
-4. **No display math.** History entries must use plain ASCII math only (`a^k mod n`, not `$$a^k \pmod n$$`). Flag any `$$` blocks.
+4. **No `Depends on` / `Unlocks`.** Flag any such field, or anything resembling one, anywhere in the entry — that structure belongs solely in `INDEX.yml`.
 
-5. **No labels.** Paragraph must be flowing prose with no "Key result:", "Key insight:", or similar label prefixes. Flag any such labels.
+5. **No mathematical exposition.** Flag any full algorithm description, proof, theorem statement, or complexity derivation inside the entry — that belongs in the notes file. A short factual reference naming a result (e.g. "Compared observed periods against the Hull-Dobell conditions") is fine; reproducing the result is not.
 
-6. **Unlocks backfill.** Check whether any prior history entry whose concept is listed in this entry's `Depends on` field has a blank or stale `Unlocks` field that should now name this concept. Flag any that need updating.
+6. **No personal/psychological content.** Flag any personal information, personality description, psychological interpretation, inferred learning style, or subjective judgment of intelligence, ability, motivation, or behavior. `corrections` entries must be factual before/after statements about an assumption, never an evaluation of the person who held it.
 
-**INDEX.txt — check consistency:**
+7. **Field discipline.** Spot-check that `completed` items are observable outcomes, not vague statements like "understood X" or "gained insight"; that `not_completed` isn't silently empty when the session prose/notes mention deferred work; and that `open_questions` isn't populated with an invented "natural next step" that wasn't actually raised.
 
-1. **New entry present.** The new session's Concept Title must appear as a key under `sessions`, with matching file-or-source, date, depends_on, and unlocks lists (bare concept titles, no parenthetical explanations).
+8. **No retrospective edits to older entries.** If any *other* (older) HISTORY entry was modified as part of this session's close, flag it unless the change is one of the "Historical immutability rule" exceptions (factual error, formatting, filename/date correction, or a genuinely-omitted same-session item) — a change made because of a new dependency, reuse, or future target discovered later is a violation and belongs in `INDEX.yml` instead.
 
-2. **depends_on_index updated.** For every concept in this session's Depends-on list, this session's Concept Title must appear in that concept's list in `depends_on_index`.
+**INDEX.yml — check consistency:**
 
-3. **unlocks_index updated.** For every concept in this session's Unlocks list, this session's Concept Title must appear in that concept's list in `unlocks_index`.
+1. **New entry present and correctly classified.** The new session's Concept Title must appear as a key under `sessions`, with `kind`, `file`/`source`, `date`, and the full relationship field set (`prerequisites`, `uses_concepts`, `reuses_code`, `derived_from`, `related_to`, `unlocks`, `future_targets`, `summary`, `concepts`, `capabilities`). Since HISTORY no longer carries a `Depends on`/`Unlocks` field to copy from, verify each relationship was classified against the stricter tests in CLAUDE.md's "Fast index (INDEX.yml)" section using `src/bin/*.md`/`*.rs` as primary evidence — e.g. flag a `prerequisites` entry that is really just chronology, or a harder algorithm listed as a prerequisite of a simpler one.
 
-4. **Resolved flags removed.** If this session's own Concept Title was previously flagged "(not yet its own session)" anywhere in `unlocks_index`, that flag must now be gone.
+2. **reuses_code is `—`.** Every session's `reuses_code` field must be `—`, per the repo's no-cross-file-code-reuse constraint. A non-empty value here is a violation of that constraint, not a legitimate index entry.
 
-5. **Backfill reflected on BOTH sides.** If step 6 above (history Unlocks backfill) found a stale field that needed updating, confirm it was fixed in TWO places, not one: the backfilled concept's own `unlocks` list under `sessions`, AND its appearances in `unlocks_index`. A fix applied only to `unlocks_index` while the `sessions` entry still shows the old/stale text is itself a violation — check both explicitly, don't just spot-check one.
+3. **prerequisite_index updated.** For every concept in this session's `prerequisites` list, this session's Concept Title must appear under that concept's `required_by` list in `prerequisite_index`, and nowhere else that wasn't genuinely a prerequisite.
+
+4. **concept_index / capability_index updated.** Every tag in this session's `concepts` and `capabilities` lists must map back to this session in `concept_index` / `capability_index` respectively.
+
+5. **completed_by_date updated.** This session's Concept Title must appear exactly once, under the correct date key, and nowhere else.
+
+6. **future_targets resolved structurally.** If this session's own Concept Title was previously listed under the canonical `future_targets:` section, it must now be removed from there (a topic cannot be both a completed session and a future target). Flag any bare string flag like "(not yet its own session)" baked into an identifier anywhere in the file — that information must live in `future_targets`' `status: not-completed` field instead.
+
+7. **Retrospective revisions reflected everywhere, and only in INDEX.yml.** If session-close's step 5 revised an earlier session's `prerequisites`/`derived_from`/`unlocks`/`related_to` fields, confirm the change is consistent on both sides within INDEX.yml (the earlier session's own field AND its appearances in `prerequisite_index`/other reverse indexes) — a fix applied in only one place while another still shows stale data is itself a violation. Confirm that same revision was **not** mirrored into the earlier session's HISTORY entry (see "No retrospective edits to older entries" above).
 
 Flag as a violation any of the above left stale or inconsistent.
 
