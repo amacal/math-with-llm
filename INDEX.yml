@@ -1,4 +1,4 @@
-# INDEX.yml — derived, compact knowledge graph over HISTORY-YYYY.MM.md and src/bin/*.md.
+# INDEX.yml — derived, compact knowledge graph over HISTORY-YYYY.MM.yml and src/bin/*.md.
 # Non-authoritative: if this ever disagrees with the history or notes files, they win — rebuild this file from them.
 # Every session is keyed by its exact Concept Title (the string used in its HISTORY heading), never by filename,
 # since book-study sessions have no filename. Empty list fields use "—", matching HISTORY-YYYY.MM.md convention.
@@ -9,36 +9,36 @@
 
 metadata:
   generated_from:
-    - HISTORY-2026.06.md
-    - HISTORY-2026.07.md
+    - HISTORY-2026.06.yml
+    - HISTORY-2026.07.yml
     - src/bin/*.md
     - src/bin/*.rs
   authoritative: false
   purpose: "compact LLM-readable learning knowledge graph"
   schema_version: 2
-  generated_at: "2026-07-16"
-  session_count: 33
-  note: "Rebuilt from scratch against HISTORY-2026.06.md and HISTORY-2026.07.md (source of truth) plus every src/bin/*.md notes file, not by mechanically relabeling the prior depends_on/unlocks fields. See CLAUDE.md for the schema this file follows."
+  generated_at: "2026-07-17"
+  session_count: 34
+  note: "Rebuilt from scratch against HISTORY-2026.06.yml and HISTORY-2026.07.yml (source of truth) plus every src/bin/*.md notes file, not by mechanically relabeling the prior depends_on/unlocks fields. See CLAUDE.md for the schema this file follows."
 
 # ---------------------------------------------------------------------------
 # selection_context: evidence for an LLM picking the next session. Signals, not a recommendation.
 # ---------------------------------------------------------------------------
 selection_context:
   recent_sessions:
+    - "Secant Method for Root-Finding"
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     - "Newton's Method for General Root-Finding"
     - "Linear Congruential Generator"
     - "Wiener's Attack on RSA"
     - "Continued-Fraction Term Generation via the Euclidean Algorithm"
-    - "Pell's Equation via Continued Fractions"
   active_branches:
     - "Quadratic Residues & the Structure of (Z/pZ)*"
     - "Root-Finding & Numerical Methods"
     - "Continued Fractions, Diophantine Approximation & Pell's Equation"
     - "Primality, Factorization & Public-Key Cryptography"
   branch_frontiers:
+    - "Secant Method for Root-Finding"
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
-    - "Newton's Method for General Root-Finding"
     - "Linear Congruential Generator"
     - "Wiener's Attack on RSA"
     - "Trial Division Factorization"
@@ -50,6 +50,7 @@ selection_context:
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
     - "Tonelli-Shanks Algorithm for Modular Square Roots"
   reusable_recent_capabilities:
+    - "find-roots-without-derivative"
     - "compute-legendre-symbol"
     - "compute-integer-sqrt-exactly"
     - "compute-integer-sqrt-via-newton"
@@ -58,11 +59,10 @@ selection_context:
     - "break-rsa-with-small-private-exponent"
     - "generate-continued-fraction-terms-algorithmically"
     - "solve-pells-equation"
-    - "factor-integers-by-trial-division"
   candidate_signals:
     continuation:
-      - "Root-Finding & Numerical Methods is the most recently active branch before today (Newton's Method for General Root-Finding, 2026-07-16); its internal chain (bisection -> Newton isqrt -> general Newton) has no explicitly named next step in the repo, but a derivative-free (secant-style) or multi-dimensional generalization is the shape suggested by the existing chain — this is an inferred continuation, not a named target."
-      - "Quadratic Residues & the Structure of (Z/pZ)* is brand new as of today (2026-07-16); its own notes file explicitly names Tonelli-Shanks (modular square root extraction) as the natural next step building directly on Euler's Criterion, making it an explicitly-named continuation rather than an inferred one."
+      - "Root-Finding & Numerical Methods's chain now runs bisection -> Newton isqrt -> general Newton -> secant (2026-07-17); no next step is explicitly named in the repo, but a bracketing-safe hybrid such as Brent's method, combining bisection's guaranteed robustness with secant/inverse-quadratic interpolation's speed, is the shape suggested by the existing chain — this is an inferred continuation, not a named target."
+      - "Quadratic Residues & the Structure of (Z/pZ)* is brand new as of 2026-07-16; its own notes file explicitly names Tonelli-Shanks (modular square root extraction) as the natural next step building directly on Euler's Criterion, making it an explicitly-named continuation rather than an inferred one."
     consolidation:
       - "The Continued Fractions / Pell's-equation branch and the RSA / cryptanalysis branch were already combined once, in Wiener's Attack on RSA — no unexplored consolidation between two specific branches is named explicitly elsewhere in the repo."
     new_branch:
@@ -75,6 +75,31 @@ selection_context:
 # sessions: primary record, one entry per completed session, most recent first.
 # ---------------------------------------------------------------------------
 sessions:
+  "Secant Method for Root-Finding":
+    kind: implementation
+    file: src/bin/root-secant.rs
+    source: —
+    date: 2026-07-17
+    prerequisites:
+      - "Newton's Method for General Root-Finding"
+    uses_concepts:
+      - "Newton's Method for General Root-Finding"
+      - "Integer Square Root"
+    reuses_code: —
+    derived_from:
+      - "Newton's Method for General Root-Finding"
+    related_to: —
+    unlocks: —
+    future_targets: —
+    summary: "Replaced Newton's exact derivative with a finite-difference slope from two prior points, re-derived the Taylor-expansion error argument for two error terms to get e_{n+1}~C*e_n*e_{n-1}, and solved the resulting ansatz's characteristic equation p^2-p-1=0 for the golden-ratio order of convergence p≈1.618."
+    concepts:
+      - "secant-method"
+      - "root-finding"
+      - "numerical-methods"
+      - "taylor-series"
+    capabilities:
+      - "find-roots-without-derivative"
+
   "Quadratic Residues & the Legendre Symbol via Euler's Criterion":
     kind: implementation
     file: src/bin/mod-legendre.rs
@@ -109,7 +134,7 @@ sessions:
 
   "Newton's Method for General Root-Finding":
     kind: implementation
-    file: src/bin/root-newton-general.rs
+    file: src/bin/root-newton.rs
     source: —
     date: 2026-07-16
     prerequisites:
@@ -121,7 +146,8 @@ sessions:
     derived_from:
       - "Newton's Method for Integer Square Root"
     related_to: —
-    unlocks: —
+    unlocks:
+      - "Secant Method for Root-Finding"
     future_targets: —
     summary: "Generalized the isqrt tangent-line update to x1 = x0 - f(x0)/f'(x0) for any differentiable f, proved quadratic convergence via Taylor's theorem, and found a genuine non-convergent counterexample (f(x)=x^3-x oscillating forever)."
     concepts:
@@ -363,6 +389,7 @@ sessions:
       - "Trial Division Factorization"
       - "Wiener's Attack on RSA"
       - "Newton's Method for General Root-Finding"
+      - "Secant Method for Root-Finding"
     future_targets: —
     summary: "Computed isqrt(n) via integer-only bisection on the trivial bracket [0,n], fixing two off-by-one stalls with a ceiling-rounded midpoint and a hi=mid-1 discard rule."
     concepts:
@@ -1054,8 +1081,9 @@ branches:
       - "Integer Square Root"
       - "Newton's Method for Integer Square Root"
       - "Newton's Method for General Root-Finding"
+      - "Secant Method for Root-Finding"
     frontier:
-      - "Newton's Method for General Root-Finding"
+      - "Secant Method for Root-Finding"
     explicit_future_targets: —
   "Randomness":
     sessions:
@@ -1191,6 +1219,9 @@ prerequisite_index:
   "Newton's Method for Integer Square Root":
     required_by:
       - "Newton's Method for General Root-Finding"
+  "Newton's Method for General Root-Finding":
+    required_by:
+      - "Secant Method for Root-Finding"
 
 # ---------------------------------------------------------------------------
 # code_reuse_index: intentionally empty. See the header note — this repo forbids code reuse across
@@ -1310,6 +1341,7 @@ concept_index:
     - "Integer Square Root"
     - "Newton's Method for General Root-Finding"
     - "Newton's Method for Integer Square Root"
+    - "Secant Method for Root-Finding"
   pells-equation:
     - "Continued Fractions"
     - "Pell's Equation via Continued Fractions"
@@ -1338,11 +1370,15 @@ concept_index:
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
   root-finding:
     - "Newton's Method for General Root-Finding"
+    - "Secant Method for Root-Finding"
+  secant-method:
+    - "Secant Method for Root-Finding"
   sieve-methods:
     - "Segmented Sieve"
     - "Sieve of Eratosthenes"
   taylor-series:
     - "Newton's Method for General Root-Finding"
+    - "Secant Method for Root-Finding"
 
 capability_index:
   apply-eulers-theorem:
@@ -1389,6 +1425,8 @@ capability_index:
     - "Primitive Roots mod p"
   find-roots-of-differentiable-functions:
     - "Newton's Method for General Root-Finding"
+  find-roots-without-derivative:
+    - "Secant Method for Root-Finding"
   generate-continued-fraction-terms-algorithmically:
     - "Continued-Fraction Term Generation via the Euclidean Algorithm"
   generate-pseudorandom-sequences:
@@ -1420,6 +1458,8 @@ capability_index:
 # completed_by_date: newest first. Every session appears exactly once.
 # ---------------------------------------------------------------------------
 completed_by_date:
+  "2026-07-17":
+    - "Secant Method for Root-Finding"
   "2026-07-16":
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     - "Newton's Method for General Root-Finding"

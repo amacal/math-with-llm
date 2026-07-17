@@ -1,4 +1,13 @@
-fn main() {}
+fn main() {
+    for p in [3, 5, 7] {
+        for n in 0..p {
+            match legendre(n, p) {
+                Some(value) => println!("legendre({}, {}) = {}", n, p, value),
+                _ => {},
+            }
+        }
+    }
+}
 
 fn legendre(n: u64, p: u64) -> Option<u64> {
     if p == 0 {

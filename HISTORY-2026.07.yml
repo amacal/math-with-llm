@@ -8,6 +8,47 @@ month: "2026-07"
 previous: HISTORY-2026.06.yml
 next: —
 entries:
+  - date: 2026-07-17
+    title: "Secant Method for Root-Finding"
+    session:
+      file: src/bin/root-secant.rs
+      source: —
+      status: completed
+      attempted:
+        - Derive a root-finding update rule that replaces Newton's exact derivative with a slope estimated from two prior points.
+        - Determine the resulting order of convergence relative to bisection and Newton's method.
+      explored:
+        - Derived the secant slope as a finite-difference stand-in for f'(x0) and substituted it into Newton's update rule to obtain the secant update rule.
+        - Re-derived the Taylor-expansion error argument from `root-newton.md` for two error terms instead of one, arriving at a recurrence relating each new error to the product of the two previous errors.
+        - Assumed a self-similar power-law relationship between consecutive errors and solved the resulting characteristic equation for the order of convergence, identifying it as the golden ratio.
+        - Recast bisection's convergence order in the same power-law form used for secant and Newton, for comparison, since the original bisection session had not framed it that way.
+        - Derived the O(log log(1/eps)) iteration-count bound from the power-law ansatz by taking logarithms twice.
+        - Investigated whether the secant method requires its two starting points to bracket a sign change, and contrasted with regula falsi (method of false position).
+        - Investigated why f(x) = x^3 + x converges to exactly 0 under `root-newton.rs` but to approximately 2.3e-19 under `root-secant.rs`.
+      tried:
+        - Hand-traced the update rule on f(x) = x^3 - 2 from x0=1, x1=1.5 through x2 and x3, and compared error ratios e_{n+1}/e_n^2 against e_{n+1}/(e_n*e_{n-1}) to distinguish the two candidate recurrences.
+        - Tested the implementation against f(x) = x^3 - x starting near 1/sqrt(5), the same region that produced an infinite two-cycle under Newton's method.
+        - Tested the implementation against a double root, f(x) = (x-1)^2, near x0=1.0001, x1=1.0005.
+        - Traced both failing tests numerically outside the implementation (via a scratch Python script) to diagnose root cause before changing any assertions.
+      corrections:
+        - Initially wrote the Taylor expansion with a sign error on the linear term (f(x) = f(a) - f'(a)(x-a) + ...); corrected after checking against a concrete example, f(x)=x^2 at a=1.
+        - Initially wrote the general secant/Newton point-slope relation with x and y swapped (x1-x0 = m(y1-y0)); corrected after checking against concrete points (0,0) and (1,2).
+        - Initially expected the test starting near 1/sqrt(5) for f(x) = x^3 - x to return None (non-convergence, by analogy with Newton's oscillation there); traced the iteration and found it does converge, chaotically, to the legitimate root at 0, so the test's expected outcome was changed from None to Some.
+        - Initially asserted the double-root test's precision at the same 1e-6 tolerance passed into the function; traced the iteration and found the step-to-step ratio near the double root is only about 0.6 (linear, not superlinear, convergence, since f'(r)=0 there), inflating the true error above the step-size-based stopping check by a factor of about 1.5; the assertion tolerance was loosened to 1e-5 to reflect this.
+      bugs_found:
+        - Test root_of_x_cube_minus_x_at_1_by_sqrt_5 asserted the wrong expected outcome (None instead of Some); corrected after tracing the actual iterates.
+        - Test root_of_x_minus_1_square_at_1_0001 asserted a precision (1e-6) tighter than the double root's degraded convergence rate actually supports; corrected to 1e-5.
+      completed:
+        - Implemented src/bin/root-secant.rs with find_root(f0, x0, x1, eps, n) -> Option<f64>, guarding both x0==x1 and f(x0)==f(x1) before dividing.
+        - Added 11 tests covering simple roots of x^3+x and x^3-2, multiple bracketing pairs for x^3-x (including near-symmetric points and points close to the oscillation region), and a double root of (x-1)^2 at two different starting scales.
+        - Renamed src/bin/root-newton-general.rs/.md to src/bin/root-newton.rs/.md and propagated the filename correction to INDEX.yml and this file's prior entry.
+        - Verified all 11 tests pass after correcting the two failing assertions.
+      not_completed:
+        - Did not apply the identified optimization of caching/cycling y0,y1 alongside x0,x1 to avoid recomputing one function value per iteration; left as a known inefficiency by explicit choice.
+      open_questions: —
+      notes:
+        - Traced both failing tests using a standalone Python script in the scratchpad directory, not by editing the Rust implementation, to diagnose behavior before deciding how to fix the tests.
+
   - date: 2026-07-16
     title: "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     session:
@@ -44,7 +85,7 @@ entries:
   - date: 2026-07-16
     title: "Newton's Method for General Root-Finding"
     session:
-      file: src/bin/root-newton-general.rs
+      file: src/bin/root-newton.rs
       source: —
       status: completed
       attempted:
