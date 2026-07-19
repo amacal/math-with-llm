@@ -36,7 +36,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Present findings in chat for accept/reject. Apply a wording change only after explicit user approval — never auto-apply.
 
 ## Book study sessions
-- Looking up book content: search the repo root for a local PDF first (`find . -name "*.pdf"`), read via `pdftotext`, before any web source. Web search only if no local file exists or it's unreadable.
+- Looking up book content: search the repo root for a local PDF first (`find . -name "*.pdf"`). Never read it as extracted text (`pdftotext` mangles equation layout, subscripts/superscripts, symbols, and drops figures/tables entirely — unacceptable for math content). Instead, render the needed pages as images with `pdftoppm`/`pdftocairo` (`-png -r <dpi>`) into `.tmp/{page}.png` in the working directory, named by the book's printed page number where it differs from the PDF's physical page index, and read them directly with multimodal vision. Use 200 DPI by default, raised to ~300 DPI for pages with dense equations or small subscripts. `.tmp/` is gitignored and its contents are deleted only at the Session closing ritual (see below) — never earlier, so pages already extracted this session can be re-referenced without re-rendering. Web search only if no local PDF exists or it's unreadable.
 - Before exercises: read the section text and walk through its key definitions/propositions/proofs with the user, Socratically — they should be able to state each result in their own words and understand why it's true before using it as a tool. Never skip this, even for a short section.
 - Problem sets: follow book order exactly — full Exercises list ascending (sub-parts a/b/c in order), then Supplementary Problems ascending. Never skip around, reorder, or jump ahead.
 - Do not run the Session closing ritual until every assigned problem (Exercises + Supplementary) is done in that order.
@@ -46,6 +46,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - Give step-by-step solutions.
 - Explain *how* to implement something unless the user is completely stuck and has explicitly asked for more than a hint.
 - Edit or write to any file inside the user's project tree — not even temporarily for diagnostics with the intent to revert. If probing behavior on extra inputs would help, do it with a scratch copy outside the repo (e.g. the scratchpad directory), never with Edit/Write on the user's own files.
+  - Exception: `.tmp/{page}.png` book-page images (see "Book study sessions") — written via Bash (`pdftoppm`/`pdftocairo`), never via Edit/Write. Gitignored, deleted only at the Session closing ritual.
 
 ## Problem history
 - Each problem: a `src/bin/` file, lowercase-dash-separated, with a companion `.md` notes file at the same path (Cargo ignores non-`.rs`).
@@ -180,6 +181,8 @@ Then update INDEX.yml — **incrementally, never a full regeneration** (see "Fas
 Two sequential agent calls:
 1. **Write agent** (fork, `.skills/session-close.md`) — writes the notes file, the new HISTORY entry, and the incremental INDEX.yml patch, keeping raw file I/O out of your context.
 2. **Verify agent** (fork, `.skills/session-verify.md`), once the write agent finishes — audits the output for CLAUDE.md violations. Fix any found directly yourself (don't spawn another agent for this).
+
+Once the verify agent finishes, book-study sessions only: delete every file under `.tmp/` (the extracted page images) — this is the only point in the session they may be removed.
 
 ## Workflow
 - Read the current working file and run its tests proactively whenever the user says they've made a change — don't wait to be asked.
