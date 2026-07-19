@@ -2,9 +2,9 @@ Investigate the repo and propose exactly 5 candidate topics for the next session
 
 ## Steps
 
-1. **Done set.** Read INDEX.yml first — `sessions` keys ARE the done set. Cross-check against the `src/bin/*.rs` file list. Fall back to reading every HISTORY-YYYY.MM.yml in full only if INDEX.yml looks stale/incomplete (e.g. a `.rs` file with no matching `sessions` entry).
+1. **Done set.** `scripts/index-query.py titles` — `sessions` keys ARE the done set. Cross-check against the `src/bin/*.rs` file list. Fall back to reading every HISTORY-YYYY.MM.yml in full only if INDEX.yml looks stale/incomplete (e.g. a `.rs` file with no matching `sessions` entry).
 
-2. **Dependency graph.** Read directly from INDEX.yml's `prerequisite_index` and each session's `derived_from`/`unlocks` — genuine prerequisites already kept separate from softer `uses_concepts`/`related_to`. Use `branches`/`open_gaps` for "what's underexplored". HISTORY carries no dependency field by design — if INDEX.yml looks stale, re-derive from `src/bin/*.md`/`*.rs` directly, never from a HISTORY `Depends on`/`Unlocks` field (none exists). Use HISTORY only for session-event citations (a specific bug, a specific abandoned approach) when needed.
+2. **Dependency graph.** `scripts/index-query.py required-by "<concept>"` for `prerequisite_index` lookups, `scripts/index-query.py session "<title>"` for a session's own `derived_from`/`unlocks` — genuine prerequisites already kept separate from softer `uses_concepts`/`related_to`. `scripts/index-query.py branches` / `open-gaps` for "what's underexplored". HISTORY carries no dependency field by design — if INDEX.yml looks stale, re-derive from `src/bin/*.md`/`*.rs` directly, never from a HISTORY `Depends on`/`Unlocks` field (none exists). Use `scripts/history-query.py by-title`/`by-file`/`grep` only for session-event citations (a specific bug, a specific abandoned approach) when needed.
 
 3. **Book-study position.** If any `**Source:**` entries exist, find the most recent, identify book/chapter/section. Locate the PDF (`find . -name "*.pdf"`), read its TOC via `pdftotext`, determine the next section in book order. If the most recent book session didn't complete every Exercise/Supplementary Problem for its section, the "next" candidate is finishing that section, not advancing — say so explicitly.
 

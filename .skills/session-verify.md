@@ -29,6 +29,7 @@ Verify that the most recently written notes file and history entry conform to ev
 
 **INDEX.yml — consistency and incremental-update discipline:**
 
+0. **Run `scripts/index-validate.py` first.** Any reported problem is itself a violation to flag — quote its exact output line rather than re-deriving the same check by hand.
 1. **New entry present and correctly classified.** New session's Concept Title is a key under `sessions`, with `kind`, `file`/`source`, `date`, and the full relationship field set (`prerequisites`, `uses_concepts`, `reuses_code`, `derived_from`, `related_to`, `unlocks`, `future_targets`, `summary`, `concepts`, `capabilities`). Verify each relationship was classified honestly against CLAUDE.md's "Fast index (INDEX.yml)" tests, comparing against existing INDEX.yml sessions (not re-derived from a HISTORY `Depends on`/`Unlocks` field — none exists) — e.g. flag a `prerequisites` entry that's really just chronology, or a harder algorithm listed as prerequisite of a simpler one.
 2. **`reuses_code` is `—`.** Every session's, no exceptions — this repo forbids cross-file code reuse. Non-empty here is a violation.
 3. **`prerequisite_index` updated.** For every concept in this session's `prerequisites`, its title appears under that concept's `required_by`, and nowhere it wasn't genuinely a prerequisite.
