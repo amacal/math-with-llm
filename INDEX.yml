@@ -16,8 +16,8 @@ metadata:
   authoritative: false
   purpose: "compact LLM-readable learning knowledge graph"
   schema_version: 2
-  generated_at: "2026-07-18"
-  session_count: 35
+  generated_at: "2026-07-19"
+  session_count: 36
   note: "Rebuilt from scratch against HISTORY-2026.06.yml and HISTORY-2026.07.yml (source of truth) plus every src/bin/*.md notes file, not by mechanically relabeling the prior depends_on/unlocks fields. See CLAUDE.md for the schema this file follows."
 
 # ---------------------------------------------------------------------------
@@ -25,12 +25,12 @@ metadata:
 # ---------------------------------------------------------------------------
 selection_context:
   recent_sessions:
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
     - "BigInteger Division"
     - "Secant Method for Root-Finding"
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     - "Newton's Method for General Root-Finding"
     - "Linear Congruential Generator"
-    - "Wiener's Attack on RSA"
   active_branches:
     - "Arbitrary-Precision RSA & Wiener's Attack"
     - "Quadratic Residues & the Structure of (Z/pZ)*"
@@ -40,7 +40,7 @@ selection_context:
   branch_frontiers:
     - "BigInteger Division"
     - "Secant Method for Root-Finding"
-    - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
     - "Linear Congruential Generator"
     - "Wiener's Attack on RSA"
     - "Trial Division Factorization"
@@ -50,7 +50,6 @@ selection_context:
     - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
   explicit_unfinished_targets:
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
-    - "Tonelli-Shanks Algorithm for Modular Square Roots"
     - "BigInteger GCD"
     - "BigInteger Modular Exponentiation"
     - "BigInteger Miller-Rabin Primality Test"
@@ -59,6 +58,7 @@ selection_context:
     - "BigInteger Integer Square Root"
     - "Wiener's Attack on BigInteger RSA"
   reusable_recent_capabilities:
+    - "compute-modular-square-root"
     - "divide-arbitrary-precision-integers"
     - "find-roots-without-derivative"
     - "compute-legendre-symbol"
@@ -72,7 +72,6 @@ selection_context:
   candidate_signals:
     continuation:
       - "Root-Finding & Numerical Methods's chain now runs bisection -> Newton isqrt -> general Newton -> secant (2026-07-17); no next step is explicitly named in the repo, but a bracketing-safe hybrid such as Brent's method, combining bisection's guaranteed robustness with secant/inverse-quadratic interpolation's speed, is the shape suggested by the existing chain — this is an inferred continuation, not a named target."
-      - "Quadratic Residues & the Structure of (Z/pZ)* is brand new as of 2026-07-16; its own notes file explicitly names Tonelli-Shanks (modular square root extraction) as the natural next step building directly on Euler's Criterion, making it an explicitly-named continuation rather than an inferred one."
       - "Arbitrary-Precision RSA & Wiener's Attack now has BigInteger Division as its sole completed session; the explicitly-named next step is BigInteger GCD via the Euclidean algorithm, though a BigInteger Binary GCD detour (needing only subtraction and bit-shifts, already available without division) was raised as a genuine open alternative and left undecided."
     consolidation:
       - "The Continued Fractions / Pell's-equation branch and the RSA / cryptanalysis branch were already combined once, in Wiener's Attack on RSA — no unexplored consolidation between two specific branches is named explicitly elsewhere in the repo."
@@ -81,13 +80,42 @@ selection_context:
       - "Arbitrary-Precision RSA & Wiener's Attack was opened 2026-07-18 by BigInteger Division — the first session extending arbitrary-precision arithmetic toward the already-completed plain-u64/u128 RSA/Wiener's-attack chain, rather than continuing the existing polynomial-multiplication direction that Big Integer Arithmetic (Schoolbook) and Karatsuba Multiplication had previously been feeding."
     explicit_commitment:
       - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality — named as future work in Section 2.1's own session evidence."
-      - "Tonelli-Shanks Algorithm for Modular Square Roots — named as future work directly in src/bin/mod-legendre.md's Overview, as the natural next step after Euler's Criterion."
       - "BigInteger GCD, BigInteger Modular Exponentiation, BigInteger Miller-Rabin Primality Test, BigInteger RSA Cryptosystem, BigInteger Continued-Fraction Convergents, BigInteger Integer Square Root, and Wiener's Attack on BigInteger RSA — named explicitly as the remaining steps of the arc BigInteger Division opened, per this session's own not_completed/open_questions fields."
 
 # ---------------------------------------------------------------------------
 # sessions: primary record, one entry per completed session, most recent first.
 # ---------------------------------------------------------------------------
 sessions:
+  "Tonelli-Shanks Algorithm for Modular Square Roots":
+    kind: implementation
+    file: src/bin/mod-tonelli-shanks.rs
+    source: —
+    date: 2026-07-19
+    prerequisites:
+      - "Modular Exponentiation"
+      - "Miller-Rabin Primality Test"
+      - "Primitive Roots mod p"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    uses_concepts:
+      - "Modular Exponentiation"
+      - "Miller-Rabin Primality Test"
+      - "Primitive Roots mod p"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    reuses_code: —
+    derived_from:
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    related_to: —
+    unlocks: —
+    future_targets: —
+    summary: "Computed an actual square root of a quadratic residue a mod p by decomposing p-1=Q*2^S (reusing Miller-Rabin's peel-off-powers-of-two technique), then correcting a naive guess via a non-residue-derived generator of the group's full two-power-order subgroup, halving the guess's error term's order each iteration until it reaches 1, in O(log^2 p)."
+    concepts:
+      - "quadratic-residues"
+      - "group-theory"
+      - "modular-arithmetic"
+      - "number-theory"
+    capabilities:
+      - "compute-modular-square-root"
+
   "BigInteger Division":
     kind: implementation
     file: src/bin/big-uint-division.rs
@@ -171,8 +199,7 @@ sessions:
     derived_from: —
     related_to: —
     unlocks: —
-    future_targets:
-      - "Tonelli-Shanks Algorithm for Modular Square Roots"
+    future_targets: —
     summary: "Proved the squaring map mod p is exactly two-to-one (giving exactly (p-1)/2 quadratic residues), then proved Euler's Criterion — a^((p-1)/2) mod p determines residue status — using a primitive root to settle the converse direction, and implemented the Legendre symbol test via modular exponentiation."
     concepts:
       - "quadratic-residues"
@@ -1054,13 +1081,6 @@ future_targets:
       - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
     evidence:
       - "HISTORY-2026.07.md: Section 2.1's Unlocks field names it directly (\"floor/ceiling functions and the sqrt(n) trial division bound formalised\")."
-  "Tonelli-Shanks Algorithm for Modular Square Roots":
-    status: not-completed
-    mentioned_by:
-      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
-    evidence:
-      - "src/bin/mod-legendre.md Overview: \"Computing an actual x with x squared congruent to a modulo p is a separate, harder algorithm, standardly called Tonelli-Shanks in the literature ... it remains open as a natural next step building on the machinery developed here.\""
-      - "HISTORY-2026.07.md: this session's not_completed field names it directly."
   "BigInteger GCD":
     status: not-completed
     mentioned_by:
@@ -1139,10 +1159,10 @@ branches:
   "Quadratic Residues & the Structure of (Z/pZ)*":
     sessions:
       - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
-    frontier:
-      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
-    explicit_future_targets:
       - "Tonelli-Shanks Algorithm for Modular Square Roots"
+    frontier:
+      - "Tonelli-Shanks Algorithm for Modular Square Roots"
+    explicit_future_targets: —
   "Primality, Factorization & Public-Key Cryptography":
     sessions:
       - "Miller-Rabin Primality Test"
@@ -1212,7 +1232,6 @@ branches:
 open_gaps:
   explicit_future_targets:
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
-    - "Tonelli-Shanks Algorithm for Modular Square Roots"
     - "BigInteger GCD"
     - "BigInteger Modular Exponentiation"
     - "BigInteger Miller-Rabin Primality Test"
@@ -1272,6 +1291,7 @@ prerequisite_index:
       - "Primitive Roots mod p"
       - "RSA Cryptosystem"
       - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+      - "Tonelli-Shanks Algorithm for Modular Square Roots"
   "Euler's Theorem & Modular Inverse via Exponentiation":
     required_by:
       - "Miller-Rabin Primality Test"
@@ -1285,10 +1305,15 @@ prerequisite_index:
       - "Baby-Step Giant-Step (Discrete Logarithm)"
       - "Primitive Roots mod p"
       - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+      - "Tonelli-Shanks Algorithm for Modular Square Roots"
   "Primitive Roots mod p":
     required_by:
       - "Number Theoretic Transform (NTT)"
       - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+      - "Tonelli-Shanks Algorithm for Modular Square Roots"
+  "Quadratic Residues & the Legendre Symbol via Euler's Criterion":
+    required_by:
+      - "Tonelli-Shanks Algorithm for Modular Square Roots"
   "RSA Cryptosystem":
     required_by:
       - "Wiener's Attack on RSA"
@@ -1418,6 +1443,7 @@ concept_index:
     - "Number Theoretic Transform (NTT)"
     - "Primitive Roots mod p"
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
   lagranges-theorem:
     - "Euler's Theorem & Modular Inverse via Exponentiation"
     - "Primitive Roots mod p"
@@ -1437,6 +1463,7 @@ concept_index:
     - "Modular Inverse"
     - "RSA Cryptosystem"
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
   newtons-method:
     - "Newton's Method for General Root-Finding"
     - "Newton's Method for Integer Square Root"
@@ -1457,6 +1484,7 @@ concept_index:
     - "Trial Division Factorization"
     - "Wiener's Attack on RSA"
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
   numerical-methods:
     - "Integer Square Root"
     - "Newton's Method for General Root-Finding"
@@ -1488,6 +1516,7 @@ concept_index:
     - "Newton's Method for Integer Square Root"
   quadratic-residues:
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
   quotient-estimation-and-correction:
     - "BigInteger Division"
   root-finding:
@@ -1533,6 +1562,8 @@ capability_index:
     - "Modular Inverse"
   compute-modular-inverse-via-exponentiation:
     - "Euler's Theorem & Modular Inverse via Exponentiation"
+  compute-modular-square-root:
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
   divide-arbitrary-precision-integers:
     - "BigInteger Division"
   enumerate-primes-in-large-range-window:
@@ -1582,6 +1613,8 @@ capability_index:
 # completed_by_date: newest first. Every session appears exactly once.
 # ---------------------------------------------------------------------------
 completed_by_date:
+  "2026-07-19":
+    - "Tonelli-Shanks Algorithm for Modular Square Roots"
   "2026-07-18":
     - "BigInteger Division"
   "2026-07-17":
@@ -1698,3 +1731,9 @@ edges:
     confidence: explicit
     evidence:
       - "src/bin/mod-legendre.md: the fact that x^2=1 (mod p) has exactly two roots, first proved in Miller-Rabin's notes, is cited (not re-derived) and used twice — once to show the squaring map is exactly two-to-one, once to show a^((p-1)/2) is confined to {1,-1}."
+  - from: "Miller-Rabin Primality Test"
+    to: "Tonelli-Shanks Algorithm for Modular Square Roots"
+    type: derived_from
+    confidence: explicit
+    evidence:
+      - "src/bin/mod-tonelli-shanks.md \"Decomposing p minus 1\" section: reuses Miller-Rabin's n-1=2^s*d peel-off-powers-of-two decomposition directly as p-1=Q*2^S, and reuses its repeated-squaring search technique (there searching for a nontrivial root of 1, here searching for the exponent i such that t's order is 2^i)."
