@@ -1,0 +1,20 @@
+date: "2026-06-11"
+title: "Extended Euclidean GCD"
+session:
+  file: "src/bin/gcd-euclidean-extended.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Augment the Euclidean algorithm to also produce Bezout coefficients x,y with a*x+b*y=gcd(a,b)."
+  explored:
+    - "Investigated threading a coefficient-pair invariant through the same reduction loop as the basic algorithm."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented extended Euclidean GCD with coefficient tracking."
+    - "Traced a worked example: gcd(35,15)=5 with Bezout coefficients (1,-2)."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "An overflow edge case (quotient q exceeding i64::MAX) can only occur when b=1, at which point the loop is about to exit anyway."

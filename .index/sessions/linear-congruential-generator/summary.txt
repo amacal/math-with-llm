@@ -1,0 +1,1 @@
+Implemented x_(n+1) = (a*x_n + c) mod m and derived the Hull-Dobell full-period conditions by hand for m=8, generalizing to any power-of-two modulus.

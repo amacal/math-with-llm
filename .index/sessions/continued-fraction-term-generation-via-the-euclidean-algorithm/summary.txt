@@ -1,0 +1,1 @@
+Implemented the algorithmic continued-fraction term generator flagged as unimplemented theory in the Continued Fractions session, by retaining every quotient of the Euclidean algorithm's division loop instead of discarding all but the last.

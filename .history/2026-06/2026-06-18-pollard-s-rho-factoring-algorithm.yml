@@ -1,0 +1,22 @@
+date: "2026-06-18"
+title: "Pollard's Rho Factoring Algorithm"
+session:
+  file: "src/bin/mod-pollard-rho.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Find a non-trivial factor of a composite n faster than trial division."
+  explored:
+    - "Investigated the birthday-paradox argument for why a collision mod an unknown prime factor p appears after about sqrt(p) draws."
+    - "Investigated Floyd's cycle detection as an O(1)-space alternative to storing the full sequence."
+    - "Investigated failure modes: a collision mod n rather than mod p, and degenerate cycles for certain constants c."
+  tried:
+    - "Tested restarting with a different constant c on failure, avoiding c=0 and c=2 by convention."
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented Pollard's Rho with Floyd's cycle detection and a special-cased even-n check."
+    - "Traced a worked example factoring n=77 with f(x)=x^2+1, finding the factor 7 at step 3."
+  not_completed: —
+  open_questions: —
+  notes: —

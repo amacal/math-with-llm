@@ -1,0 +1,5 @@
+title: "Newton's Method for Integer Square Root"
+kind: "implementation"
+file: "src/bin/mod-isqrt-newton.rs"
+source: —
+date: "2026-07-10"

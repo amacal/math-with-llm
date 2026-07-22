@@ -1,0 +1,1 @@
+Strengthened Fermat's test against Carmichael numbers by exploiting that x^2=1 mod p has only two roots for a genuine prime p, bounding the false-positive rate at (1/4)^k over k bases.

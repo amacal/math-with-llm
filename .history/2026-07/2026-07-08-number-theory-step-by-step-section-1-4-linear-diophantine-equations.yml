@@ -1,0 +1,27 @@
+date: "2026-07-08"
+title: "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 1, Section 1.4"
+  status: "completed"
+  attempted:
+    - "Complete Section 1.4 (Linear Diophantine Equations): all 16 Exercises and all 24 Supplementary Problems 1, in book order."
+  explored:
+    - "Worked through Propositions 1.16-1.18 and Corollary 1.19 building the general solution to ax+by=c."
+    - "Checked a counterexample (6x+10y=8) against Proposition 1.16's formula to motivate Proposition 1.18."
+    - "Applied the theory to constrained word problems (coins, stamps, hotdogs and buns, ATM notes, a fish-and-chips receipt) requiring inequality constraints on the free parameter."
+    - "Checked Exercise 14's printed general solution against Exercise 1(b)'s own numbers."
+    - "Worked Supplementary Problem 1.23 (a^n divides b^n implies a divides b) without using prime factorization."
+  tried: —
+  corrections:
+    - "Exercise 14's printed general solution to akx+bky=c used step sizes b/k and a/k; these were shown to be non-integer in general against Exercise 1(b)'s numbers, and corrected to x=x0+bt, y=y0-at once gcd(ak,bk)=k was established via mutual divisibility."
+  bugs_found: —
+  completed:
+    - "Completed all 16 Exercises 1.4 and all 24 Supplementary Problems 1 in order."
+    - "Flagged and corrected the book's printed general solution in Exercise 14."
+    - "Proved Supplementary Problem 1.23 and Problem 1.24."
+  not_completed:
+    - "Flagged that this repo had not yet covered prime factorization as a proven theorem (needed an alternative gcd-decomposition proof for Problem 1.23 instead)."
+  open_questions: —
+  notes:
+    - "One of the largest sessions in the repo (40 problems); this entry is trimmed to load-bearing facts rather than recapping every exercise."

@@ -1,0 +1,21 @@
+date: "2026-06-16"
+title: "Euler's Theorem & Modular Inverse via Exponentiation"
+session:
+  file: "src/bin/mod-euler.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Prove Euler's theorem and derive a second way to compute modular inverses via exponentiation."
+  explored:
+    - "Investigated the group structure of (Z/nZ)* and Lagrange's theorem (order divides group order)."
+    - "Investigated Fermat's little theorem as the prime special case of Euler's theorem."
+    - "Checked the theorem concretely for n=9 (phi(9)=6, 2^6=64=7*9+1)."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented modular inverse via a^(phi(n)-1) mod n."
+    - "Traced a worked example: modular inverse of 5 mod 9, computed as 5^5 mod 9 = 2."
+  not_completed: —
+  open_questions: —
+  notes: —

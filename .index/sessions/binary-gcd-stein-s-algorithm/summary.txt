@@ -1,0 +1,1 @@
+Computed GCD using only subtraction and bit-shifts instead of division, alternating a guaranteed-even subtraction step with a bit-halving step to match Euclidean GCD's O(log(min(a,b))) bound.

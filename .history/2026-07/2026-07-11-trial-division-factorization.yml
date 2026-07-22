@@ -1,0 +1,24 @@
+date: "2026-07-11"
+title: "Trial Division Factorization"
+session:
+  file: "src/bin/mod-factorize-trial.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement complete prime factorization using trial division, without using the existing Pollard's-Rho-based factorizer."
+  explored:
+    - "Investigated whether the trial-division search index ever needs to backtrack."
+    - "Investigated the practical search bound for a composite's smallest divisor."
+    - "Ran the factorizer across the 100 integers immediately below u64::MAX to empirically test the O(sqrt(n)) worst case."
+  tried:
+    - "Derived independently (rather than citing) that the search index only ever moves forward."
+    - "Derived independently that a composite's smallest divisor never exceeds its square root."
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented trial-division factorization with a forward-only search index and a square-root search bound."
+    - "Ran the factorizer over the 100 integers just below u64::MAX; found three were prime themselves and one had 2^61-1 (a Mersenne prime) as its largest factor, each requiring the full ~2^32 search, while another factored into many small primes and finished quickly."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Reused the checked-multiplication-overflow-as-automatic-stop pattern from mod-isqrt-bisect.rs for the square-root bound check."

@@ -1,0 +1,4 @@
+claim: "Tight closed-form bound r = O(sqrt(D)*log(D)) on the period length of sqrt(D)'s continued-fraction expansion"
+status: "cited from the literature, not derived in-repo"
+evidence:
+  - "src/bin/gcd-euclidean-pell.md: Complexity section."

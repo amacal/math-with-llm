@@ -1,0 +1,30 @@
+date: "2026-07-12"
+title: "Pell's Equation via Continued Fractions"
+session:
+  file: "src/bin/gcd-euclidean-pell.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Find the fundamental solution to x^2 - D*y^2 = 1 for non-square D by expanding sqrt(D) as a continued fraction."
+  explored:
+    - "Derived a general (m,d,a) recurrence for expanding sqrt(D), generalizing the sqrt(2)-specific hand rationalization from the Continued Fractions session."
+    - "Investigated why the (m,d) state space is finite and why the expansion must become periodic."
+    - "Checked an empirically observed identity, p_k^2 - D*q_k^2 = (-1)^(k+1)*d_(k+1), against D=7, then D=13 and D=61."
+    - "Investigated whether the fundamental solution sits at k=r-1 or k=2r-1, depending on the parity of the period r."
+  tried:
+    - "Reused and generalized the bisection technique from Integer Square Root as a float-free floor test for each partial quotient."
+    - "Tested against seven known fundamental solutions (D=2,3,5,6,7,13,61)."
+  corrections: —
+  bugs_found:
+    - "d hitting exactly 0 at a perfect-square D caused an unsigned-subtraction underflow one step later rather than a clean division-by-zero; fixed by checking isqrt(D)^2==D upfront and returning None."
+    - "An initial tuple-ordering mistake in the (m,d,a) recurrence was caught by testing against known fundamental solutions."
+    - "A modulo-based index shortcut incorrectly collapsed the k=r-1 and k=2r-1 cases together, since they differ by exactly r and share the same value mod r; corrected once shown unsound."
+  completed:
+    - "Implemented the (m,d,a) recurrence and fundamental-solution recovery via the convergent recurrence."
+    - "Added tests against seven known fundamental solutions, including the D=61 Fermat-challenge case."
+  not_completed:
+    - "Did not prove the p_k^2 - D*q_k^2 = (-1)^(k+1)*d_(k+1) identity from first principles; treated it as an empirically confirmed conjecture."
+    - "Did not derive a tight closed-form bound on the period length r as a function of D; cited the literature's r=O(sqrt(D)*log(D)) without deriving it."
+  open_questions: —
+  notes:
+    - "The D=61 test case's numerators/denominators reach into the billions, still within u64."

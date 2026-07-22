@@ -1,0 +1,6 @@
+from: "Karatsuba Multiplication"
+to: "Number Theoretic Transform (NTT)"
+type: "related"
+confidence: "explicit"
+evidence:
+  - "src/bin/poly-mul-ntt.md Complexity section: contrasts NTT's T(n)=2T(n/2)+O(n) Master-theorem boundary case against Karatsuba's T(n)=3T(n/2)+O(n) recursive-work-dominates case."

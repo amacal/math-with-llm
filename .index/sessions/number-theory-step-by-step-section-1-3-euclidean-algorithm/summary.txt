@@ -1,0 +1,1 @@
+Proved Bezout's Identity via well-ordering, built the Euclidean Algorithm and its back-substitution reverse, and proved Euclid's Lemma plus a multiplicativity lemma across 19 exercises.

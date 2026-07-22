@@ -1,0 +1,13 @@
+title: "Arbitrary-Precision RSA & Wiener's Attack"
+sessions:
+  - "BigInteger Division"
+frontier:
+  - "BigInteger Division"
+explicit_future_targets:
+  - "BigInteger GCD"
+  - "BigInteger Modular Exponentiation"
+  - "BigInteger Miller-Rabin Primality Test"
+  - "BigInteger RSA Cryptosystem"
+  - "BigInteger Continued-Fraction Convergents"
+  - "BigInteger Integer Square Root"
+  - "Wiener's Attack on BigInteger RSA"

@@ -1,0 +1,5 @@
+title: "Multi-Modulus NTT with CRT Reconstruction"
+kind: "implementation"
+file: "src/bin/poly-mul-crt.rs"
+source: —
+date: "2026-07-05"

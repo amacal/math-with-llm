@@ -1,0 +1,6 @@
+from: "Miller-Rabin Primality Test"
+to: "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+type: "related"
+confidence: "explicit"
+evidence:
+  - "src/bin/mod-legendre.md: the fact that x^2=1 (mod p) has exactly two roots, first proved in Miller-Rabin's notes, is cited (not re-derived) and used twice — once to show the squaring map is exactly two-to-one, once to show a^((p-1)/2) is confined to {1,-1}."

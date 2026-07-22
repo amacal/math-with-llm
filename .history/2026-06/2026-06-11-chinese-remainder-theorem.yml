@@ -1,0 +1,20 @@
+date: "2026-06-11"
+title: "Chinese Remainder Theorem"
+session:
+  file: "src/bin/gcd-crt.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Solve two congruences with coprime moduli for a unique combined solution."
+  explored:
+    - "Investigated the existence/uniqueness argument via counting pairs of remainders against the range [0, m1*m2)."
+  tried: —
+  corrections: —
+  bugs_found:
+    - "Computing (a2-a1) via naive unsigned subtraction could underflow when a2<a1; fixed by reducing the difference mod m2 before use."
+  completed:
+    - "Implemented CRT for two coprime moduli via a single modular-inverse call."
+    - "Traced a worked example: x=2 mod 3, x=3 mod 5, solved to x=8."
+  not_completed: —
+  open_questions: —
+  notes: —

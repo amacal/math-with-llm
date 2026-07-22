@@ -1,0 +1,6 @@
+from: "Trial Division Factorization"
+to: "Pollard's Rho Factoring Algorithm"
+type: "related"
+confidence: "explicit"
+evidence:
+  - "HISTORY-2026.07.md: Trial Division entry, \"contrasted explicitly against the O(n^(1/4)) cost of the Pollard's-Rho-based factorize\" — a same-problem comparison, not a prerequisite; trial division is the simpler of the two algorithms."

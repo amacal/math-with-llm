@@ -1,0 +1,5 @@
+title: "Euler's Totient Function"
+kind: "implementation"
+file: "src/bin/mod-totient.rs"
+source: —
+date: "2026-06-14"

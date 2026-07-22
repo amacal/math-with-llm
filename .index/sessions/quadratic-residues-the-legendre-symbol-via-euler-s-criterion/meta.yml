@@ -1,0 +1,5 @@
+title: "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+kind: "implementation"
+file: "src/bin/mod-legendre.rs"
+source: —
+date: "2026-07-16"

@@ -1,0 +1,19 @@
+date: "2026-06-11"
+title: "Binary GCD (Stein's Algorithm)"
+session:
+  file: "src/bin/gcd-binary.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Compute GCD using only subtraction and bit-shifts instead of division."
+  explored:
+    - "Investigated the two properties (subtraction preserves gcd; shared factors of 2 can be stripped and restored) that replace division."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented binary GCD with a shift counter k for the stripped common factor of 2."
+    - "Traced a worked example: gcd(24,18)=6."
+  not_completed: —
+  open_questions: —
+  notes: —

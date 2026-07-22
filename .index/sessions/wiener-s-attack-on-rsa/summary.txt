@@ -1,0 +1,1 @@
+Recovered RSA's private exponent d and factored n from the public key alone, whenever d < n^(1/4)/sqrt(2), by matching e/n against its continued-fraction convergents via Legendre's theorem.

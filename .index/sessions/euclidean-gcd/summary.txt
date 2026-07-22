@@ -1,0 +1,1 @@
+Established gcd(a,b)=gcd(b,a mod b) by proving the two pairs share identical common-divisor sets, giving O(log(min(a,b))) via Lame's theorem.

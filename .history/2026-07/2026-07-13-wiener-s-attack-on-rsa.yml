@@ -1,0 +1,31 @@
+date: "2026-07-13"
+title: "Wiener's Attack on RSA"
+session:
+  file: "src/bin/mod-rsa-wiener.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Recover RSA's private exponent d and factor n from the public key alone, exploiting a small d."
+  explored:
+    - "Investigated the algebraic relationship among e, d, and phi(n) implied by RSA key generation."
+    - "Compared the session's derived bound on d against the published literature bound."
+    - "Checked Legendre's theorem concretely against previously computed sqrt(2) convergents (17/12 and 10/7)."
+  tried:
+    - "Chose RSA primes near 2^30 to keep phi(n) within the existing extended-GCD implementation's i64 range."
+    - "Tested a large-d case (d = 200000) expected to fall outside the derived bound."
+    - "Recovered candidate p, q via Vieta's formulas and a discriminant perfect-square check for each continued-fraction convergent of e/n."
+  corrections:
+    - "Initially called the continued-fraction generator on the private exponent d instead of the public modulus n; corrected once recognized this used information a real attacker would not have."
+  bugs_found:
+    - "The existing extended-GCD routine's i64 Bezout coefficients overflowed once phi(n) approached u64::MAX with primes near 2^32; worked around by choosing smaller primes near 2^30 instead of widening the coefficient type."
+    - "Squaring p+q before subtracting 4n could overflow u64; fixed by widening that multiplication to u128, matching the existing pattern in mod_exp."
+    - "An early version called the continued-fraction generator on the private exponent d instead of n, which \"solved\" the attack using information the attacker would not have; caught before being mistaken for a working implementation."
+  completed:
+    - "Implemented the attack: convergent search, phi(n) candidate recovery, and p/q recovery via the quadratic discriminant."
+    - "Verified against a worked example with p=97, q=101, d=7, recovering the exact factors from the public key alone."
+    - "Confirmed the large-d test case (d=200000) returns no candidate, as expected given the derived bound."
+  not_completed:
+    - "Did not widen the extended-GCD Bezout-coefficient type to i128; used smaller primes instead as a scope decision."
+  open_questions: —
+  notes:
+    - "Derived bound d < n^(1/4)/sqrt(2), looser than the literature's n^(1/4)/3 but the same order of magnitude."

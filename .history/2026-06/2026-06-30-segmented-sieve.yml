@@ -1,0 +1,22 @@
+date: "2026-06-30"
+title: "Segmented Sieve"
+session:
+  file: "src/bin/sieve-segmented.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Sieve primes in a window [L,R] using O(sqrt(R)) space instead of O(R)."
+  explored:
+    - "Investigated the first-multiple-in-window formula ceil(L/p)*p and its edge case when the result equals p itself."
+    - "Investigated ceil versus floor when computing the sqrt(R) precomputation limit."
+  tried: —
+  corrections:
+    - "Initially used floor when computing the sqrt(R) limit for precomputation; corrected to ceil after finding floating-point sqrt could round down and silently drop a prime (e.g. at a perfect square R)."
+  bugs_found:
+    - "The first-multiple-in-window formula can return p itself when L<=p, which would incorrectly mark p composite; fixed with an explicit guard advancing to 2p in that case."
+  completed:
+    - "Implemented the segmented sieve using the basic sieve for precomputation up to sqrt(R)."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Flagged the floating-point sqrt precision concern that later motivated the Integer Square Root session."

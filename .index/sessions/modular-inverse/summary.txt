@@ -1,0 +1,1 @@
+Computed the modular inverse of a mod m as the Bezout coefficient x from extended GCD, existing exactly when gcd(a,m)=1, normalized into [0,m).

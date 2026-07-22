@@ -1,0 +1,29 @@
+date: "2026-07-04"
+title: "Number Theoretic Transform (NTT)"
+session:
+  file: "src/bin/poly-mul-ntt.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement polynomial multiplication in O(n log n) via evaluation at roots of unity mod p, instead of direct convolution."
+  explored:
+    - "Investigated constructing a primitive n-th root of unity h=g^((p-1)/n) from a primitive root g."
+    - "Investigated why the even/odd-split recursion requires n to be a power of two, checking concretely with p=7, h=3 (order 6, not a power of 2)."
+    - "Derived the orthogonality identity used to justify the inverse transform."
+  tried:
+    - "Implemented the recursion in place via an (offset, stride) addressing scheme instead of allocating fresh sub-arrays."
+  corrections:
+    - "Initially checked the recursion's base case as size==1 instead of size==0, causing it to stop one level too early."
+    - "Initially assumed E's and O's outputs occupy contiguous halves of the local array; corrected once the in-place offset/stride scheme was shown to interleave them instead."
+  bugs_found:
+    - "Base case checked as size==1 instead of size==0, skipping a real combine step."
+    - "Combine-step read positions assumed contiguous halves rather than the actual interleaved offset+stride layout."
+    - "A read/write clobbering hazard: one iteration's write to a \"high\" position landed on a position a later iteration still needed to read; fixed by computing all outputs into a scratch buffer before copying back."
+    - "The twiddle factor root^k was computed as a single fixed value per call instead of advancing with the loop index; fixed by precomputing a table of h^0..h^(n-1) and walking it by +stride per iteration."
+    - "Zero-padding at the convolution level initially risked adding leading rather than trailing zero coefficients, which would silently multiply the polynomial by a power of x."
+  completed:
+    - "Implemented the recursive forward and inverse NTT with an in-place (offset, stride) scheme."
+    - "Verified against a worked example: forward-transforming and inverting P(x)=1+2x+3x^2+x^3 with p=5, h=2."
+  not_completed: —
+  open_questions: —
+  notes: —

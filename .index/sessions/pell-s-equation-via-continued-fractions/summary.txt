@@ -1,0 +1,1 @@
+Found the fundamental solution to x^2-D*y^2=1 by expanding sqrt(D) via the (m,d,a) recurrence, proving eventual periodicity by pigeonhole, and locating the solution at k=r-1 or k=2r-1 depending on period parity.

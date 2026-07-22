@@ -1,0 +1,1 @@
+Generalized the isqrt tangent-line update to x1 = x0 - f(x0)/f'(x0) for any differentiable f, proved quadratic convergence via Taylor's theorem, and found a genuine non-convergent counterexample (f(x)=x^3-x oscillating forever).

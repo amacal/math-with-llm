@@ -1,0 +1,6 @@
+from: "Karatsuba Multiplication"
+to: "BigInteger Division"
+type: "not_a_prerequisite"
+confidence: "explicit"
+evidence:
+  - "src/bin/big-uint-division.md Overview: \"Karatsuba Multiplication ... is not a genuine prerequisite here, since every multiplication this algorithm performs multiplies a single 64-bit digit against the full divisor, never two multi-limb numbers against each other, so there is no asymptotic reason to reach for a subquadratic multiplication algorithm.\" Recorded explicitly since Karatsuba is the chronologically most recent session in the same prior branch and could otherwise be mistaken for a prerequisite."

@@ -1,0 +1,6 @@
+from: "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
+to: "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+type: "derived_from"
+confidence: "explicit"
+evidence:
+  - "HISTORY-2026.07.md: Section 1.4's Supplementary Problem 1.23 explicitly flags prime factorization as \"not yet covered as a proven theorem\" in this repo; Section 2.1, three days later, closes exactly that gap by proving the Fundamental Theorem of Arithmetic."

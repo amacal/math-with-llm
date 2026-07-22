@@ -1,0 +1,1 @@
+Represented arbitrary-precision unsigned integers as base-2^64 Vec<u64> with a no-trailing-zeros invariant, implementing add/sub/compare and O(n*m) schoolbook multiplication.

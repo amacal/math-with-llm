@@ -1,0 +1,1 @@
+Computed a^b mod m in O(log b) via square-and-multiply, maintaining the invariant result=a^(exp & (2^n-1)) mod m and power=a^(2^n) mod m after n bits.

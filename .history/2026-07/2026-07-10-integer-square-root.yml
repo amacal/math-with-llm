@@ -1,0 +1,26 @@
+date: "2026-07-10"
+title: "Integer Square Root"
+session:
+  file: "src/bin/mod-isqrt-bisect.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Compute isqrt(n) using only integer bisection, with no floating-point sqrt call."
+  explored:
+    - "Investigated candidate search brackets, including n/2 as an upper bound."
+    - "Hand-traced bisection on n=2 to look for off-by-one behavior."
+  tried:
+    - "Tried an n/2 upper bound."
+    - "Tried a floor-rounded midpoint mid=(lo+hi)/2 with an hi=mid overshoot rule."
+  corrections:
+    - "Initially expected an n/2 upper bound to be safe; corrected after finding it fails for n=1, 2, and 3."
+  bugs_found:
+    - "A floor-rounded midpoint combined with lo=mid on the non-overshoot branch stalled once hi=lo+1, since floor division kept sending mid back to lo; fixed by rounding the midpoint up instead."
+    - "An hi=mid overshoot rule left the bracket unchanged whenever mid already equaled hi; fixed by discarding mid entirely on overshoot (hi=mid-1)."
+  completed:
+    - "Implemented isqrt via bisection on the bracket [0,n], with a ceiling-rounded midpoint and hi=mid-1 overshoot rule."
+    - "Handled overflow via checked multiplication (mid*mid) treated as automatic overshoot, and a saturating add for n=u64::MAX."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Motivated by a floating-point sqrt precision concern flagged in Segmented Sieve's notes, though not technically dependent on that session."

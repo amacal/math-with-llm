@@ -1,0 +1,6 @@
+from: "Baby-Step Giant-Step (Discrete Logarithm)"
+to: "Primitive Roots mod p"
+type: "derived_from"
+confidence: "explicit"
+evidence:
+  - "src/bin/mod-bsgs.md \"Finding a generator\" section: the safe-prime two-check shortcut (g^2, g^((p-1)/2)) is explicitly named as the special case that Primitive Roots mod p later generalizes to any prime via Lagrange's theorem."

@@ -1,0 +1,1 @@
+Replaced Newton's exact derivative with a finite-difference slope from two prior points, re-derived the Taylor-expansion error argument for two error terms to get e_{n+1}~C*e_n*e_{n-1}, and solved the resulting ansatz's characteristic equation p^2-p-1=0 for the golden-ratio order of convergence p≈1.618.

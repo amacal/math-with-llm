@@ -1,0 +1,4 @@
+claim: "Whether BigInteger GCD should be reached directly via the Euclidean algorithm (now unlocked by BigInteger Division) or via a BigInteger Binary GCD (Stein's Algorithm) detour first (needing only subtraction and bit-shifts, both already available without division)"
+status: "open fork point, explicitly raised and left undecided, not yet a missing prerequisite for either path"
+evidence:
+  - "HISTORY-2026.07.yml: BigInteger Division's not_completed and open_questions fields raise this choice explicitly."

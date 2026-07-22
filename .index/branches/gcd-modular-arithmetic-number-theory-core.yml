@@ -1,0 +1,13 @@
+title: "GCD, Modular Arithmetic & Number Theory Core"
+sessions:
+  - "Euclidean GCD"
+  - "Extended Euclidean GCD"
+  - "Binary GCD (Stein's Algorithm)"
+  - "Modular Inverse"
+  - "Chinese Remainder Theorem"
+  - "Modular Exponentiation"
+  - "Euler's Totient Function"
+  - "Euler's Theorem & Modular Inverse via Exponentiation"
+frontier:
+  - "Binary GCD (Stein's Algorithm)"
+explicit_future_targets: —

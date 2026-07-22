@@ -1,0 +1,5 @@
+title: "Newton's Method for General Root-Finding"
+kind: "implementation"
+file: "src/bin/root-newton.rs"
+source: —
+date: "2026-07-16"

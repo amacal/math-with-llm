@@ -1,0 +1,9 @@
+title: "Root-Finding & Numerical Methods"
+sessions:
+  - "Integer Square Root"
+  - "Newton's Method for Integer Square Root"
+  - "Newton's Method for General Root-Finding"
+  - "Secant Method for Root-Finding"
+frontier:
+  - "Secant Method for Root-Finding"
+explicit_future_targets: —

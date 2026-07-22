@@ -1,0 +1,1 @@
+Proved the squaring map mod p is exactly two-to-one (giving exactly (p-1)/2 quadratic residues), then proved Euler's Criterion — a^((p-1)/2) mod p determines residue status — using a primitive root to settle the converse direction, and implemented the Legendre symbol test via modular exponentiation.

@@ -1,0 +1,1 @@
+Proved a^phi(n)=1 mod n via Lagrange's theorem on the group (Z/nZ)*, giving Fermat's little theorem as the prime case and a^(phi(n)-1) as a second way to compute modular inverses.

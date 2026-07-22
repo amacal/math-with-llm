@@ -1,0 +1,1 @@
+Multiplied polynomials whose coefficients exceed any single NTT prime by running NTT mod three primes and CRT-reconstructing each coefficient, exact whenever c[k] < p1*p2*p3 (~4.6e26).

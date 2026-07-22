@@ -1,0 +1,10 @@
+title: "Big Integer Arithmetic & Fast Polynomial Multiplication"
+sessions:
+  - "Big Integer Arithmetic (Schoolbook)"
+  - "Karatsuba Multiplication"
+  - "Naive Polynomial Multiplication (Linear Convolution)"
+  - "Number Theoretic Transform (NTT)"
+  - "Multi-Modulus NTT with CRT Reconstruction"
+frontier:
+  - "Multi-Modulus NTT with CRT Reconstruction"
+explicit_future_targets: —

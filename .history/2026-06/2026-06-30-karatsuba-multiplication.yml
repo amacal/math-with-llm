@@ -1,0 +1,20 @@
+date: "2026-06-30"
+title: "Karatsuba Multiplication"
+session:
+  file: "src/bin/big-uint-karatsuba.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Multiply big integers faster than schoolbook O(n^2) by reducing four sub-multiplications to three."
+  explored:
+    - "Investigated the algebraic identity that recovers the cross term z1 from z0, z2, and one extra product."
+    - "Investigated the base-case and pivot strategy needed when one operand has a single chunk."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented Karatsuba multiplication with padding to guarantee a pivot >= 1, and a safety argument for the z1 subtraction order."
+    - "Traced a worked example multiplying A=[3,5] by B=[7,11]."
+  not_completed: —
+  open_questions: —
+  notes: —

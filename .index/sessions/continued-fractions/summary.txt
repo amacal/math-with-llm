@@ -1,0 +1,1 @@
+Proved that a/b's continued-fraction terms are exactly the Euclidean algorithm's quotients, derived the convergent recurrence p_k=a_k*p_(k-1)+p_(k-2), and verified sqrt(2)'s convergents satisfy Pell's equation p_k^2-2q_k^2=+-1.

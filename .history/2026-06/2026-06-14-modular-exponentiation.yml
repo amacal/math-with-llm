@@ -1,0 +1,21 @@
+date: "2026-06-14"
+title: "Modular Exponentiation"
+session:
+  file: "src/bin/mod-exponent.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Compute a^b mod m in O(log b) instead of O(b) naive repeated multiplication."
+  explored:
+    - "Investigated the square-and-multiply decomposition of b's binary representation."
+    - "Investigated why intermediate values must be reduced mod m at every step to stay within u64/u128 bounds."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented square-and-multiply modular exponentiation using u128 intermediates."
+    - "Traced a worked example: 3^13 mod 7 = 3."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Edge cases handled: exp=0 returns 1, modulus=1 returns 0, modulus=0 returns None."

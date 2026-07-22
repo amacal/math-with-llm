@@ -1,0 +1,6 @@
+from: "Pell's Equation via Continued Fractions"
+to: "Linear Congruential Generator"
+type: "related"
+confidence: "explicit"
+evidence:
+  - "HISTORY-2026.07.md: LCG entry, \"the pigeonhole-plus-determinism argument from the Pell's equation session, generalized here\" — a borrowed side-argument for LCG's eventual-periodicity remark, not a prerequisite for its core Hull-Dobell result."

@@ -1,0 +1,19 @@
+date: "2026-06-14"
+title: "Euler's Totient Function"
+session:
+  file: "src/bin/mod-totient.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Compute phi(n) efficiently using trial division and multiplicativity."
+  explored:
+    - "Investigated the multiplicativity property phi(m*n)=phi(m)*phi(n) for coprime m,n and the prime-power formula phi(p^k)=p^k-p^(k-1)."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented phi(n) via trial-division factorization and the prime-power product formula."
+    - "Traced a worked example: phi(45)=24, cross-checked via inclusion-exclusion."
+  not_completed: —
+  open_questions: —
+  notes: —

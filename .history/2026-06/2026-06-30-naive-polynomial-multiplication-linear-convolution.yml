@@ -1,0 +1,19 @@
+date: "2026-06-30"
+title: "Naive Polynomial Multiplication (Linear Convolution)"
+session:
+  file: "src/bin/poly-mul-naive.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement polynomial multiplication as direct linear convolution of coefficient vectors."
+  explored:
+    - "Distinguished linear convolution (output length n+m-1, no wrapping) from cyclic convolution (output length n, indices mod n)."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented linear convolution c[k] = sum of a[i]*b[k-i]."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Introduced as a stepping stone toward NTT, which computes cyclic convolution natively."

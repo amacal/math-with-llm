@@ -1,0 +1,24 @@
+date: "2026-07-12"
+title: "Continued-Fraction Term Generation via the Euclidean Algorithm"
+session:
+  file: "src/bin/gcd-euclidean-fraction.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement an algorithmic generator for the continued-fraction terms of a/b, replacing the hand-computed term lists used in the prior Continued Fractions session."
+  explored:
+    - "Investigated whether this function should treat its two arguments symmetrically the way gcd(a,b) does."
+    - "Considered whether a < b needs special-case handling."
+  tried:
+    - "Attempted to import gcd's swap-invariance rule onto this function."
+  corrections:
+    - "Initially assumed the gcd-style argument-swap rule applied here; corrected after showing a/b and b/a answer genuinely different questions, so no swap or reordering is needed."
+  bugs_found: —
+  completed:
+    - "Implemented `decompose`, generating continued-fraction terms via the Euclidean algorithm's division-with-remainder loop."
+    - "Verified decompose(17,7) against the hand-derived expansion from the prior session."
+    - "Renamed the old gcd-euclidean-fraction.rs (sqrt(2) example, Pell-identity test oracle) to gcd-euclidean-sqrt.rs to free the filename for this session's file."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Confirmed a=0 is a valid input producing the single-term result [0]; only b=0 is rejected."

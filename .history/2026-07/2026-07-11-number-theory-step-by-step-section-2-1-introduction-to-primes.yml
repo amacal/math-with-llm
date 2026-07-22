@@ -1,0 +1,20 @@
+date: "2026-07-11"
+title: "Number Theory Step by Step, Section 2.1: Introduction to Primes"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 2, Section 2.1"
+  status: "completed"
+  attempted:
+    - "Complete Section 2.1 (Introduction to Primes), Exercises 1-13, in book order."
+  explored:
+    - "Worked through the Well-Ordering-Principle-based existence proof and the Corollary-2.4-based uniqueness proof for the Fundamental Theorem of Arithmetic."
+    - "Worked through Proposition 2.2 (Euclid's Lemma) and its extension to products of n factors (Corollaries 2.3, 2.4)."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Completed all 13 exercises in order: prime decompositions of ten numbers, gcd proofs with primes, product-notation evaluation, error-spotting in invalid applications of Corollary 2.4, relative primality of p and p+2, divisibility-by-3 case analysis mod 3, five disproof problems, and sigma/tau functions for primes."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Section 1.4's Supplementary Problem 1.23 had flagged prime factorization as not yet covered as a proven theorem in this repo; this session closes that gap."

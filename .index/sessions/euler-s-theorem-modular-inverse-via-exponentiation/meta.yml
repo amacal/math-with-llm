@@ -1,0 +1,5 @@
+title: "Euler's Theorem & Modular Inverse via Exponentiation"
+kind: "implementation"
+file: "src/bin/mod-euler.rs"
+source: —
+date: "2026-06-16"

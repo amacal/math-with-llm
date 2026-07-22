@@ -1,0 +1,1 @@
+Proved the composite-divisor bound (Proposition 2.9) and the prime-divisor bound (Corollary 2.10, via an alternative route to the book's own proof) and reconstructed Euclid's proof of the infinitude of primes (Theorem 2.11), then completed all 14 Exercises 2.2 including three starred problems.

@@ -1,0 +1,5 @@
+title: "RSA Cryptosystem"
+kind: "implementation"
+file: "src/bin/mod-rsa.rs"
+source: —
+date: "2026-06-17"

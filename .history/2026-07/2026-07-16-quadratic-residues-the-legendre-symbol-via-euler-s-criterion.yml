@@ -1,0 +1,32 @@
+date: "2026-07-16"
+title: "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+session:
+  file: "src/bin/mod-legendre.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement a Legendre symbol test deciding whether a is a quadratic residue mod prime p, via Euler's Criterion."
+  explored:
+    - "Derived the exactly-two-to-one structure of the squaring map mod p."
+    - "Investigated the relationship between the primitive-root-power form (-1)^k and the general a^((p-1)/2) form of Euler's Criterion."
+    - "Considered adding modular square root extraction to the same function; scoped out as separate future work."
+  tried:
+    - "Derived x^2 = (p-x)^2 (mod p) algebraically."
+    - "Derived that x^2 = y^2 (mod p) implies x = +-y (mod p), via z = x * y^-1."
+    - "Verified the counting argument and Euler's Criterion concretely for p=7, including via powers of the primitive root g=3."
+  corrections:
+    - "Initial algebra for (p-x)^2 had a sign error (p(p-2x-q) instead of p(p-2x+q)); corrected on request to recheck the sign."
+    - "Initial derivation of z^2=1 from x^2=y^2 conflated squaring y^-1 with multiplying by y^-1 once; corrected via a concrete numeric trace (p=7, x=3, y=4) before redoing the algebra."
+    - "An arithmetic slip in that same trace (3x2 stated as 1 instead of 6) was corrected on request to recheck the product."
+    - "The QR-to-sign pairing (QR maps to +1, non-residue to -1) was stated backwards twice during the closing correctness recap, despite an earlier correct concrete computation (2^3 mod 7 = 1 for QR a=2); corrected by being pointed back to that computation."
+  bugs_found:
+    - "None in the submitted implementation; both tests passed on first run. Traced but left unaddressed: for p=1 or p=2, integer division makes (p-1)/2 equal to 0, so mod_exp always returns 1 regardless of the base, making legendre(0,2) return Some(1) instead of Some(0); accepted as a consequence of the documented p-must-be-an-odd-prime precondition rather than fixed with a runtime check."
+  completed:
+    - "Derived the exact count of quadratic residues mod p and Euler's Criterion from first principles, using a primitive root to establish the converse direction."
+    - "Implemented and tested src/bin/mod-legendre.rs (2 tests passing), computing the Legendre symbol via Euler's Criterion."
+    - "Added a code comment documenting the p-must-be-an-odd-prime precondition."
+  not_completed:
+    - "Did not implement modular square root extraction (Tonelli-Shanks); scoped out as a separate future session."
+  open_questions: —
+  notes:
+    - "Reimplemented the square-and-multiply routine fresh in this file rather than importing it from Modular Exponentiation, per this repo's no-code-reuse rule."

@@ -1,0 +1,6 @@
+title: "BigInteger GCD"
+status: not-completed
+mentioned_by:
+  - "BigInteger Division"
+evidence:
+  - "HISTORY-2026.07.yml: BigInteger Division's not_completed field names it directly, as now unlocked by this session's division."

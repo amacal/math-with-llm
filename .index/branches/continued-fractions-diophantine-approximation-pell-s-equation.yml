@@ -1,0 +1,8 @@
+title: "Continued Fractions, Diophantine Approximation & Pell's Equation"
+sessions:
+  - "Continued Fractions"
+  - "Continued-Fraction Term Generation via the Euclidean Algorithm"
+  - "Pell's Equation via Continued Fractions"
+frontier:
+  - "Pell's Equation via Continued Fractions"
+explicit_future_targets: —

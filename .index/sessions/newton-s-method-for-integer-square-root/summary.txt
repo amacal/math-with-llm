@@ -1,0 +1,1 @@
+Derived x1=(x0+n/x0)/2 as the tangent-line update for f(x)=x^2-n, proved quadratic convergence via AM-GM, and found the truncated integer version settles into a 2-3 cycle rather than a fixed point.

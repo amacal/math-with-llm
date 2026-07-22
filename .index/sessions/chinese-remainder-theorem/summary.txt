@@ -1,0 +1,1 @@
+Solved x≡a1(mod m1), x≡a2(mod m2) for coprime moduli by writing x=a1+k*m1 and solving for k via the modular inverse of m1 mod m2, with uniqueness following from m1*m2 dividing any two solutions' difference.

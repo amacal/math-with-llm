@@ -1,0 +1,5 @@
+title: "Wiener's Attack on RSA"
+kind: "implementation"
+file: "src/bin/mod-rsa-wiener.rs"
+source: —
+date: "2026-07-13"

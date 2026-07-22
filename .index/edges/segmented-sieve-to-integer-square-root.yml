@@ -1,0 +1,7 @@
+from: "Segmented Sieve"
+to: "Integer Square Root"
+type: "related"
+confidence: "explicit"
+evidence:
+  - "src/bin/mod-isqrt-bisect.md Overview: \"motivated directly by a floating-point sqrt precision bug flagged in the segmented sieve's notes\"."
+  - "HISTORY-2026.07.md: Integer Square Root's own Depends-on field says \"motivated by, but not technically dependent on\" — historical inspiration, not a prerequisite."

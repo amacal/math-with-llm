@@ -1,0 +1,4 @@
+claim: "p_k^2 - D*q_k^2 = (-1)^(k+1)*d_(k+1), used in Pell's Equation via Continued Fractions to locate the fundamental solution"
+status: "confirmed empirically for D=7,13,61; not proved from first principles"
+evidence:
+  - "src/bin/gcd-euclidean-pell.md: \"From convergents to a solution\" section, explicitly flagged as \"genuinely open work for a future session\"."

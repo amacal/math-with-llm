@@ -1,0 +1,1 @@
+Proved the Fundamental Theorem of Arithmetic (existence via WOP-descent, uniqueness via Euclid's Lemma) and completed all 13 exercises.

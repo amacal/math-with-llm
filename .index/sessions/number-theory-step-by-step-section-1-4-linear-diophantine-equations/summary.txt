@@ -1,0 +1,1 @@
+Built the full theory of ax+by=c on Bezout's identity (Propositions 1.16-1.18, Corollary 1.19) and completed all 16 Exercises 1.4 plus all 24 Supplementary Problems 1, including a corrected book error in Exercise 14.

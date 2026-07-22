@@ -1,0 +1,30 @@
+date: "2026-07-13"
+title: "Linear Congruential Generator"
+session:
+  file: "src/bin/rand-lcg.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement LCG variants for fixed-width integer state spaces (u8, u16, u64)."
+    - "Determine when the generator visits every state exactly once before repeating (full period)."
+  explored:
+    - "Hand-traced all four multipliers coprime to 8 for modulus m=8."
+    - "Compared observed periods against the Hull-Dobell conditions."
+    - "Connected the finite deterministic state evolution to the eventual-cycling argument from the Pell's Equation session."
+    - "Considered how an invertible step map affects predictability of the output stream."
+  tried:
+    - "Used ordinary modular arithmetic for the u8 and u16 cases."
+    - "Initially represented the full-width u64 modulus using the literal u64::MAX."
+  corrections:
+    - "Initially treated u64::MAX as equivalent to modulus 2^64; corrected this because u64::MAX = 2^64 - 1."
+    - "Initially assumed the Hull-Dobell factor-4 condition scales with the modulus; corrected it to a fixed condition on the number 4 itself, independent of modulus size."
+  bugs_found:
+    - "The initial u64 implementation used the literal 18446744073709551615 (u64::MAX) as the modulus instead of 2^64 itself, silently making the modulus odd and defeating the intended free-wraparound optimization; fixed by using a zero-sentinel meaning \"skip the modulo, rely on native u64 wraparound.\""
+  completed:
+    - "Implemented u8, u16, and u64 LCG variants."
+    - "Exhaustively verified full-period behavior for the u8 and u16 moduli."
+  not_completed:
+    - "Did not add a direct-enumeration full-period test for the u64 (2^64) modulus case, since iterating through 2^64 states is computationally infeasible; relies on the Hull-Dobell argument alone."
+  open_questions: —
+  notes:
+    - "Native u64 wraparound was used to model modulus 2^64 without an explicit % operation."

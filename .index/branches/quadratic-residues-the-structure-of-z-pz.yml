@@ -1,0 +1,7 @@
+title: "Quadratic Residues & the Structure of (Z/pZ)*"
+sessions:
+  - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+  - "Tonelli-Shanks Algorithm for Modular Square Roots"
+frontier:
+  - "Tonelli-Shanks Algorithm for Modular Square Roots"
+explicit_future_targets: —

@@ -1,0 +1,1 @@
+Built textbook RSA on n=p*q, phi(n)=(p-1)(q-1), and Euler's theorem, choosing e coprime to phi(n) and computing d as its modular inverse via extended GCD.

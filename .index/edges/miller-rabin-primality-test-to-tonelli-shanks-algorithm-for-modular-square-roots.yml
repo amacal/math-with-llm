@@ -1,0 +1,6 @@
+from: "Miller-Rabin Primality Test"
+to: "Tonelli-Shanks Algorithm for Modular Square Roots"
+type: "derived_from"
+confidence: "explicit"
+evidence:
+  - "src/bin/mod-tonelli-shanks.md \"Decomposing p minus 1\" section: reuses Miller-Rabin's n-1=2^s*d peel-off-powers-of-two decomposition directly as p-1=Q*2^S, and reuses its repeated-squaring search technique (there searching for a nontrivial root of 1, here searching for the exponent i such that t's order is 2^i)."

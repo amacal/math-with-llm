@@ -1,0 +1,29 @@
+date: "2026-07-19"
+title: "Tonelli-Shanks Algorithm for Modular Square Roots"
+session:
+  file: "src/bin/mod-tonelli-shanks.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement the Tonelli-Shanks algorithm to compute an actual modular square root of a quadratic residue a mod p, extending the Legendre symbol session's existence test into a root-finding algorithm."
+  explored:
+    - "Reviewed Lagrange's theorem (order divides p-1) via a concrete example mod 7, distinguishing it from Euler's Criterion and from the special case where an element's order equals p-1 (a primitive root)."
+    - "Investigated the naive guess r=a^((Q+1)/2) and the exact condition (a^Q=1) under which it is already correct with zero correction, using a=10 mod 41 as a case where this happens by luck."
+    - "Investigated the order-halving correction mechanism using two concrete cases (a=2 and a=4 mod 41, with different relationships between the found exponent i and the running M) to derive the general update rule before generalizing it."
+  tried:
+    - "Traced a=10 mod 41 by hand, finding the naive guess r=16 already satisfies r^2=10 mod 41 with zero loop iterations."
+    - "Traced a=2 mod 41 by hand (t of order 4, one correction using h=b) and a=4 mod 41 by hand (t of order 2, one correction using h=b^2), each verified against a direct square-root check."
+    - "Implemented mod_sqrt(a, p) -> Option<u64> independently in src/bin/mod-tonelli-shanks.rs."
+  corrections:
+    - "Conflated Lagrange's theorem (order divides p-1) with Euler's Criterion (a^((p-1)/2)=+-1) and with \"order of a primitive root equals p-1\" as if it were the general rule for any element; corrected via a concrete counterexample (order of 2 mod 7 is 3, not 6, though 3 still divides 6)."
+    - "Attempted an incorrect algebraic substitution when verifying the loop invariant R^2=a*t, squaring both a and t instead of substituting R^2=a*t directly; corrected via an explicit smaller-step substitution."
+    - "Initially estimated the cost of a modular exponentiation with a power-of-two exponent as log(m-i-1) rather than directly proportional to (m-i-1); corrected by reasoning through the binary representation of that exponent."
+  bugs_found: —
+  completed:
+    - "Derived the order-halving correction mechanism from first principles: proved b=z^Q (z a non-residue) has order exactly 2^S via Euler's Criterion, and proved the per-iteration update rule via a uniqueness-of-cyclic-subgroups argument."
+    - "Implemented and tested src/bin/mod-tonelli-shanks.rs (2 tests passing): can_square_ring verifies every residue across 12 primes spanning S values 1 through 4 finds exactly (n-1)/2 roots via mod_sqrt, and can_square_edge covers a=0, p=0, and a non-residue input."
+    - "Verified the closing correctness argument (loop invariant R^2=a*t mod p, preserved algebraically through each update) and complexity argument (O(S^2) modular multiplications, S<=log2(p), giving O(log^2 p) overall) via Socratic dialogue."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Direct continuation of src/bin/mod-legendre.rs, which named Tonelli-Shanks explicitly as the next step."

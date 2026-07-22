@@ -1,0 +1,1 @@
+Multiplied polynomials in O(n log n) by evaluating at powers of a primitive n-th root of unity mod p, splitting even/odd coefficients recursively the way FFT does over the reals.

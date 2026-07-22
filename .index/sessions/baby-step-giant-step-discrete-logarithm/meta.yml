@@ -1,0 +1,5 @@
+title: "Baby-Step Giant-Step (Discrete Logarithm)"
+kind: "implementation"
+file: "src/bin/mod-bsgs.rs"
+source: —
+date: "2026-06-18"

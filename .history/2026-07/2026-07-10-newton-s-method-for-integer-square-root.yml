@@ -1,0 +1,26 @@
+date: "2026-07-10"
+title: "Newton's Method for Integer Square Root"
+session:
+  file: "src/bin/mod-isqrt-newton.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Compute isqrt(n) via Newton's method (tangent-line iteration on f(x) = x^2 - n) instead of bisection."
+  explored:
+    - "Derived the update rule x1 = (x0 + n/x0)/2 from the tangent-line x-intercept."
+    - "Investigated the effect of integer truncation on convergence."
+    - "Compared quadratic convergence against bisection's geometric error decay."
+  tried:
+    - "Hand-traced the truncated integer iteration starting from x0=8 for n=8."
+    - "Used a stopping condition of x1 >= x0 rather than waiting for x1 == x0."
+  corrections:
+    - "Initially expected the invariant \"x0 stays at or above sqrt(n)\"; corrected to \"x0 stays at or above r = isqrt(n)\" after the n=8 trace showed x0=2 falling below the real-valued sqrt(8) ~= 2.828."
+    - "Initially expected the sequence to settle at a fixed point; corrected after the n=8 trace showed it instead enters a 2-3 cycle under truncation."
+  bugs_found: —
+  completed:
+    - "Implemented Newton's-method isqrt with the x1 >= x0 stopping rule and a saturating-add overflow guard at x0=n=u64::MAX."
+    - "Tested across low, mid, and high (u64::MAX-adjacent) input ranges."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Confirmed the practical benefit over bisection is a smaller constant, not a different complexity class, since the first steps behave like bisection."

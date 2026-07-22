@@ -1,0 +1,33 @@
+date: "2026-07-16"
+title: "Newton's Method for General Root-Finding"
+session:
+  file: "src/bin/root-newton.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Generalize the isqrt Newton update to an arbitrary differentiable f with a supplied derivative f'."
+    - "Determine whether Newton's method converges unconditionally for a general f."
+  explored:
+    - "Derived the general update rule x1 = x0 - f(x0)/f'(x0) from point-slope form and checked it reduces to the isqrt-specific formula for f(x) = x^2 - n."
+    - "Investigated convergence behavior for f(x) = x^3 - x starting away from any of its three roots."
+    - "Introduced Taylor's theorem to generalize the quadratic-convergence proof beyond the isqrt-specific case."
+    - "Investigated what a function-value stopping check versus a step-size stopping check each actually guarantee near a root of multiplicity k."
+  tried:
+    - "Started the x^3 - x iteration at x0 = 1/sqrt(5)."
+    - "Checked convergence using a function-value stopping criterion (|f(x)| < eps)."
+    - "Checked convergence using a step-size stopping criterion (|x1 - x0| < eps)."
+    - "Tested against a double root, f(x) = (x-1)^2."
+  corrections:
+    - "Initially expected Newton's method to converge to the nearest root of x^3 - x; found instead that starting at x0 = 1/sqrt(5) produces an exact eternal two-cycle x0, -x0, x0, -x0 that never reaches any of the three real roots."
+    - "Initially assumed a function-value stopping check (|f(x)| < eps) guarantees eps precision; corrected after testing against the double root f(x) = (x-1)^2, which only guaranteed eps^(1/k) precision near a root of multiplicity k."
+  bugs_found:
+    - "The function-value-based stopping check under-guaranteed precision near a multiplicity-k root (only eps^(1/k), not eps); replaced with a step-size check (|x1-x0| < eps), which does not degrade with multiplicity."
+  completed:
+    - "Implemented a general Newton root-finder taking f and f' as closures, with a hard iteration cap."
+    - "Added 10 tests covering a simple polynomial root, both simple roots and the non-convergent case of x^3 - x, and the double-root precision case."
+    - "Verified empirically that the double-root case reaches about 7.8e-7 precision in 7 iterations against a requested tolerance of 1e-6, using the step-size check."
+  not_completed:
+    - "Did not trace the second iteration of the cube-root-of-2 worked example fully by hand."
+  open_questions: —
+  notes:
+    - "Confirmed the general update rule specializes exactly to the isqrt-specific formula when f(x) = x^2 - n."

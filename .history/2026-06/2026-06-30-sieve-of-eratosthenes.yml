@@ -1,0 +1,20 @@
+date: "2026-06-30"
+title: "Sieve of Eratosthenes"
+session:
+  file: "src/bin/sieve-eratosthenes.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Find all primes up to n by elimination rather than individual testing."
+  explored:
+    - "Investigated why the crossing-out phase can stop at sqrt(n) and start each prime's pass at p*p."
+    - "Connected the total-crossings bound to Mertens' theorem and contrasted it against the ordinary harmonic series."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented the sieve with a crossing-out phase bounded by sqrt(n), starting at p*p."
+    - "Traced a worked example sieving up to n=20."
+  not_completed: —
+  open_questions: —
+  notes: —

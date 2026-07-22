@@ -1,0 +1,20 @@
+date: "2026-06-28"
+title: "Big Integer Arithmetic (Schoolbook)"
+session:
+  file: "src/bin/big-uint-naive.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement arbitrary-precision unsigned integer arithmetic (add, subtract, compare, multiply) from scratch."
+  explored:
+    - "Investigated a representation invariant (no trailing zeros except for zero itself) that makes equality and comparison simple."
+    - "Investigated `mul128`'s 32-bit-half-splitting approach to compute a full 128-bit product without u128."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented BigNumber as Vec<u64> with the no-trailing-zeros invariant, plus add/sub/compare/mul128/schoolbook multiplication."
+    - "Traced a worked example multiplying vec![3,1] by vec![2]."
+  not_completed: —
+  open_questions: —
+  notes: —

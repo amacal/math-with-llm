@@ -1,0 +1,1 @@
+Computed an actual square root of a quadratic residue a mod p by decomposing p-1=Q*2^S (reusing Miller-Rabin's peel-off-powers-of-two technique), then correcting a naive guess via a non-residue-derived generator of the group's full two-power-order subgroup, halving the guess's error term's order each iteration until it reaches 1, in O(log^2 p).

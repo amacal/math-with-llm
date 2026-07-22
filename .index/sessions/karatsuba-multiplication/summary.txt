@@ -1,0 +1,1 @@
+Multiplied big integers in O(n^log2(3)) by recovering the cross term z1=(A_lo+A_hi)(B_lo+B_hi)-z0-z2 to cut the four schoolbook sub-multiplications down to three.

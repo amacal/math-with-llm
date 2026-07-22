@@ -1,0 +1,1 @@
+Computed phi(n) in O(sqrt(n)) via trial division and the multiplicativity property phi(m*n)=phi(m)*phi(n) for coprime m,n, combined with phi(p^k)=p^k-p^(k-1).

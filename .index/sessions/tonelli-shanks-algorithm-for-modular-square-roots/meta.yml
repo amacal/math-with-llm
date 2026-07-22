@@ -1,0 +1,5 @@
+title: "Tonelli-Shanks Algorithm for Modular Square Roots"
+kind: "implementation"
+file: "src/bin/mod-tonelli-shanks.rs"
+source: —
+date: "2026-07-19"

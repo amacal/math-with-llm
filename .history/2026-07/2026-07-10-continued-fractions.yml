@@ -1,0 +1,25 @@
+date: "2026-07-10"
+title: "Continued Fractions"
+session:
+  file: "src/bin/gcd-euclidean-sqrt.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Determine the relationship between a rational number's continued-fraction expansion and the Euclidean algorithm's quotients, and implement the convergent recurrence."
+  explored:
+    - "Investigated whether the continued-fraction terms of a/b are merely analogous to, or exactly equal to, the Euclidean algorithm's quotients on (a,b)."
+    - "Derived the convergent recurrence p_k = a_k*p_(k-1) + p_(k-2) by substituting a_(k-1) -> a_(k-1) + 1/a_k into the previous truncation."
+    - "Hand-derived sqrt(2)'s continued-fraction expansion via rationalization and checked its convergents against Pell's equation."
+  tried:
+    - "Hand-computed a term list for 13/8 to test the convergent recurrence."
+  corrections:
+    - "The initial hand-derived term list for 13/8 was too short (three terms instead of five) and internally inconsistent with its expected convergent; corrected by re-running the Euclidean algorithm by hand."
+  bugs_found: —
+  completed:
+    - "Implemented the convergent recurrence (`convergents`) and the sqrt(2) approximation (`sqrt2`)."
+    - "Verified sqrt(2)'s convergents satisfy p_k^2 - 2*q_k^2 = +-1 exactly, by hand and in code."
+  not_completed:
+    - "Did not implement a standalone function deriving a rational number's continued-fraction terms from the Euclidean algorithm; used hand-computed term lists for the rational-number tests instead."
+  open_questions: —
+  notes:
+    - "This session synthesizes three results (quotient equivalence, convergent recurrence, sqrt(2) example) rather than one, running longer than a typical single-concept session."

@@ -1,0 +1,5 @@
+title: "Miller-Rabin Primality Test"
+kind: "implementation"
+file: "src/bin/mod-miller-rabin.rs"
+source: —
+date: "2026-06-16"

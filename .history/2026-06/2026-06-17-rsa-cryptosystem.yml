@@ -1,0 +1,21 @@
+date: "2026-06-17"
+title: "RSA Cryptosystem"
+session:
+  file: "src/bin/mod-rsa.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement textbook RSA key generation, encryption, and decryption."
+  explored:
+    - "Investigated the coprimality condition gcd(m,n)=1 required for correct decryption, and how m<min(p,q) is a sufficient but not necessary special case."
+    - "Investigated why signing (encrypt with d, verify with e) is mathematically equivalent to encryption."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented key generation (p,q via Miller-Rabin, e coprime to phi(n), d via extended GCD), encryption, and decryption."
+    - "Traced a worked example: p=7, q=11, e=13, d=37, encrypting and decrypting m=19."
+  not_completed:
+    - "Did not implement padding (e.g. OAEP); textbook RSA remains deterministic."
+  open_questions: —
+  notes: —

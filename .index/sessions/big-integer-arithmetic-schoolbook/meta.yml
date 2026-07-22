@@ -1,0 +1,5 @@
+title: "Big Integer Arithmetic (Schoolbook)"
+kind: "implementation"
+file: "src/bin/big-uint-naive.rs"
+source: —
+date: "2026-06-28"

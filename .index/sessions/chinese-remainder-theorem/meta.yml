@@ -1,0 +1,5 @@
+title: "Chinese Remainder Theorem"
+kind: "implementation"
+file: "src/bin/gcd-crt.rs"
+source: —
+date: "2026-06-11"

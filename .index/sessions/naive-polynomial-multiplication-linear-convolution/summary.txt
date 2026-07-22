@@ -1,0 +1,1 @@
+Computed polynomial multiplication as linear convolution, c[k]=sum a[i]*b[k-i], in O(n*m), and distinguished it from the cyclic convolution NTT computes natively.

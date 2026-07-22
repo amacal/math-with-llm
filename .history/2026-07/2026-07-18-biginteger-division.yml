@@ -1,0 +1,40 @@
+date: "2026-07-18"
+title: "BigInteger Division"
+session:
+  file: "src/bin/big-uint-division.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement division for the BigNumber arbitrary-precision type via schoolbook long division (Knuth's Algorithm D), as the first step of a longer stated arc toward Wiener's attack on RSA using BigIntegers at realistic key sizes."
+  explored:
+    - "Confirmed Karatsuba Multiplication is not a genuine prerequisite for division, since the algorithm only ever multiplies a single u64 digit against the full divisor, never two multi-limb numbers against each other."
+    - "Investigated whether Binary GCD (Stein's Algorithm) could be done on BigIntegers before division exists at all, as a possible detour before Euclidean GCD; left as an open, undecided fork point."
+    - "Investigated the general normalization-factor formula in isolation from the specific base-10 example that first motivated it, distinguishing the proven Knuth Algorithm D formula from a naive halving formula that only worked by coincidence in the degenerate leading-digit-1 case."
+    - "Investigated a from-scratch technique for computing floor(2^64 / d) using only native u64 arithmetic (via u64::MAX and a remainder-equality correction), as a hypothetical for languages without a 128-bit integer type; not used in the final implementation, which uses u128 directly."
+  tried:
+    - "Attempted an ad hoc doubled-halved-base normalization formula to avoid a potential overflow; set aside after finding configurations where its safety margin could not be verified by hand, in favor of exact u128 arithmetic."
+    - "Verified several intermediate computations (the normalization factor, a window value, a multiplication result) against independent Python bignum arithmetic before accepting or rejecting a hypothesis about where a bug lived."
+  corrections:
+    - "Initially assumed the normalization factor was simply half the base divided by the leading digit; corrected once a non-trivial leading digit (13) was found to undershoot the required half-base threshold due to integer truncation, in favor of the proven base/(leading_limb+1) formula."
+    - "Initially believed the correction loop's `candidate >= window` comparison was correct; corrected to `candidate > window` once an exact match (remainder zero) was found to be wrongly decremented."
+    - "Initially computed the digit-extraction loop's window offset as a fixed formula assuming the scaled dividend always had at least one spare limb beyond the divisor; corrected to an unconditional single-leading-zero pad after two distinct failures (equal-length underflow, one-limb-longer silent wrong window) traced to this assumption."
+  bugs_found:
+    - "The digit-extraction loop's \"bring down the next limb\" step read the wrong dividend index, initially re-reading a limb already inside the current window instead of the next unused one; fixed by correcting the index formula."
+    - "The correction loop's overshoot check used `candidate >= window` instead of `candidate > window`, wrongly decrementing an exact match; fixed by changing the comparator."
+    - "The window-offset computation `dividend.len() - divisor.len() - 1` panicked with a usize subtraction overflow whenever the scaled dividend and scaled divisor had equal limb counts; fixed by unconditionally padding the scaled dividend with one leading zero limb before computing this offset."
+    - "A raw quotient-digit estimate could reach base, base+1, or base+2 before being cast to u64, silently wrapping instead of erroring; fixed by capping the estimate at u64::MAX before the correction loop."
+    - "The dividend-padding condition was initially conditional on `dividend.len() == other.len()` (comparing the scaled dividend against the unscaled divisor's length), so it failed to trigger for a dividend exactly one limb longer than the scaled divisor and for a dividend with ample spare limbs that still needed the pad; fixed by making the pad unconditional on every call."
+    - "A carry-propagation bug in `Mul<u64> for &BigNumber`: the carry from adding a limb's low mul128 output into `data[idx]` was deferred to `carries[idx+2]` instead of `carries[idx+1]`, corrupting results whenever that carry fired; found via a 9-limb-dividend/8-limb-divisor test case, confirmed independently against a Python simulation, and fixed by correcting the index."
+  completed:
+    - "Implemented `Div for &BigNumber` returning `Option<BigNumber>`, computing the quotient via normalization, a leading-limb estimate capped at u64::MAX, a bounded correction loop, and an unconditional leading-zero-padded window."
+    - "Added tests covering division by one, exact division, single-limb divisors with and without cross-limb carry, multi-limb divisors (up to 8 limbs against a 9-limb dividend, and 4 limbs against a 7-limb dividend), a divisor larger than the dividend, dividend/divisor of equal limb length and of nearly-equal magnitude, a dividend divided by itself, division by a power of two, and two large stress tests (100 limbs by 78 limbs, and 1000 limbs by 345 limbs)."
+    - "Verified all tests pass after fixing the carry-propagation bug in `Mul<u64>`."
+  not_completed:
+    - "The remainder is not exposed by the current `Div` implementation, only the quotient."
+    - "BigInteger GCD (Euclidean algorithm), now unlocked by this session's division, was not started."
+    - "BigInteger modular exponentiation, BigInteger Miller-Rabin primality test, BigInteger RSA at realistic key sizes, BigInteger continued-fraction convergents, BigInteger integer square root, and Wiener's attack on BigInteger RSA — the remaining named steps of the stated arc — were not started."
+    - "Whether to detour through BigInteger Binary GCD before Euclidean GCD (since Binary GCD needs only subtraction and bit-shifts, both already available) was raised and left undecided."
+  open_questions:
+    - "Whether the next session should implement BigInteger GCD directly via the Euclidean algorithm (reusing this session's division) or take the Binary GCD detour first."
+  notes:
+    - "The seven remaining steps of the arbitrary-precision arc (BigInteger GCD, modular exponentiation, Miller-Rabin, RSA, continued fractions, integer square root, Wiener's attack) were all named explicitly in conversation before this session's coding began, not invented after the fact."

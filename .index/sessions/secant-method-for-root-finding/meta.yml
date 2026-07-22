@@ -1,0 +1,5 @@
+title: "Secant Method for Root-Finding"
+kind: "implementation"
+file: "src/bin/root-secant.rs"
+source: —
+date: "2026-07-17"

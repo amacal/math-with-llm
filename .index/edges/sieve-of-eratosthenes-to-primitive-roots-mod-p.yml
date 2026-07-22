@@ -1,0 +1,6 @@
+from: "Sieve of Eratosthenes"
+to: "Primitive Roots mod p"
+type: "related"
+confidence: "explicit"
+evidence:
+  - "src/bin/mod-primitive-root.md Complexity section: reuses the Mertens'-theorem density argument from the sieve session to bound the candidate search, without requiring the sieve algorithm itself."

@@ -1,0 +1,1 @@
+Computed isqrt(n) via integer-only bisection on the trivial bracket [0,n], fixing two off-by-one stalls with a ceiling-rounded midpoint and a hi=mid-1 discard rule.

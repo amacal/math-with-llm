@@ -1,0 +1,21 @@
+date: "2026-06-18"
+title: "Baby-Step Giant-Step (Discrete Logarithm)"
+session:
+  file: "src/bin/mod-bsgs.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Solve g^x = h mod p for the discrete logarithm x, faster than brute force."
+  explored:
+    - "Investigated the exponent decomposition x=k*m+y with m=ceil(sqrt(p)), and why ceil (not floor) is required to cover every exponent."
+    - "Investigated why the baby-step table depends on h and must be rebuilt per query, while the giant-step table depends only on g and p."
+    - "Investigated the safe-prime generator-finding shortcut (checking only g^2 and g^((p-1)/2))."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented BSGS with a hash-map-based baby-step/giant-step match."
+    - "Traced a worked example: p=11, g=2, h=8, x=3."
+  not_completed: —
+  open_questions: —
+  notes: —

@@ -1,0 +1,20 @@
+date: "2026-06-11"
+title: "Modular Inverse"
+session:
+  file: "src/bin/mod-inverse.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Compute the modular inverse of a mod m."
+  explored:
+    - "Explored by hand why no inverse exists when gcd(a,m)>1, using a=2, m=4 as an example."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented modular inverse as a normalized Bezout coefficient from extended GCD."
+    - "Traced a worked example: inverse of 5 mod 8 = 5, and a contrasting failure case (inverse of 4 mod 6 does not exist)."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Normalization uses m-|x| rather than (x+m)%m to avoid overflow when m is near i64::MAX."

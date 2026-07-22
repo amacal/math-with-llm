@@ -1,0 +1,1 @@
+Augmented Euclidean GCD to also produce Bezout coefficients x,y with a*x+b*y=gcd(a,b), by threading coefficient pairs through the same reduction loop.

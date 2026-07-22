@@ -1,8 +1,10 @@
-Verify that the most recently written notes file and history entry conform to every rule in CLAUDE.md. Report each violation specifically — quote the offending text and cite the rule it breaks.
+Verify that the most recently written notes file, `.history/` entry, and `.index/sessions/<slug>/` directory conform to every rule in CLAUDE.md. Report each violation specifically — quote the offending text and cite the rule it breaks. No scripts — every check here is `Read`/`Grep`/`Glob` against the actual files, per `.index/schema.yml` and `.history/schema.yml`.
+
+Your prompt should already include the write agent's report: every file it wrote/edited/removed, with paths. Use that to know what changed and where — don't re-derive it by globbing the whole `.index/`/`.history/` tree. Spot-check with targeted `Grep`/`Glob` calls (e.g. `grep -l 'title: "<Title>"' .index/sessions/*/meta.yml`, `grep -rl "<Title>" .index/sessions/*/prerequisites.yml`) rather than reading everything.
 
 ## What to check
 
-**Identify the files.** Most recently modified `src/bin/*.md` notes file and its corresponding entry in the appropriate `HISTORY-YYYY.MM.yml`.
+**Identify the files.** The notes file, `.history/` entry, and `.index/sessions/<slug>/` directory named in the write agent's report.
 
 **Notes file:**
 
@@ -16,31 +18,30 @@ Verify that the most recently written notes file and history entry conform to ev
 8. **Citation vs. re-derivation.** A concept covered in a prior session's notes must be cited by filename, not re-derived. Flag any full re-derivation of a previously-covered result.
 9. **No personal data.** Flag names, emails, or other personal information.
 
-**History entry:**
+**`.history/` entry:**
 
-1. **Placement.** Top (index 0) of the correct monthly file's `entries`. Flag if not.
+1. **Placement and naming.** File exists at exactly `.history/<YYYY-MM>/<YYYY-MM-DD>-<slug>.yml`; its own `date:` field matches the filename's date; its own `title:` field, run through `.index/schema.yml`'s `slug_algorithm`, matches the filename's slug. Flag any mismatch.
 2. **Schema completeness.** `date`, `title`, `session` block with every fixed field present: `file`, `source`, `status`, `attempted`, `explored`, `tried`, `corrections`, `bugs_found`, `completed`, `not_completed`, `open_questions`, `notes`. Flag any missing field, even when empty.
 3. **Empty-field convention.** Empty = exactly `—`, never an empty list, never omitted. Flag any list mixing `—` with real entries, and flag `bugs_found` not `—` on a book-study entry (no code, no defects possible).
-4. **No `Depends on`/`Unlocks`.** Flag any such field or resemblance anywhere — belongs solely in INDEX.yml.
+4. **No `Depends on`/`Unlocks`.** Flag any such field or resemblance anywhere — belongs solely in `.index/`.
 5. **No mathematical exposition.** Flag any full algorithm description, proof, theorem statement, or complexity derivation (belongs in notes file). A short factual reference naming a result ("Compared observed periods against the Hull-Dobell conditions") is fine; reproducing the result is not.
 6. **No personal/psychological content.** Flag personal info, personality description, psychological interpretation, inferred learning style, subjective judgment of intelligence/ability/motivation/behavior. `corrections` must be factual before/after about an assumption, never an evaluation of the person.
 7. **Field discipline.** Spot-check: `completed` items are observable outcomes, not vague ("understood X," "gained insight"); `not_completed` isn't silently empty when the session mentions deferred work; `open_questions` isn't populated with an invented "natural next step" that wasn't actually raised.
-8. **No retrospective edits to older entries.** Flag any *other* (older) HISTORY entry modified as part of this close, unless it's one of the immutability-rule exceptions (factual error, formatting, filename/date correction, genuinely-omitted same-session item). A change for a newly-discovered dependency/reuse/future-target is a violation — belongs in INDEX.yml instead.
+8. **No retrospective edits to other entries.** Confirm (via the write agent's file list, or `git status .history/` if needed) that no `.history/` file *other than* the one new entry was touched this close, unless it's one of the immutability-rule exceptions (factual error, formatting, filename/date correction, genuinely-omitted same-session item) — and that exception is explicitly stated in the write agent's report. A change for a newly-discovered dependency/reuse/future-target is a violation — belongs in `.index/` instead.
 
-**INDEX.yml — consistency and incremental-update discipline:**
+**`.index/` — consistency and incremental-update discipline:**
 
-0. **Run `scripts/index-validate.py` first.** Any reported problem is itself a violation to flag — quote its exact output line rather than re-deriving the same check by hand.
-1. **New entry present and correctly classified.** New session's Concept Title is a key under `sessions`, with `kind`, `file`/`source`, `date`, and the full relationship field set (`prerequisites`, `uses_concepts`, `reuses_code`, `derived_from`, `related_to`, `unlocks`, `future_targets`, `summary`, `concepts`, `capabilities`). Verify each relationship was classified honestly against CLAUDE.md's "Fast index (INDEX.yml)" tests, comparing against existing INDEX.yml sessions (not re-derived from a HISTORY `Depends on`/`Unlocks` field — none exists) — e.g. flag a `prerequisites` entry that's really just chronology, or a harder algorithm listed as prerequisite of a simpler one.
-2. **`reuses_code` is `—`.** Every session's, no exceptions — this repo forbids cross-file code reuse. Non-empty here is a violation.
-3. **`prerequisite_index` updated.** For every concept in this session's `prerequisites`, its title appears under that concept's `required_by`, and nowhere it wasn't genuinely a prerequisite.
-4. **`concept_index`/`capability_index` updated.** Every tag in this session's `concepts`/`capabilities` maps back to it in the respective index.
-5. **`completed_by_date` updated.** This session's title appears exactly once, under the correct date, nowhere else.
-6. **`future_targets` resolved structurally.** If this session's own title was previously listed there, it's now removed (can't be both a completed session and a future target). Flag any bare string flag ("(not yet its own session)") baked into an identifier — that belongs in `future_targets`' `status: not-completed` field.
-7. **No unwarranted full re-derivation.** Confirm the update looks incremental — an already-completed older session's fields should be untouched unless the write agent gave a specific, stated reason this new session's evidence implicates that older classification. Flag if many older sessions changed with no stated justification, or if the write agent's own report describes re-scanning all sessions from scratch rather than patching just the new one.
-8. **Retrospective revisions reflected everywhere, and only in INDEX.yml.** If an earlier session's `prerequisites`/`derived_from`/`unlocks`/`related_to` was revised, confirm it's consistent on both sides within INDEX.yml (the field itself AND its appearances in `prerequisite_index`/other reverse indexes) — a fix in only one place is itself a violation. Confirm it was **not** mirrored into that session's HISTORY entry.
+1. **Directory shape.** `ls .index/sessions/<slug>/` is exactly the 10 files `.index/schema.yml` enumerates (`meta.yml`, `summary.txt`, and the 8 relationship lists) — none missing, none extra (in particular, no `reuses_code` file should exist).
+2. **New entry correctly classified.** `Read` each relationship file and verify it was classified honestly against CLAUDE.md's "Fast index (`.index/`)" tests, comparing against the sibling sessions it actually cites (`Read` those specific files, not the whole tree) — e.g. flag a `prerequisites.yml` entry that's really just chronology, or a harder algorithm listed as prerequisite of a simpler one.
+3. **`prerequisites.yml`/`uses_concepts.yml` resolve.** For each title listed, `grep -l 'title: "<ref>"' .index/sessions/*/meta.yml` finds exactly one file.
+4. **`concepts.yml`/`capabilities.yml` reachable.** For each tag, `grep -rl "<tag>" .index/sessions/*/concepts.yml` (or `capabilities.yml`) includes this session's directory.
+5. **Date consistency.** `meta.yml`'s `date` matches the `.history/` entry's `date` exactly.
+6. **`future_targets` resolved structurally.** If this session's own title was previously a `.index/future-targets/<slug>.yml` file, confirm it's now gone (`rm`'d) — can't be both a completed session and a future target. Flag any bare string flag ("(not yet its own session)") baked into an identifier — that belongs in the future-target file's `status: not-completed` field.
+7. **No unwarranted full re-derivation.** Confirm the write agent's report lists only the new session's own files plus any explicitly-justified touches — not a sweep implying every existing session was re-read or rewritten.
+8. **Retrospective revisions reflected correctly, and only in `.index/`.** If an earlier session's file was revised, confirm the write agent's report states a specific reason tied to this new session's evidence, confirm only that one file changed (not a cascade), and confirm it was **not** mirrored into that session's `.history/` entry.
 
 Flag as a violation any of the above left stale or inconsistent.
 
 ## Output format
 
-List each violation as: **[File:Line] Rule violated — quoted offending text**. If none found, say so explicitly and give the notes file's word count.
+List each violation as: **[File] Rule violated — quoted offending text**. If none found, say so explicitly and give the notes file's word count.

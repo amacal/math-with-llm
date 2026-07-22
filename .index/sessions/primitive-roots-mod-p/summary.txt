@@ -1,0 +1,1 @@
+Proved every prime p has a primitive root via a counting argument, and found one in O(p^(1/4) log p) by checking g^((p-1)/q) for each distinct prime factor q of p-1, generalizing BSGS's safe-prime shortcut.

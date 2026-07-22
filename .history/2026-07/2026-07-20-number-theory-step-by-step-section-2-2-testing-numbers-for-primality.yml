@@ -1,0 +1,41 @@
+date: "2026-07-20"
+title: "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 2, Section 2.2"
+  status: "completed"
+  attempted:
+    - "Covered floor/ceiling functions (Definitions 2.7/2.8), the composite-divisor bound (Proposition 2.9), the prime-divisor bound (Corollary 2.10), the Sieve of Eratosthenes review, and the infinitude of primes (Theorem 2.11), then completed all 14 Exercises 2.2."
+  explored:
+    - "Tested floor(-3.7) as a concrete negative-number check against a \"closest integer\" misreading of the floor definition."
+    - "Compared using floor(sqrt(n)) versus ceiling(sqrt(n)) as the divisor-search bound, verified with n=1001 (floor=31, ceiling=32), to distinguish a correctness question from an efficiency question."
+    - "Derived Corollary 2.10 via an alternative route to the book's own proof (an incremental \"smaller prime already tested\" argument using transitivity of divisibility, rather than the book's direct Fundamental-Theorem-of-Arithmetic route)."
+    - "Hand-tested n=983 for primality against all 11 primes up to floor(sqrt(983))=31."
+    - "Connected Exercise 9's (2x3x5x7)-1 and +1 numbers directly to Theorem 2.11's Euclid-number construction before computing them."
+    - "Connected Exercise 12/13's log-based floor/ceiling results back to the general bounding results proved in Exercises 6 and 7 of the same set."
+    - "Connected Exercise 14(ii)'s floor(sqrt(floor(x)))=floor(sqrt(x)) identity to the prior \"Integer Square Root\" bisection session."
+  tried:
+    - "Built the Corollary 2.10 proof and both Exercise 6/7/14(ii) proofs using a repeated two-sided-bound technique (showing b >= n and b <= n separately, then concluding equality)."
+    - "Verified an uncertain inequality direction (Exercise 7(a)) by testing it on a small concrete set {2,5,7} before reapplying it abstractly."
+  corrections:
+    - "Floor described as \"closest integer <= x\" was corrected to the precise \"greatest integer <= x\", after floor(-3.7) confirmed as -4 rather than the \"closest\" answer of -3."
+    - "A claim that using ceiling(sqrt(n)) instead of floor(sqrt(n)) as the search bound would break correctness was corrected to: it only risks one wasted candidate check, never an incorrect result."
+    - "Wrote \"3n\" intending \"3^n\" in the Exercise 11 proof; corrected before continuing."
+    - "Wrote \"b=n\" instead of the algebraically-forced \"b=n-1\" as a final-line slip in Exercise 6(b); corrected on request."
+    - "Asserted \"b<=n\" instead of \"b>=n\" in Exercise 7(a)'s bounding argument; corrected after testing against the concrete set {2,5,7}."
+    - "Guessed n=k^2 exactly instead of the correct k^2<=n in Exercise 14(ii); corrected after testing x=5 (k=2, k^2=4, n=floor(5)=5, 5 != 4)."
+    - "Included 1 in the set of primes when first computing pi(10); self-corrected to exclude it."
+    - "Stated ceiling(-6.3)=-7 (the value of floor(-6.3)) in Exercise 2(a); self-corrected to -6."
+  bugs_found: —
+  completed:
+    - "Derived Proposition 2.9 (composite n has a divisor d with 1 < d <= floor(sqrt(n))) independently via contradiction."
+    - "Derived Corollary 2.10 (composite n has a prime divisor p <= floor(sqrt(n))) via an alternative proof route to the book's."
+    - "Reconstructed Euclid's proof of Theorem 2.11 (infinitely many primes) via contradiction using the Euclid-number construction."
+    - "Completed all 14 Exercises 2.2, including the three starred/harder problems: Exercise 11 (2^(3^n)+1 composite for all natural n), Exercise 13 (floor(log10(N))+1 gives the digit count of N, applied to Googol, googolplex, and 2^74207211 in base 10 and base 2), and Exercise 14(ii) (floor(sqrt(floor(x)))=floor(sqrt(x)))."
+    - "Stated the closing three-part wrap-up: the divisor-pair-straddles-sqrt(n) invariant, the correctness argument as the explicit contrapositive of Corollary 2.10, and the complexity as pi(floor(sqrt(n))) divisions."
+  not_completed: —
+  open_questions:
+    - "Whether the Prime Number Theorem's asymptotic for pi(x) applies to bound the complexity more tightly than pi(floor(sqrt(n))) itself — raised at the very end of the session, not yet covered in this repo."
+  notes:
+    - "Confirmed by direct page render that the book's printed exponent in Exercise 13(d) is 2^74207211, not the historical Mersenne-prime exponent 2^74207281-1; the session used the book's actual printed value throughout."
+    - "This session found and closed a process gap: both the main conversation and a planning subagent had used pdftotext against the book PDF for physical-to-printed page navigation/locating, which the book-study rules did not previously forbid explicitly for navigation-only use. CLAUDE.md and .skills/session-plan.md were both edited (with explicit user approval) to state the pdftotext ban as total, covering page-locating/navigation as well as content-reading."

@@ -1,0 +1,1 @@
+Found all primes up to n in O(n log log n) by crossing out multiples of each prime starting at p*p, with the log log n bound following from Mertens' theorem.

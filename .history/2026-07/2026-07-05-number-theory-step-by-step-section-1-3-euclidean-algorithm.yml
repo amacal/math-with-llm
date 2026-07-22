@@ -1,0 +1,24 @@
+date: "2026-07-05"
+title: "Number Theory Step by Step, Section 1.3: Euclidean Algorithm"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 1, Section 1.3"
+  status: "completed"
+  attempted:
+    - "Complete Section 1.3 (Euclidean Algorithm), Exercises 1-19, in book order."
+  explored:
+    - "Worked the well-ordering proof of Bezout's Identity."
+    - "Worked gcd(156,18)=6 by hand and back-substituted to find Bezout coefficients, in the book's back-substitution style rather than the forward-threaded style already coded in gcd-euclidean-extended.rs."
+    - "Worked Euclid's Lemma via a prime-factorization argument (198|5x => 198|x)."
+    - "Worked Exercises 12, 15, 17, 19 via set-equality-in-both-directions and mutual-divisibility techniques."
+  tried: —
+  corrections:
+    - "Recurring precision slip: mixed up which quantity a divisibility statement applies to (claiming \"d|x, d|y\" instead of \"d|a, d|b\"); corrected during the exercises."
+    - "Recurring precision slip: asserted \"gcd(ma,mb)=mg\" directly from a linear combination when only the weaker \"gcd(ma,mb) divides mg\" follows from that combination alone; corrected during the exercises."
+  bugs_found: —
+  completed:
+    - "Completed all 19 exercises in order, including Exercise 12(ii)'s multiplicativity lemma and Exercise 17's gcd(ma,mb)=mg proof."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "The back-substitution worked example reused the same Bezout machinery already implemented in gcd-euclidean-extended.rs, run by hand in the book's presentation style."

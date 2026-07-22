@@ -1,0 +1,1 @@
+Solved g^x=h mod p in O(sqrt(p)*log p) by decomposing x=k*m+y with m=ceil(sqrt(p)), matching baby-step and giant-step tables via a hash map.

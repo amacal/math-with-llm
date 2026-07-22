@@ -1,0 +1,7 @@
+title: "Sieve Methods"
+sessions:
+  - "Sieve of Eratosthenes"
+  - "Segmented Sieve"
+frontier:
+  - "Segmented Sieve"
+explicit_future_targets: —

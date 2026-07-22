@@ -1,0 +1,25 @@
+date: "2026-07-01"
+title: "Primitive Roots mod p"
+session:
+  file: "src/bin/mod-primitive-root.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Prove every prime p has a primitive root and find one efficiently."
+  explored:
+    - "Hand-compared the multiplicative cycles of g=3 and g=2 modulo p=7."
+    - "Investigated the counting argument for existence, checking totals for p=7 (3+2=5 falls short of the group size 6)."
+    - "Investigated how the safe-prime-specific BSGS shortcut generalizes to the Lagrange-based test for any p."
+  tried:
+    - "Searched candidates g=2,3,4,... in order rather than starting at g=1 or scanning downward from p-1."
+  corrections:
+    - "Initially misstated the primitive-root rejection direction (thought g was rejected when a check failed rather than when it equaled 1); corrected once the iff characterization was worked through carefully."
+  bugs_found:
+    - "The `factorize` function treated any nontrivial Pollard's-Rho factor as prime without recursively checking it, silently returning composite entries (e.g. 55=5x11 for input 15785); fixed by recursively splitting until every result passes a primality check."
+    - "The `primitive_root` function never verified p itself was prime before searching, producing group-theoretically meaningless results for composite p; fixed by running the Miller-Rabin test at the top of the function."
+  completed:
+    - "Implemented `factorize` (recursive Pollard's-Rho splitting with primality verification) and `primitive_root` (candidate search with the Lagrange-based iff test)."
+    - "Verified against a worked example: p=7, factorize(6)=[2,3], search rejects g=2 and accepts g=3."
+  not_completed: —
+  open_questions: —
+  notes: —

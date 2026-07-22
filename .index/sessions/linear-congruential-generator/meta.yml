@@ -1,0 +1,5 @@
+title: "Linear Congruential Generator"
+kind: "implementation"
+file: "src/bin/rand-lcg.rs"
+source: —
+date: "2026-07-13"

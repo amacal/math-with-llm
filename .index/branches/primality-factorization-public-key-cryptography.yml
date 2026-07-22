@@ -1,0 +1,13 @@
+title: "Primality, Factorization & Public-Key Cryptography"
+sessions:
+  - "Miller-Rabin Primality Test"
+  - "RSA Cryptosystem"
+  - "Pollard's Rho Factoring Algorithm"
+  - "Baby-Step Giant-Step (Discrete Logarithm)"
+  - "Primitive Roots mod p"
+  - "Trial Division Factorization"
+  - "Wiener's Attack on RSA"
+frontier:
+  - "Wiener's Attack on RSA"
+  - "Trial Division Factorization"
+explicit_future_targets: —

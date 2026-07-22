@@ -1,0 +1,20 @@
+date: "2026-06-10"
+title: "Euclidean GCD"
+session:
+  file: "src/bin/gcd-euclidean-basic.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement the Euclidean algorithm for GCD."
+  explored:
+    - "Investigated why gcd(a,b)=gcd(b,a mod b) via a common-divisor-set argument."
+  tried:
+    - "Used absolute values for negative inputs to avoid Rust's toward-zero remainder truncation breaking termination."
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented Euclidean GCD, including negative-input handling and a free swap when a<b."
+    - "Traced a worked example: gcd(48,18)=6."
+  not_completed: —
+  open_questions: —
+  notes: —

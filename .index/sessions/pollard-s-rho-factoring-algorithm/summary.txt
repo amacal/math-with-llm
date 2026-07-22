@@ -1,0 +1,1 @@
+Found a non-trivial factor of composite n in expected O(n^(1/4)) via a birthday-paradox collision mod an unknown prime factor, detected in O(1) space with Floyd's cycle detection.

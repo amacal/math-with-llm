@@ -1,0 +1,6 @@
+title: "BigInteger Integer Square Root"
+status: not-completed
+mentioned_by:
+  - "BigInteger Division"
+evidence:
+  - "HISTORY-2026.07.yml: BigInteger Division's not_completed field names it directly, needed to recover p,q from p+q and n in Wiener's attack on BigInteger RSA."

@@ -1,0 +1,22 @@
+date: "2026-06-16"
+title: "Miller-Rabin Primality Test"
+session:
+  file: "src/bin/mod-miller-rabin.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement a primality test that closes the Carmichael-number gap in the plain Fermat test."
+  explored:
+    - "Investigated why Carmichael number 561 fools the Fermat test, via Korselt's criterion."
+    - "Investigated the fact that x^2=1 mod p has only two roots (+-1) for a genuine prime p, and how a third root anywhere in the sequence proves compositeness."
+    - "Investigated the strong-liar bound (at most 1/4 of bases) and its effect on the false-positive rate over k bases."
+  tried: —
+  corrections: —
+  bugs_found: —
+  completed:
+    - "Implemented the Miller-Rabin test with the n-1 = 2^s*d decomposition and repeated-squaring check."
+    - "Traced a worked example: n=561 (Carmichael number), base a=2, correctly reporting IsComposite."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "The implementation does not explicitly exclude base a=1, which trivially reports MaybePrime for any even n."

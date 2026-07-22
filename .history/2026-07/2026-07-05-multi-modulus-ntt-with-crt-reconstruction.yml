@@ -1,0 +1,22 @@
+date: "2026-07-05"
+title: "Multi-Modulus NTT with CRT Reconstruction"
+session:
+  file: "src/bin/poly-mul-crt.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Extend single-prime NTT to multiply polynomials whose output coefficients exceed any single NTT prime, using CRT reconstruction across three primes."
+  explored:
+    - "Investigated the maximum output-coefficient bound n*B^2 and compared it against each of the three chosen NTT primes."
+  tried:
+    - "Ran NTT independently modulo three primes (998244353, 985661441, 469762049) and chained two CRT calls per output coefficient."
+  corrections: —
+  bugs_found:
+    - "The inverse NTT divided by mod_inverse(p-1,p) instead of mod_inverse(n,p) (n=16, the transform size); this was masked by the small test prime p=17 (where p-1=16) and only surfaced with a production-sized prime."
+    - "The CRT chaining loop passed the raw p1-only residues into every CRT call instead of the running combined residue, causing the second call to ignore the p2 information entirely; fixed by threading the running combined value through the loop."
+  completed:
+    - "Implemented multi-modulus NTT with two-step CRT chaining, widened to u128 throughout."
+    - "Verified against a worked example multiplying two degree-2 polynomials with p1=5, p2=17, p3=97."
+  not_completed: —
+  open_questions: —
+  notes: —

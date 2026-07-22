@@ -1,0 +1,1 @@
+Turned the WOP-based existence proof from Section 2.1 into a working O(sqrt(n)) factorization algorithm, proving independently that the search index never needs to backtrack.
