@@ -8,6 +8,53 @@ month: "2026-07"
 previous: HISTORY-2026.06.yml
 next: —
 entries:
+  - date: 2026-07-22
+    title: "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
+    session:
+      file: —
+      source: Number Theory Step by Step (Kuldeep Singh), Chapter 2, Section 2.3
+      status: completed
+      attempted:
+        - Worked through Propositions 2.13-2.16 and Dirichlet's Theorem (2.17), then completed all of Exercises 2.3 (Questions 1-4, all sub-parts) in book order.
+      explored:
+        - Compared the multiplicative closure of numbers of form 4n+1 against numbers of form 4n+3, and of 3n+1 against 3n+2, to determine which residue classes admit a direct Euclid/Lemma-2.15-style contradiction proof and which require a harder order-based argument.
+        - Verified the derived proof of Proposition 2.16 against the book's own stated proof (rendered from the PDF) and confirmed they matched construction-for-construction.
+        - Investigated whether the square/quadratic-residue trick used for primes of form 4n+1 could be adapted to prove infinitude of primes of form 4n+3, and confirmed it cannot (the trick structurally only ever forces residue 1 mod 4).
+        - Generalized the closed-vs-open residue class distinction to mod 5, checking by hand which of the four nonzero residue classes are self-closed under multiplication.
+      tried:
+        - Reused Euler's Criterion (from mod-legendre.md) to show -1 is a quadratic residue mod q exactly when q is congruent to 1 mod 4, then built the M^2+1 construction for Exercise 1(a).
+        - Built an order-of-element argument (via M^3-1=(M-1)(M^2+M+1) and Fermat's Little Theorem) as the mod-3 analogue of the quadratic-residue trick, for Exercise 2(a).
+        - Constructed a direct/universal proof (fix an arbitrary bound X, exhibit a larger prime) as a second, structurally different proof of Proposition 2.16 for Exercise 1(b), rather than restating the book's contradiction-based proof.
+      corrections:
+        - An informal divisibility statement ("n divides 7!+n for n through 2 to 7") was restated precisely as a properly quantified claim before generalizing.
+        - An initial claim that 10! suffices to produce 10 consecutive composite integers was corrected to 11!, after recounting that k=2,...,N gives N-1 values, not N.
+        - An unnecessary and incorrect claim that d < sqrt((n+1)!) was dropped from the Proposition 2.13 compositeness argument in favor of the direct bound d+1 = N/x < N.
+        - A sign error stating M^2+1=0 (mod q) implies M^2=1 (mod q) was corrected to M^2=-1 (mod q).
+        - An invalid inference from M^2=-1 (mod q) directly to M=-1 (mod q) was corrected to the valid conclusion that -1 is a quadratic residue mod q, witnessed by M.
+        - Repeated arithmetic slips in expanding products of the form (4k+1)(4l+3) and similar were corrected via re-expansion.
+        - A substitution that treated M itself as having the form 3n+1 (rather than using p_i divides M) was corrected to the direct divisibility argument for Exercise 2(a).
+        - An initial construction N=M^2-1 for Exercise 2(b) was checked concretely against M=2 (giving N=3, not of form 3n+2) and corrected to N=3M-1.
+        - Repeated modular-arithmetic slips in the mod-3 case analysis for Exercise 3(i), including a phantom term 2n+2 not matching any of the three actual factors (2n+1, 2n+3, 2n+5), were resolved via step-by-step numeric verification of each case.
+        - A reversed goal in Exercise 4(a) (initially targeting rejection of 1 mod 4 instead of 3 mod 4, and a final sum miscomputed as 3 mod 4 instead of 1 mod 4) was corrected on both occasions.
+        - An initial blanket claim that there are no primes of form 3n+3 was refined to note the n=0 exception (3 itself is of that form and is prime).
+      bugs_found: —
+      completed:
+        - Derived Proposition 2.13 (existence of n consecutive composite integers), Proposition 2.14 (every integer has form 4n, 4n+1, 4n+2, or 4n+3), Lemma 2.15 (closure of 4n+1 under multiplication), and Proposition 2.16 (infinitely many primes of form 4n+3), the last verified against the book's own stated proof.
+        - "Completed Exercise 1(a): proved infinitely many primes of form 4n+1 via a quadratic-residue argument using M^2+1."
+        - "Completed Exercise 1(b): built a second, direct/universal proof of infinitely many primes of form 4n+3, distinct in logical structure from Proposition 2.16's proof by contradiction."
+        - "Completed Exercise 1(c): proved every prime greater than 3 has form 6n+1 or 6n+5."
+        - "Completed Exercise 2(a): proved infinitely many primes of form 3n+1 via an order-of-element argument using M^2+M+1."
+        - "Completed Exercise 2(b): proved infinitely many primes of form 3n+2 via the Euclid/Lemma-style contradiction, reusing the closure fact from 2(a)."
+        - "Completed Exercise 2(c): explained why 3n+3 admits no primes for n greater than or equal to 1, identifying and resolving the n=0 boundary exception."
+        - "Completed Exercise 3(i): proved the product of three consecutive odd numbers is divisible by 3, via case analysis mod 3."
+        - "Completed Exercise 3(ii): proved p=3 is the only prime with p, p+2, p+4 all prime, reusing 3(i)."
+        - "Completed Exercise 4(a): proved a prime that is a sum of two squares has form 4n+1, via a parity argument on the two summands."
+        - "Completed Exercise 4(b): proved a prime of form 4n+3 cannot be a sum of two squares, via proof by contrapositive from 4(a)."
+      not_completed: —
+      open_questions: —
+      notes:
+        - Amended CLAUDE.md's "Book study sessions" section, at the user's explicit request, to require quoting each exercise's exact text verbatim from the book before its Socratic walkthrough, rather than paraphrasing.
+        - Confirmed via rendered PDF pages that Section 2.3 assigns no Supplementary Problems of its own (this book assigns them once per chapter, not per section).
   - date: 2026-07-20
     title: "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
     session:

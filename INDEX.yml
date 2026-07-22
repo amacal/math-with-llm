@@ -25,12 +25,12 @@ metadata:
 # ---------------------------------------------------------------------------
 selection_context:
   recent_sessions:
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
     - "Tonelli-Shanks Algorithm for Modular Square Roots"
     - "BigInteger Division"
     - "Secant Method for Root-Finding"
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
-    - "Newton's Method for General Root-Finding"
   active_branches:
     - "Arbitrary-Precision RSA & Wiener's Attack"
     - "Quadratic Residues & the Structure of (Z/pZ)*"
@@ -47,9 +47,8 @@ selection_context:
     - "Multi-Modulus NTT with CRT Reconstruction"
     - "Pell's Equation via Continued Fractions"
     - "Segmented Sieve"
-    - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
-  explicit_unfinished_targets:
     - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
+  explicit_unfinished_targets:
     - "BigInteger GCD"
     - "BigInteger Modular Exponentiation"
     - "BigInteger Miller-Rabin Primality Test"
@@ -58,6 +57,8 @@ selection_context:
     - "BigInteger Integer Square Root"
     - "Wiener's Attack on BigInteger RSA"
   reusable_recent_capabilities:
+    - "prove-infinitude-of-primes-in-a-residue-class"
+    - "classify-primes-by-residue-class"
     - "compute-modular-square-root"
     - "divide-arbitrary-precision-integers"
     - "find-roots-without-derivative"
@@ -67,8 +68,6 @@ selection_context:
     - "find-roots-of-differentiable-functions"
     - "generate-pseudorandom-sequences"
     - "break-rsa-with-small-private-exponent"
-    - "generate-continued-fraction-terms-algorithmically"
-    - "solve-pells-equation"
   candidate_signals:
     continuation:
       - "Root-Finding & Numerical Methods's chain now runs bisection -> Newton isqrt -> general Newton -> secant (2026-07-17); no next step is explicitly named in the repo, but a bracketing-safe hybrid such as Brent's method, combining bisection's guaranteed robustness with secant/inverse-quadratic interpolation's speed, is the shape suggested by the existing chain — this is an inferred continuation, not a named target."
@@ -79,13 +78,43 @@ selection_context:
       - "Quadratic Residues & the Structure of (Z/pZ)* was opened today by Quadratic Residues & the Legendre Symbol via Euler's Criterion — the first session in the repo to address quadratic residues, built on Modular Exponentiation, Modular Inverse, Euler's Theorem, Miller-Rabin, and Primitive Roots mod p, but not itself a continuation of any single one of them."
       - "Arbitrary-Precision RSA & Wiener's Attack was opened 2026-07-18 by BigInteger Division — the first session extending arbitrary-precision arithmetic toward the already-completed plain-u64/u128 RSA/Wiener's-attack chain, rather than continuing the existing polynomial-multiplication direction that Big Integer Arithmetic (Schoolbook) and Karatsuba Multiplication had previously been feeding."
     explicit_commitment:
-      - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers — named as future work in Section 2.2's own session evidence."
       - "BigInteger GCD, BigInteger Modular Exponentiation, BigInteger Miller-Rabin Primality Test, BigInteger RSA Cryptosystem, BigInteger Continued-Fraction Convergents, BigInteger Integer Square Root, and Wiener's Attack on BigInteger RSA — named explicitly as the remaining steps of the arc BigInteger Division opened, per this session's own not_completed/open_questions fields."
 
 # ---------------------------------------------------------------------------
 # sessions: primary record, one entry per completed session, most recent first.
 # ---------------------------------------------------------------------------
 sessions:
+  "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers":
+    kind: book-study
+    file: —
+    source: "Number Theory Step by Step (Kuldeep Singh), Chapter 2, Section 2.3"
+    date: 2026-07-22
+    prerequisites:
+      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+      - "Euclidean GCD"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    uses_concepts:
+      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+      - "Euclidean GCD"
+      - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
+    reuses_code: —
+    derived_from:
+      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+    related_to: —
+    unlocks: —
+    future_targets: —
+    summary: "Proved Propositions 2.13-2.16 (existence of n consecutive composites, the 4n+r classification, closure of 4n+1 under multiplication, and infinitely many primes of form 4n+3), then completed all of Exercises 2.3, including a quadratic-residue proof of infinitely many primes of form 4n+1, an order-of-an-element analogue for primes of form 3n+1, and a second, directly-constructive (rather than contradiction-based) proof of infinitely many primes of form 4n+3."
+    concepts:
+      - "number-theory"
+      - "infinitude-of-primes"
+      - "quadratic-residues"
+      - "modular-arithmetic"
+      - "order-of-an-element"
+      - "primes-in-arithmetic-progressions"
+    capabilities:
+      - "prove-infinitude-of-primes-in-a-residue-class"
+      - "classify-primes-by-residue-class"
+
   "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality":
     kind: book-study
     file: —
@@ -106,8 +135,7 @@ sessions:
       - "Sieve of Eratosthenes"
     unlocks:
       - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
-    future_targets:
-      - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
+    future_targets: —
     summary: "Proved the composite-divisor bound (Proposition 2.9) and the prime-divisor bound (Corollary 2.10, via an alternative route to the book's own proof) and reconstructed Euclid's proof of the infinitude of primes (Theorem 2.11), then completed all 14 Exercises 2.2 including three starred problems."
     concepts:
       - "number-theory"
@@ -1107,12 +1135,6 @@ sessions:
 # A target is removed from this section the moment it receives its own completed session.
 # ---------------------------------------------------------------------------
 future_targets:
-  "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers":
-    status: not-completed
-    mentioned_by:
-      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
-    evidence:
-      - "HISTORY-2026.07.yml: Section 2.2's session entry records completing all of Section 2.2, with Section 2.3 as the immediate next section in book order (confirmed from the book's own page 64 section header)."
   "BigInteger GCD":
     status: not-completed
     mentioned_by:
@@ -1254,17 +1276,16 @@ branches:
       - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
       - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
       - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
-    frontier:
-      - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
-    explicit_future_targets:
       - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
+    frontier:
+      - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
+    explicit_future_targets: —
 
 # ---------------------------------------------------------------------------
 # open_gaps: conservative, evidence-only. No invented curriculum.
 # ---------------------------------------------------------------------------
 open_gaps:
   explicit_future_targets:
-    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
     - "BigInteger GCD"
     - "BigInteger Modular Exponentiation"
     - "BigInteger Miller-Rabin Primality Test"
@@ -1300,6 +1321,7 @@ prerequisite_index:
       - "Continued-Fraction Term Generation via the Euclidean Algorithm"
       - "Linear Congruential Generator"
       - "Pollard's Rho Factoring Algorithm"
+      - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   "Extended Euclidean GCD":
     required_by:
       - "Modular Inverse"
@@ -1347,6 +1369,7 @@ prerequisite_index:
   "Quadratic Residues & the Legendre Symbol via Euler's Criterion":
     required_by:
       - "Tonelli-Shanks Algorithm for Modular Square Roots"
+      - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   "RSA Cryptosystem":
     required_by:
       - "Wiener's Attack on RSA"
@@ -1380,6 +1403,9 @@ prerequisite_index:
     required_by:
       - "Trial Division Factorization"
       - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+  "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality":
+    required_by:
+      - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   "Integer Square Root":
     required_by:
       - "Newton's Method for Integer Square Root"
@@ -1482,6 +1508,7 @@ concept_index:
     - "Tonelli-Shanks Algorithm for Modular Square Roots"
   infinitude-of-primes:
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   lagranges-theorem:
     - "Euler's Theorem & Modular Inverse via Exponentiation"
     - "Primitive Roots mod p"
@@ -1502,6 +1529,7 @@ concept_index:
     - "RSA Cryptosystem"
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     - "Tonelli-Shanks Algorithm for Modular Square Roots"
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   newtons-method:
     - "Newton's Method for General Root-Finding"
     - "Newton's Method for Integer Square Root"
@@ -1517,6 +1545,7 @@ concept_index:
     - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
     - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
     - "Pell's Equation via Continued Fractions"
     - "RSA Cryptosystem"
     - "Segmented Sieve"
@@ -1529,6 +1558,8 @@ concept_index:
     - "Newton's Method for General Root-Finding"
     - "Newton's Method for Integer Square Root"
     - "Secant Method for Root-Finding"
+  order-of-an-element:
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   pells-equation:
     - "Continued Fractions"
     - "Pell's Equation via Continued Fractions"
@@ -1543,6 +1574,8 @@ concept_index:
   primality-testing:
     - "Miller-Rabin Primality Test"
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+  primes-in-arithmetic-progressions:
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   primitive-roots:
     - "Primitive Roots mod p"
   probabilistic-algorithms:
@@ -1557,6 +1590,7 @@ concept_index:
   quadratic-residues:
     - "Quadratic Residues & the Legendre Symbol via Euler's Criterion"
     - "Tonelli-Shanks Algorithm for Modular Square Roots"
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   quotient-estimation-and-correction:
     - "BigInteger Division"
   root-finding:
@@ -1580,6 +1614,8 @@ capability_index:
     - "Big Integer Arithmetic (Schoolbook)"
   break-rsa-with-small-private-exponent:
     - "Wiener's Attack on RSA"
+  classify-primes-by-residue-class:
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   compute-bezout-coefficients:
     - "Extended Euclidean GCD"
   compute-convergents:
@@ -1642,6 +1678,8 @@ capability_index:
     - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
   prove-infinitude-of-primes:
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
+  prove-infinitude-of-primes-in-a-residue-class:
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   solve-linear-diophantine-equations:
     - "Number Theory Step by Step, Section 1.4: Linear Diophantine Equations"
   solve-pells-equation:
@@ -1657,6 +1695,8 @@ capability_index:
 # completed_by_date: newest first. Every session appears exactly once.
 # ---------------------------------------------------------------------------
 completed_by_date:
+  "2026-07-22":
+    - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   "2026-07-20":
     - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
   "2026-07-19":

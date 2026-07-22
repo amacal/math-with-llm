@@ -40,6 +40,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 - This ban on `pdftotext` (or any other text-extraction tool) against the book PDF is total, not just for content: never invoke it for any purpose whatsoever, including finding which physical PDF page holds a given printed page number, locating a section/exercise heading, or building a searchable index for navigation. Establish physical-to-printed page correspondence the same way as everything else — render candidate pages to PNG and read the printed page number/heading directly with vision.
 - Before exercises: read the section text and walk through its key definitions/propositions/proofs with the user, Socratically — they should be able to state each result in their own words and understand why it's true before using it as a tool. Never skip this, even for a short section.
 - Problem sets: follow book order exactly — full Exercises list ascending (sub-parts a/b/c in order), then Supplementary Problems ascending. Never skip around, reorder, or jump ahead.
+- Before starting the Socratic walkthrough of each problem, quote its exact text verbatim from the book (as rendered from the PDF, not paraphrased) directly in chat, so the user has the literal statement in front of them throughout.
 - Do not run the Session closing ritual until every assigned problem (Exercises + Supplementary) is done in that order.
 
 ## What I must never do
