@@ -7,7 +7,9 @@ sessions:
   - "Primitive Roots mod p"
   - "Trial Division Factorization"
   - "Wiener's Attack on RSA"
+  - "Wilson's Theorem as a Primality Test"
 frontier:
   - "Wiener's Attack on RSA"
   - "Trial Division Factorization"
+  - "Wilson's Theorem as a Primality Test"
 explicit_future_targets: —

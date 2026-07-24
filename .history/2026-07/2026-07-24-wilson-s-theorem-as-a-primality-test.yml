@@ -1,0 +1,29 @@
+date: "2026-07-24"
+title: "Wilson's Theorem as a Primality Test"
+session:
+  file: src/bin/mod-wilson.rs
+  source: —
+  status: completed
+  attempted:
+    - "Implemented and proved Wilson's Theorem ((n-1)! ≡ -1 mod n iff n is prime) as a primality test, contrasted against Trial Division and Miller-Rabin"
+  explored:
+    - "Concrete inverse-pairing structure for p=7 (found each residue's multiplicative inverse by hand)"
+    - "Whether order(a)=2 (group-theory framing) was a valid route to showing only 1 and p-1 are self-inverse mod p, compared against a more elementary factoring-plus-Euclid's-Lemma route"
+    - "Complexity comparison against Trial Division Factorization (O(sqrt(n))) and the Miller-Rabin Primality Test (O(k log n)), including a concrete estimate for n around 10^18"
+  tried:
+    - "Derived (p-x)^2 mod p by direct expansion of p^2 - 2px + x^2"
+    - "Derived both contradiction arguments showing x in {2,...,p-2} cannot have inverse 1 or p-1"
+    - "Derived the composite-n argument via n = d*e with two distinct factors both appearing in (n-1)!"
+    - "Derived an early-exit optimization: stop and return composite as soon as the running product hits 0 mod n"
+  corrections:
+    - "Initial expansion of (p-x)^2 mod p was stated as x, corrected to x^2 after rechecking the expansion term-by-term"
+    - "Initial appeal to 'order(a)=2' as the reason only 1 and p-1 are self-inverse was set aside in favor of the elementary factoring argument (a^2-1=(a-1)(a+1) plus Euclid's Lemma), since it does not require additional unproven group-theory machinery"
+  bugs_found: —
+  completed:
+    - "Implemented src/bin/mod-wilson.rs with a wilson(n: u64) -> bool function, including early-exit on zero and u128 for the running product"
+    - "Added tests covering primes 2 through 47, composites 4 through 28 (including n=4), and edge cases n=0 and n=1 — all passing (cargo test --bin mod-wilson)"
+    - "Stated the full iff correctness invariant, argued both directions including the n=4 exception, and stated complexity as O(n) time / O(1) space"
+  not_completed: —
+  open_questions: —
+  notes:
+    - "User declined to add a large-n test (e.g. a prime in the thousands) citing runtime duration, a deliberate scope choice rather than an oversight"

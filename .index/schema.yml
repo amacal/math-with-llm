@@ -191,6 +191,8 @@ computed_queries:
   uses_by: 'grep -rl "<exact Concept Title>" .index/sessions/*/uses_concepts.yml'
   concept_lookup: 'grep -rl "<tag>" .index/sessions/*/concepts.yml'
   capability_lookup: 'grep -rl "<tag>" .index/sessions/*/capabilities.yml'
+  concept_frequency: "grep -h '^- ' .index/sessions/*/concepts.yml | sed 's/^- //' | sort | uniq -c | sort -rn   (tag counts across every session — use to see which domains are saturated vs. barely touched; feeds session-select's breadth check, see CLAUDE.md's \"Session selection\")"
+  capability_frequency: "grep -h '^- ' .index/sessions/*/capabilities.yml | sed 's/^- //' | sort | uniq -c | sort -rn"
   completed_by_date: "grep -h '^  date:' .index/sessions/*/meta.yml | sort"
   by_date: 'grep -l "date: \"<YYYY-MM-DD>\"" .index/sessions/*/meta.yml'
   future_targets_list: "ls .index/future-targets/"

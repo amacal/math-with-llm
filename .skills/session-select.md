@@ -15,6 +15,6 @@ Investigate the repo and propose exactly 5 candidate topics for the next session
    - 1-2 sentences on why it's interesting given what's done.
    - Its prerequisite chain (existing sessions/files it draws on).
 
-5. **Force genuine breadth.** Don't let all 5 be the next link in the most recent chain — check whether a cross-domain option (probability, linear algebra, numerical methods, ML, physics) is viable given the done set, include at least one if so.
+5. **Force genuine breadth.** Don't let all 5 be the next link in the most recent chain. Run `.index/schema.yml`'s `concept_frequency` query (`grep -h '^- ' .index/sessions/*/concepts.yml | sed 's/^- //' | sort | uniq -c | sort -rn`) to see, concretely, which domains/tags are saturated versus barely touched — cite the actual counts (e.g. "modular-arithmetic: 14 sessions, probability: 0") when justifying a cross-domain candidate, rather than relying on impression. Check whether a cross-domain option (probability, linear algebra, numerical methods, ML, physics) is viable given the done set, include at least one if so. This frequency count is a descriptive signal only — it does not replace the hand-curated judgment in `.index/selection-context/`, which stays a human/agent judgment call, not a formula.
 
 6. **Report back** a plain list of the 5 (title, track, classification, rationale, prerequisite chain). Not a user-facing menu, no questions asked — structured findings for the calling conversation to present interactively.

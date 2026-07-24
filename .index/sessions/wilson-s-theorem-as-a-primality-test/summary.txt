@@ -1,0 +1,1 @@
+Proved and implemented Wilson's Theorem ((n-1)! ≡ -1 mod n iff n is prime) via an inverse-pairing argument, contrasting its exact O(n) test against Trial Division and Miller-Rabin.
