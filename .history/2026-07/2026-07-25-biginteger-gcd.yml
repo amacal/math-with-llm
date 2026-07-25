@@ -1,0 +1,32 @@
+date: "2026-07-25"
+title: "BigInteger GCD"
+session:
+  file: "src/bin/big-uint-gcd.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Implement GCD for the arbitrary-precision BigNumber type, resolving the open fork left by BigInteger Division between an Euclidean-algorithm route and a Binary GCD (Stein's Algorithm) detour."
+  explored:
+    - "Compared the two candidate routes against the future need for Bézout coefficients (modular inverse, eventual BigInteger RSA key generation): the Euclidean recurrence's coefficients update linearly for free, while Stein's algorithm's halving step has no equivalent free extension since it requires operands to already be even."
+    - "Considered whether the mod operation needed a leaner variant that skips quotient-digit accumulation, since GCD never uses the quotient; concluded the quotient digit must still be determined locally at each step to know how much to subtract, so the only saving from omitting it is a small constant, not an asymptotic one."
+    - "Considered a single-limb special-case optimization once operands shrink to one word; concluded it would not change the overall asymptotic complexity since the multi-limb reduction phase dominates, and declined to add it."
+    - "Worked through why gcd(a, 0) falls out of the loop's own termination condition without special-casing, while gcd(0, 0) does not, tracing back to the convention already established in Euclidean GCD that this pair is undefined."
+    - "Derived the total complexity via a telescoping-sum argument: bounded each step's cost using the exact identity that the current divisor's limb-count equals the next iteration's dividend limb-count, then summed the resulting bound across the whole run to get O(n squared) total, rather than the larger bound suggested by naively multiplying per-step cost by iteration count."
+  tried:
+    - "Ran a 100,000-iteration stress test over random 256-limb pairs generated via a copied-in Linear Congruential Generator, breaking on the first pair with a non-trivial GCD (found at the fifth pair, gcd = 3)."
+    - "Ran gcd(fib(20000), fib(20001)) as a worst-case correctness check, using a freshly implemented Fibonacci generator, since consecutive Fibonacci numbers are both the slowest case for the Euclidean algorithm and known to always be coprime."
+  corrections:
+    - "Initially assumed the while-loop's own termination condition would naturally return 0 for gcd(0, 0) without any special-casing; corrected once the precedent in Euclidean GCD (that gcd(0, 0) is undefined and must return None) was checked, leading to an explicit pre-loop check for this case."
+    - "Initially cited the per-step division cost as O(n times (n minus m)); corrected to O(m times (n minus m)) to match the exact formula already established in BigInteger Division, where m is the divisor's limb-count."
+    - "Initially estimated total complexity by multiplying the per-step cost by the number of iterations (bounded by Lamé's theorem); corrected after working through the telescoping-sum argument, which shows the true total is the same asymptotic order as a single full-size division, not multiplied by the iteration count."
+  bugs_found: —
+  completed:
+    - "Implemented `gcd(a, b) -> Option<BigNumber>` via the standard Euclidean loop, using a `Div` implementation extended to also expose the remainder (previously discarded in BigInteger Division)."
+    - "Implemented an explicit gcd(0, 0) special case returning None, matching the Euclidean GCD precedent."
+    - "Added unit tests: single-limb and multi-limb GCD cases (three, seven, and fifteen limbs), and zero-argument edge cases, all passing alongside the 34 inherited division tests (39 total)."
+    - "Verified correctness via two stress tests in main(): 100,000 random 256-limb pairs (early-exit on first non-coprime pair, gcd = 3, found at the fifth pair) and gcd(fib(20000), fib(20001)) = 1."
+  not_completed:
+    - "BigInteger Extended GCD (Bézout coefficients / modular inverse over BigNumber) was not started; this session's design choice (Euclidean over Binary GCD) was made specifically to set up for it."
+  open_questions: —
+  notes:
+    - "The LCG and Fibonacci generator were reimplemented fresh inside this file rather than imported, per the repo's no-cross-file-reuse constraint."

@@ -1,0 +1,1 @@
+Implemented GCD for the BigNumber arbitrary-precision type via the Euclidean algorithm, extending BigInteger Division's Div to expose the remainder and choosing this route over a Binary GCD detour so it sets up cleanly for a future Bézout-coefficient extension.

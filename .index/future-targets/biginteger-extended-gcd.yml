@@ -1,0 +1,6 @@
+title: "BigInteger Extended GCD"
+status: not-completed
+mentioned_by:
+  - "BigInteger GCD"
+evidence:
+  - "HISTORY-2026.07.yml: BigInteger GCD's not_completed field names it directly, as the reason the Euclidean route was chosen over the Binary GCD detour."
