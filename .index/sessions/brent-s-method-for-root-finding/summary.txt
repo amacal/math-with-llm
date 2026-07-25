@@ -1,0 +1,1 @@
+Implemented Brent's method, combining bisection's guaranteed convergence with secant and inverse quadratic interpolation's speed via two safeguard conditions.

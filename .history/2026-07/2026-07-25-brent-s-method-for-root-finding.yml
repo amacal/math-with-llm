@@ -1,0 +1,40 @@
+date: "2026-07-25"
+title: "Brent's Method for Root-Finding"
+session:
+  file: src/bin/root-brent.rs
+  source: —
+  status: completed
+  attempted:
+    - "Implemented Brent's method for root-finding, combining bisection, secant, and inverse quadratic interpolation with two safeguard conditions."
+  explored:
+    - "Reviewed the secant method's golden-ratio order of convergence and its derivation, including recomputing the exponent from the error recurrence."
+    - "Reviewed bisection's general opposite-sign bracketing invariant, distinguishing it from the monotonic-predicate comparison used in the integer-square-root session."
+    - "Derived inverse quadratic interpolation from scratch via a Lagrange-style switch-function construction, first on a numeric toy example, then applied to fitting x as a function of y through three (x, f(x)) points."
+    - "Derived the two safeguard conditions: rejecting a candidate that falls outside the current bracket, and rejecting a candidate whose step size does not shrink to at least half the step taken two iterations back, tying the latter constant to bisection's own guaranteed shrink factor."
+    - "Discussed whether a double root (e.g. f(x) = (x-1)^2) has a meaningful bracket-based test, concluding it always fails the same-sign precondition and needs no dedicated test beyond the existing invalid-bracket case."
+    - "Discussed whether the 1/sqrt(5) pathological point that trapped Newton's method has a meaningful analog for Brent's method, concluding it does not, since that pathology depended on two nearby points approximating a tangent line."
+  tried:
+    - "An initial draft with no bracket tracking at all, running IQI/secant iteration unsafeguarded on two starting guesses."
+    - "A revised draft tracking x0/x2 as a bracket and x1 as an interpolation point, with sign-based checks to decide which endpoint to replace."
+    - "Added an insufficient-progress safeguard comparing step sizes across iterations, requiring several revisions to correctly define what 'step size' meant."
+    - "Removed all debug println! statements from the final implementation except the demo call in main()."
+  corrections:
+    - "An early assumption that Brent's method's precondition matches secant's/Newton's (any two starting guesses suffice) was corrected: Brent's method requires the two inputs to already form a valid opposite-sign bracket, so several existing test inputs carried over from root-secant.rs's test suite were invalid and had to be replaced with genuine brackets."
+    - "An assumption that the safeguard's 0.5 threshold was an arbitrary tuning constant was corrected: it is tied directly to bisection's own proven guaranteed shrink factor."
+    - "An assumption that the progress-safeguard's 'distance' should be initialized/compared as a raw x-position was corrected to comparing actual step sizes (differences between consecutive accepted positions)."
+  bugs_found:
+    - "First draft used no bracket at all (pure unsafeguarded IQI/secant iteration); discovered via a test case that diverged into a stable non-converging cycle. Resolved by introducing explicit lo/hi bracket tracking."
+    - "After adding a bracket, the original verified bracket partner (the second input argument) was silently overwritten by the interpolation candidate on the very first loop iteration, losing the opposite-sign invariant entirely. Resolved by explicitly tracking which two of the three points form the bracket."
+    - "The insufficient-progress safeguard's 'distance' variable was initialized to and compared against a raw x-position rather than a step size, making the reset condition spuriously always true or always false depending on sign. Resolved by tracking an explicit step-size history."
+    - "The insufficient-progress safeguard measured the size of the raw (possibly-rejected) IQI candidate's step rather than the step actually executed after the fallback decision. Resolved by only updating the tracked distance/guess when a step is genuinely accepted."
+    - "The bracket-update logic (deciding which of lo/hi to replace) was nested inside a branch that was skipped whenever the reset/fallback fired, so the bracket never shrank on fallback iterations, producing an infinite frozen loop. Discovered by tracing debug output showing identical state across many iterations. Resolved by moving the bracket-update check outside the reset branch so it always runs."
+  completed:
+    - "Implemented find_root in src/bin/root-brent.rs using bisection, secant (bootstrap), and inverse quadratic interpolation, with both safeguard conditions and a bracket-based precondition check."
+    - "Added 7 tests: four convergence cases (a cubic and two quadratics on different brackets), one invalid-bracket precondition-failure case, and two scale-extreme cases (a root near 1e-7 and a root near 1e7) using f(x) = (x - 0.0000001)(x - 10000000)."
+    - "Verified all 7 tests pass via cargo test."
+  not_completed:
+    - "No dedicated test forcing the zero-IQI-denominator fallback branch; verified structurally via code review instead, since constructing the exact numeric coincidence by hand was judged too fiddly."
+  open_questions: —
+  notes:
+    - "Considered and explicitly decided against a dedicated double-root test (f(x) = (x-1)^2), since it exercises the same same-sign precondition-rejection code path as the existing invalid-bracket test."
+    - "Considered and explicitly decided against porting root-secant.rs's 1/sqrt(5) pathological-point test, since Brent's method's bracket requirement makes the original two-nearby-points setup inapplicable."
