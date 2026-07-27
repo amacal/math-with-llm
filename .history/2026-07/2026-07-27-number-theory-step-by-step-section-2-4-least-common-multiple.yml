@@ -1,0 +1,32 @@
+date: "2026-07-27"
+title: "Number Theory Step by Step, Section 2.4: Least Common Multiple"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 2, Section 2.4"
+  status: completed
+  attempted:
+    - "Covered Number Theory Step by Step Section 2.4 (Least Common Multiple) theory, then completed all 22 questions of Exercises 2.4 and all 27 questions of Supplementary Problems 2, in book order."
+  explored:
+    - "Investigated whether skipping full prime factorization of a coprime remainder still gives a correct LCM, using [2000,2015] (leaving 403 unfactored since gcd(403,2000)=1) as a test case."
+    - "Compared two proof strategies for the coprime-case LCM identity: the book's approach (Proposition 2.20, derived from the prime-decomposition formula) versus a mutual-divisibility approach not using prime decomposition (Exercises 2.4 Q24)."
+    - "Examined the distinction between 'gcd of a whole set equals 1' and 'pairwise relatively prime' using the counterexample {2,3,4} (gcd(2,3,4)=1 but gcd(2,4)=2)."
+    - "Investigated whether Supplementary Problems 2.14 and 2.15 (primes ending in 111; primes of form 8n+3) required a from-scratch elementary construction or could be handled by direct citation of Dirichlet's Theorem, established in the prior Section 2.3 session."
+  tried:
+    - "Attempted computing the first composite value of 2n^2+29 by brute-force enumeration through n=15 before switching to directly checking f(29)=29(2·29+1)."
+    - "Attempted proving Supplementary 2.6/2.7/2.10 (floor/ceiling inequalities) via direct inequality manipulation before settling on a uniqueness-of-floor/ceiling argument anchored with a concrete numeric example (x=3.7)."
+  corrections:
+    - "Corrected an initial factorization of 2000 as 2^4x5^2 (=400) to 2^4x5^3 (=2000)."
+    - "Corrected an initial claim that gcd(a,b)=gcd(a,b-1) as a general rule to the correct general identity gcd(a,b)=gcd(a,b-a)."
+    - "Corrected repeated inversions of the exponent-comparison direction (max(e_i,f_i) versus g_i, for a common multiple with exponents g_i) during the proofs of Propositions 2.19 and 2.23, resolved via concrete numeric examples."
+    - "Corrected a mis-signed factorization of n^m-1 (initially written with an alternating-sign second factor) to the correct all-positive-terms form n^(m-1)+...+n+1."
+    - "Corrected an arithmetic slip in 29x59 (initially stated as 1771, corrected to 1711)."
+  bugs_found: —
+  completed:
+    - "Proved Propositions 2.19 through 2.23 and Corollary 2.24: the prime-decomposition formula for LCM, the coprime special case, the general gcd(a,b)x[a,b]=axb identity, the prime-decomposition formula for gcd, the n-ary LCM reduction, and the pairwise-coprime product formula."
+    - "Completed all 22 questions of Exercises 2.4, including six counterexamples disproving false LCM identities (Q11), a uniqueness proof for the LCM (Q12), and a proof of gcd(a,b,c)x[ab,ac,bc]=abc (Q22) chaining four separate prior results in this section."
+    - "Completed all 27 Supplementary Problems 2, including floor/ceiling inequality proofs (2.6, 2.7, 2.10), two direct applications of Dirichlet's Theorem to specific residue classes (2.14, 2.15), and two prime-decomposition-free alternate proofs of the coprime-LCM and general gcd-LCM identities (2.24, 2.25)."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Section 2.4 is the last section of Chapter 2; Supplementary Problems 2 (mixed-topic across the whole chapter) was included in the same session, matching this book's established per-chapter (not per-section) Supplementary Problems convention, confirmed during session planning against the Section 2.3 and Section 1.4 precedents."
+    - "Dirichlet's Theorem (2.17, from the Section 2.3 session) and the Fundamental Theorem of Arithmetic (from the Section 2.1 session) were cited directly as established background throughout, rather than re-derived."

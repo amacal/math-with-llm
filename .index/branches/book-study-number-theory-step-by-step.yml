@@ -5,6 +5,7 @@ sessions:
   - "Number Theory Step by Step, Section 2.1: Introduction to Primes"
   - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
   - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
+  - "Number Theory Step by Step, Section 2.4: Least Common Multiple"
 frontier:
-  - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
+  - "Number Theory Step by Step, Section 2.4: Least Common Multiple"
 explicit_future_targets: —

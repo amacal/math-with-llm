@@ -1,0 +1,1 @@
+Proved the prime-decomposition formula for the LCM and its interaction with gcd (Propositions 2.19-2.23, Corollary 2.24), then completed all 22 Exercises 2.4 and all 27 Supplementary Problems 2, including two prime-decomposition-free alternate proofs and two direct citations of Dirichlet's Theorem for primes in specific residue classes.
