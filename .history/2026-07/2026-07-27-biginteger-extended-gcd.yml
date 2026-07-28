@@ -1,0 +1,29 @@
+date: "2026-07-27"
+title: "BigInteger Extended GCD"
+session:
+  file: "src/bin/big-uint-gcd-extended.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Extend the arbitrary-precision GCD from BigInteger GCD to also compute Bézout coefficients over BigNumber operands, the deferred target that session explicitly named."
+  explored:
+    - "Diagnosed the concrete obstacle to a mechanical port of the u64 Extended Euclidean GCD recurrence: BigNumber's Sub returns Option<BigNumber> and yields None on a negative result, since it is unsigned only, while Bézout coefficients are frequently negative, and no signed BigNumber type exists anywhere in the repo."
+    - "Worked through the design of a sign-magnitude Signed type (a bool sign paired with a BigNumber magnitude), deriving negation (flip sign, keep magnitude), Signed times BigNumber multiplication (sign preserved since the quotient is always non-negative, magnitude scaled), and Signed minus Signed subtraction via the identity self - other = self + (-other), reducing to two addition cases (same original sign -> add magnitudes and keep the sign; different original sign -> subtract smaller magnitude from larger and take the winner's sign)."
+    - "Confirmed the choice of sign for a zero-magnitude result (equal-magnitude opposite-sign case) is purely cosmetic, since -0 and +0 both vanish identically in the invariant current_a = a*xa + b*ya downstream."
+    - "Confirmed the u64 version's overflow edge case (quotient exceeding i64::MAX, only possible when b = 1) does not apply here, since BigNumber has no fixed width and never overflows."
+    - "Derived a second telescoping-style complexity argument, distinct from BigInteger GCD's own: since Signed coefficient magnitudes grow to roughly n limbs and do not shrink across iterations (unlike current_a/current_b), naively bounding each iteration's coefficient multiply and multiplying by iteration count overcounts to O(n^3); bounding the product of all quotients across the whole run by roughly a/gcd(a,b) instead bounds the sum of the quotients' limb-counts (not per iteration) at O(n), giving a total coefficient-multiplication cost of O(n) (coefficient size) times O(n) (quotient-limb-count budget) = O(n^2), matching rather than exceeding the existing GCD bound."
+  tried:
+    - "Implemented the gcd loop returning Option<(BigNumber, (Signed, Signed))>, tracking (xa, ya) and (xb, yb) alongside current_a and current_b, reusing the BigInteger GCD loop's shift-and-update structure."
+    - "Added a dedicated test_gcd covering several small-input GCD-with-coefficients cases (e.g. gcd(48,18), gcd(15,22), gcd(17,19), gcd(25,25)) plus tests_gcd_zero/_three_limbs/_seven_limbs/_fifteen_limbs and dedicated Signed subtraction tests (larger-from-smaller/smaller-from-larger, both signs, positive-minus-negative and negative-minus-positive cases)."
+  corrections:
+    - "Initially wrote the Signed subtraction's same-sign/opposite-sign branch check by comparing the sign flag after the swap-for-magnitude-ordering step against the other operand's sign, rather than comparing the original (pre-swap) self sign against the other operand's sign; corrected by moving the sign-comparison branch to run before the swap."
+  bugs_found:
+    - "test_gcd failed on gcd(48, 18): expected Bézout coefficients (-1, 3) but the buggy Sub implementation produced (-1, -1). Root cause: the branch deciding add-magnitudes vs subtract-magnitudes compared the post-swap sign flag (which had already been flipped when the smaller magnitude needed reordering) against the other operand's sign, instead of comparing the two operands' original signs; this silently selected the wrong branch whenever the swap occurred. Diagnosed by hand-tracing the specific failing sub-step (1 - (-2), expected 3) through the function line by line. Fixed by relocating the same-sign/opposite-sign check to run on the original signs, before the magnitude swap."
+  completed:
+    - "Implemented Signed (sign-magnitude type over BigNumber) with negation, Signed*BigNumber multiplication, and Signed-Signed subtraction."
+    - "Implemented gcd(a: BigNumber, b: BigNumber) -> Option<(BigNumber, (Signed, Signed))> computing the GCD together with its Bézout coefficients."
+    - "All 45 tests pass, including dedicated Signed-arithmetic tests and multi-limb GCD-with-coefficients tests."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Renamed the prior session's files from src/bin/big-uint-gcd.{rs,md} to src/bin/big-uint-gcd-basic.{rs,md} (content unchanged) to group with the new big-uint-gcd-extended.rs, mirroring the existing gcd-euclidean-basic.rs / gcd-euclidean-extended.rs naming pattern."

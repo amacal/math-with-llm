@@ -1,7 +1,7 @@
 date: "2026-07-25"
 title: "BigInteger GCD"
 session:
-  file: "src/bin/big-uint-gcd.rs"
+  file: "src/bin/big-uint-gcd-basic.rs"
   source: —
   status: "completed"
   attempted:

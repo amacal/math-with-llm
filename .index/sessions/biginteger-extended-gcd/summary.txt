@@ -1,0 +1,1 @@
+Implemented Bézout coefficients for the arbitrary-precision GCD by designing a sign-magnitude Signed type over the unsigned BigNumber, and derived a second telescoping argument bounding the coefficient bookkeeping's total cost at O(n squared), matching rather than exceeding BigInteger GCD's own bound.

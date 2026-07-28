@@ -1,0 +1,5 @@
+title: "BigInteger Extended GCD"
+kind: "implementation"
+file: "src/bin/big-uint-gcd-extended.rs"
+source: —
+date: "2026-07-27"
