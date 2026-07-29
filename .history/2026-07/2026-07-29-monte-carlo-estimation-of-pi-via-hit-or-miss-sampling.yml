@@ -1,0 +1,30 @@
+date: "2026-07-29"
+title: "Monte Carlo Estimation of Pi via Hit-or-Miss Sampling"
+session:
+  file: "src/bin/rand-monte-carlo-pi.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Derive and implement the hit-or-miss Monte Carlo method for estimating pi from scratch."
+  explored:
+    - "Mapped LCG integer output to points in the unit square by division, then to the geometric hit/miss test against a quarter-circle."
+    - "Derived Bernoulli variance p(1-p), variance of a sum of independent trials, and the 1/sqrt(n) standard-error convergence rate from first principles."
+    - "Investigated why a full-period LCG can still produce biased Monte Carlo estimates, connecting to the spectral test / lattice-structure defect (same family as the historical RANDU generator)."
+  tried:
+    - "First LCG parameterization (seed=42, a=5, c=3) satisfied Hull-Dobell full period but used a very small multiplier."
+    - "First n=0 edge-case fix used `n.saturating_add(1)` inside the trial loop."
+  corrections:
+    - "Initially suspected the checked_add-based hit test itself was the source of the wrong pi estimate; verified algebraically that it exactly matches the geometric x^2+y^2<=1 threshold (up to one negligible boundary case), redirecting the search to the point-generation step instead."
+    - "Initially claimed `n.saturating_add(1)` behaved identically for all n including u32::MAX; corrected after comparing n=256 (257 actual trials) against n=u32::MAX (exactly u32::MAX trials, since saturating_add has no effect at the ceiling)."
+  bugs_found:
+    - "LCG multiplier a=5 (though satisfying Hull-Dobell) produced (x,y) pairs confined to a small number of parallel diagonal stripes rather than filling the unit square, biasing the pi estimate to converge tightly to about 3.087-3.088 instead of 3.14159; fixed by switching to multiplier 0x5d588b65 and increment 0x1b0cb175."
+    - "`n.saturating_add(1)` silently ran n+1 trials for every n except u32::MAX, an inconsistent off-by-one; fixed with an explicit `let n = if n == 0 { 1 } else { n };` special case."
+  completed:
+    - "Implemented compute_pi and a from-scratch LCG in src/bin/rand-monte-carlo-pi.rs."
+    - "Added 3 tests: convergence at n=256 and n=1048576 (tolerance 0.1 and 0.01 respectively), and an n=0 edge case."
+    - "Verified the pi estimate converges to 3.1415 after the LCG parameter fix."
+    - "Completed the three-part correctness/complexity argument: area-ratio invariant, unbiasedness plus Law of Large Numbers, and O(n) time / O(1) space with the 1/sqrt(n) precision cost."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "No dedicated LCG-overflow test was added; justified because the existing n=1048576 convergence test already drives over a million next() calls with a multiplier that would overflow u32 repeatedly, and would panic in debug mode if wrapping_mul/wrapping_add were replaced with plain arithmetic."

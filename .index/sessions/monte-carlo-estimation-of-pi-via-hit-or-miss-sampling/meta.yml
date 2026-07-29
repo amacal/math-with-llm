@@ -1,0 +1,5 @@
+title: "Monte Carlo Estimation of Pi via Hit-or-Miss Sampling"
+kind: "implementation"
+file: "src/bin/rand-monte-carlo-pi.rs"
+source: —
+date: "2026-07-29"

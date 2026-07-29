@@ -1,6 +1,7 @@
 title: "Randomness"
 sessions:
   - "Linear Congruential Generator"
+  - "Monte Carlo Estimation of Pi via Hit-or-Miss Sampling"
 frontier:
-  - "Linear Congruential Generator"
+  - "Monte Carlo Estimation of Pi via Hit-or-Miss Sampling"
 explicit_future_targets: —
