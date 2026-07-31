@@ -4,7 +4,7 @@ Write the notes file, the `.history/` entry, and the `.index/` session directory
 
 1. **Identify the file.** Find the `src/bin/*.rs` file created/primarily worked on this session. Book-reading session (no `.rs`) → identify the source instead.
 
-2. **Write the notes file** at `src/bin/{filename}.md` (same base name). Follow CLAUDE.md's "Notes writing style" exactly:
+2. **Write the notes file** at `src/bin/{filename}.md` (same base name) — **coding sessions only**. Book-reading session (identified a source, not an `.rs` file, in step 1) → skip this step entirely; book-study sessions get no `src/bin/*.md` file, per `.history/schema.yml`'s `file: — for book sessions` (the book itself is the reference; `.history`'s `completed`/`explored` fields and `.index`'s `summary.txt` carry the session record instead). Otherwise, follow CLAUDE.md's "Notes writing style" exactly:
    - Section order: `# Title`, `## Overview`, zero+ bespoke theory/derivation sections, `## Correctness`, `## Complexity`, `## Edge cases` (if applicable), `## Worked example`.
    - No `## Depends on`/`## Unlocks` — relationship structure lives solely in `.index/`.
    - Full prose paragraphs only, everywhere, including the worked example — no bullets.
@@ -39,7 +39,7 @@ Write the notes file, the `.history/` entry, and the `.index/` session directory
 
    Fill every field per CLAUDE.md's field semantics, `—` for empty (never omit a field, never an empty list, never mix `—` into a populated list; each list field is either the literal `—` or a non-empty list). Observable session events only — no algorithm descriptions/proofs/theorems/complexity derivations (→ notes file, cited by fact if reused), no `Depends on`/`Unlocks` field, no personal info/personality/psychological interpretation/subjective judgment. This `Write` is the entire operation — never touch any other file under `.history/`.
 
-4. **Check word count** (`wc -w`) on the notes file. Outside 700–1500 without a stated justification in the file → revise.
+4. **Check word count** (`wc -w`) on the notes file — coding sessions only (skipped along with step 2 for book-study). Outside 700–1500 without a stated justification in the file → revise.
 
 5. **Write the `.index/sessions/<slug>/` directory (10 files) — never a full-tree read, no script.** Treat every already-completed session's existing files as ground truth; do not re-read every old `src/bin/*.md`/`*.rs` file to re-derive them from scratch. Classify honestly against CLAUDE.md's "Fast index (`.index/`)" tests, using targeted lookups only:
    - `grep -l 'title: "<candidate title>"' .index/sessions/*/meta.yml` to confirm a candidate prerequisite/related session actually exists and get its directory.

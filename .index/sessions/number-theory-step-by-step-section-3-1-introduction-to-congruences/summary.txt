@@ -1,0 +1,1 @@
+Derived the formal definition and core properties of congruence modulo n (equivalence relation, compatibility with addition/multiplication/exponentiation) and completed all 32 Exercises 3.1, including Euler's refutation of the fifth Fermat number, a tower-exponent last-two-digits problem, and a Bezout-based building block toward the Chinese Remainder Theorem.

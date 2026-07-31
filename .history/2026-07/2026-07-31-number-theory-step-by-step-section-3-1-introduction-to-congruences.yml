@@ -1,0 +1,33 @@
+date: "2026-07-31"
+title: "Number Theory Step by Step, Section 3.1: Introduction to Congruences"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 3, Section 3.1"
+  status: completed
+  attempted:
+    - "Socratic theory walkthrough of Section 3.1 (Definition 3.1, Propositions 3.2/3.4/3.5/3.6/3.8, Corollary 3.7, Example 3.8) followed by all 32 Exercises 3.1 in book order"
+  explored:
+    - "Compared reducing residues early versus computing the true value and reducing only at the end"
+    - "Investigated why cancellation fails in modular arithmetic via zero-divisor counterexamples (Exercise 18)"
+    - "Investigated a tower-exponent case (9^(9^9), Exercise 30) via cycle-length reduction of both the base and the exponent"
+    - "Compared an exponent-splitting approach using powers of 2 against directly cycling powers of 11 for Exercise 19(b)"
+  tried:
+    - "Attempted to reduce 11^567 (mod 43) via powers of 2 through the identity 11^3 == -2 before switching to directly computing successive powers of 11 (11^3, 11^6, 11^7) to find a period-7 cycle"
+    - "Attempted a multiplicative shortcut in Exercise 15 (2^m mod 10 via 2^(4q)) before returning to direct enumeration of the period-4 cycle {2,4,8,6}"
+  corrections:
+    - "In Proposition 3.4's proof, first stated the range of r1-r2 as [0, n-1] instead of [-(n-1), n-1]; corrected using a concrete n=7 example"
+    - "In the symmetry proof of Proposition 3.5, wrote n(q2-q1) as n(q2+q1) partway through; corrected"
+    - "In Exercise 28, conflated 6^3 with 3^6; corrected via direct computation of 6^3 = 216"
+    - "In Exercise 19(b), misreduced 121 mod 43 as 8 instead of 35, which had also attached a correctly-computed residue to the wrong exponent (11^4 instead of 11^3); both corrected"
+    - "In Exercise 24(c), first concluded n=p instead of n|p from n dividing msp+ntp=p; corrected to the divisibility statement"
+    - "In Exercise 21, initially reused Example 3.5's mod-20 sum instead of recomputing for mod-10 as the exercise required; the final numeric answer (3) was still correct since the same factorials vanish under both moduli"
+  bugs_found: —
+  completed:
+    - "Proved Definition 3.1, Propositions 3.2, 3.4, 3.5, 3.6, 3.8, Corollary 3.7, and Example 3.8 (digit-sum divisibility-by-9 test) from scratch through Socratic dialogue"
+    - "Completed all 32 Exercises 3.1 in book order, including Exercise 20 (Euler's proof that 641 divides the fifth Fermat number F5), Exercise 23 (one of k consecutive integers is divisible by k), Exercise 29 (induction proof of 2^(2n+1) == 9n^2-3n+2 mod 54), Exercise 30 (last two digits of 9^(9^9)), Exercise 31 (proof of Proposition 3.9), and Exercise 32 (divisibility-by-11 alternating-sum test)"
+    - "Completed the five-part Exercise 24 chain (moduli-combination lemmas via divisibility, cancellation, and Bezout's identity, generalized to r pairwise-coprime moduli and to prime-power factorizations)"
+    - "Completed the three-part session-closing argument: stated the invariant (a==b mod n iff a-b=kn), argued correctness via the equivalence-relation properties plus compatibility with addition/multiplication/exponentiation, and justified complexity as O(log k) via modular exponentiation versus O(k) naive computation"
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Proposition 3.9 was not proved during the theory walkthrough; the book itself defers its proof to Exercise 31, where it was proved"
