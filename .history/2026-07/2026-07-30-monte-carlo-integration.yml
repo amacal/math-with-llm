@@ -1,0 +1,36 @@
+date: "2026-07-30"
+title: "Monte Carlo Integration"
+session:
+  file: src/bin/rand-monte-carlo-integration.rs
+  source: —
+  status: completed
+  attempted:
+    - Generalize hit-or-miss sampling from the Pi session into an estimator for a general definite integral of f(x) over [a, b]
+    - Derive the identity connecting a definite integral to an expectation, and the general variance formula for the resulting estimator
+  explored:
+    - Whether hit-or-miss could be generalized directly via a 2D bounding box under the curve, requiring the max/min of f over [a, b]
+    - Whether sampling could be used to estimate that bounding box's height when the true max/min is unknown
+    - Comparing the convergence rate and variance structure of this estimator against Var(Z) = p(1-p) from the Pi session
+    - Whether Var(f(X)) has a universal bound analogous to p(1-p) <= 1/4, using a constant function versus a wildly oscillating function as contrasting cases
+  tried:
+    - Estimating the bounding box's max/min by sampling a handful of x-values and taking the observed extreme
+    - Building the mean-value identity from a concrete three-point average of f(x) = x^2 on [0,1] before generalizing to a continuous weighted average
+    - Rebuilding the general weighted-average-of-squared-deviations definition of variance from the concrete Bernoulli numbers (p = 0.785) before generalizing to Var(f(X))
+  corrections:
+    - Initial assumption that a sampled maximum/minimum of f gives a valid, safe bound for a hit-or-miss box was corrected: if the assumed bound is too low, the resulting estimator's error converges to a nonzero constant rather than to zero, regardless of how many additional trials are run
+    - Initial description of the (b-a)/n factor as "each random sample owning a dedicated slice of the interval" (a Riemann-sum-style partition) was corrected to a regrouped view: (b-a) as a whole multiplied by the sample average of f-values, since independent random samples do not form an actual non-overlapping partition
+    - Initial variance derivation repeatedly dropped or misplaced terms (writing unweighted sums instead of probability-weighted sums, treating a variable's own value as its probability weight, forgetting to take the square root of Var(f(X)) itself when deriving the standard deviation) — each corrected by returning to the concrete Bernoulli numbers from the Pi session and rebuilding the general formula step by step
+  bugs_found:
+    - "Line `let scale = (u64::MAX as f64) + 1.0;` was intended to compute u64::MAX + 1 = 2^64 exactly, but f64's 52-bit mantissa already rounds `u64::MAX as f64` up to exactly 2^64 during the cast, making the subsequent `+ 1.0` a complete no-op (confirmed empirically by printing the value, which displayed as 18446744073709552000). The expression still happened to land on the mathematically correct scale value despite the redundant, misleading term. Fixed by simplifying to `let scale = u64::MAX as f64;`."
+  completed:
+    - Implemented `integrate(lcg, f, interval, n) -> Option<f64>` computing (b-a)/n times the sum of f(x_i) for n uniform samples in [a, b]
+    - Added 8 tests covering four integrands (x^2, x^3, sin(x), 4/(1+x^2), e^(-x^2)) against known closed-form or high-precision reference values, plus three edge cases (n=0, a>b, a=b)
+    - Derived the identity integral of f(x) over [a,b] equals (b-a) times E[f(X)] for X uniform on [a,b], from first principles using a density argument analogous to E[Z] in the Pi session
+    - Derived the general variance formula Var(f(X)) as a continuous weighted average of squared deviations, generalizing Var(Z) = p(1-p)
+    - Verified all 8 tests pass after the scale-factor fix
+  not_completed:
+    - —
+  open_questions:
+    - —
+  notes:
+    - "The test can_integrate_pi (integrating 4/(1+x^2) over [0,1]) gives a second, structurally different Monte Carlo method for estimating pi, distinct from the hit-or-miss geometric approach in rand-monte-carlo-pi.rs"

@@ -1,0 +1,1 @@
+Estimates a general definite integral of f(x) over [a, b] by generalizing hit-or-miss sampling into a sample-mean estimator, using the identity that the integral equals (b-a) times E[f(X)] for X uniform on [a, b].
