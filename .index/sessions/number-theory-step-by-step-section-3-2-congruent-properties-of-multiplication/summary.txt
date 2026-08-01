@@ -1,0 +1,1 @@
+Derived Proposition (3.10)'s cancellation-with-modulus-reduction rule and its consequences (Cancellation Laws 3.11-3.12, Propositions 3.13-3.14 on zero-divisor behavior mod n and mod p) from scratch, and completed all 10 Exercises 3.2.

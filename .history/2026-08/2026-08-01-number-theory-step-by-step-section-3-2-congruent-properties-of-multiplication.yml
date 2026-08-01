@@ -1,0 +1,33 @@
+date: "2026-08-01"
+title: "Number Theory Step by Step, Section 3.2: Congruent Properties of Multiplication"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 3, Section 3.2"
+  status: completed
+  attempted:
+    - "Complete Section 3.2 (Congruent Properties of Multiplication), Exercises 1-10, in book order."
+  explored:
+    - "Tested whether ac≡bc(mod n) implies a≡b(mod n) via counterexamples (2×5≡3×5 mod 5, and 6×2 vs 11×2) before deriving the general reduced-modulus rule."
+    - "Tested whether a×b≡0(mod n) implies a≡0 or b≡0(mod n) via the counterexample 2×5≡0(mod 10)."
+    - "Worked through the composite-vs-prime-modulus contrast for square roots of unity in Exercise 9, finding x=3,n=8 and x=5,n=22,a=3 as disproofs."
+  tried:
+    - "Attempted a proof-by-contradiction route for gcd(x,y)=1 inside Proposition (3.10)'s proof (x=c/g, y=n/g), assuming gcd(x,y)=d>1 to derive a larger common divisor g·d of c and n."
+    - "Attempted an inductive proof of Exercise 10, using Exercise 6's n=2 case as the base case."
+  corrections:
+    - "Repeated notation slip writing g as gcd(c,b) instead of gcd(c,n) during Proposition (3.10)'s proof; corrected each time."
+    - "Misread 'y divides x(a-b)' as implying 'y divides x or y divides (a-b)' individually; corrected via a concrete counterexample (6 divides 2×3 without dividing either factor)."
+    - "Exercise 4 first answered with trivial a=0/b=0 examples; corrected to require nontrivial numbers via the gcd(a,n)=1 mechanism."
+    - "Misread the notation 'a≡b≡0(mod p)' in Exercise 5 as 'a|b or b|a'; corrected to the intended reading of p|a and p|b simultaneously."
+    - "Exercise 7's backward direction was first answered by restating the forward direction; corrected to derive a²≡b² from a≡±b via squaring."
+    - "A stray misstatement that gcd(7,14)=2 (rather than 7) surfaced mid-Exercise 2(b); corrected before completing the part."
+  bugs_found: —
+  completed:
+    - "Derived Proposition (3.10) (ac≡bc(mod n), g=gcd(c,n) implies a≡b(mod n/g)) from scratch, including a live proof of the sub-lemma gcd(c/g, n/g)=1."
+    - "Derived Cancellation Laws (3.11) and (3.12) as corollaries of Proposition (3.10)."
+    - "Derived Proposition (3.13) (a×b≡0(mod n), gcd(a,n)=1 implies b≡0(mod n))."
+    - "Derived Proposition (3.14a) (prime-modulus zero-divisor property) and Proposition (3.14b) (a²≡b²(mod p) iff a≡±b(mod p)), both directions."
+    - "Completed all 10 Exercises 3.2 in book order."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "No Supplementary Problems are individually attached to Section 3.2 — the book groups Supplementary Problems 3 after Section 3.5."

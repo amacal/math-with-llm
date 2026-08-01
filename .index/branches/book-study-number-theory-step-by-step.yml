@@ -6,6 +6,8 @@ sessions:
   - "Number Theory Step by Step, Section 2.2: Testing Numbers for Primality"
   - "Number Theory Step by Step, Section 2.3: Properties of Prime Numbers"
   - "Number Theory Step by Step, Section 2.4: Least Common Multiple"
+  - "Number Theory Step by Step, Section 3.1: Introduction to Congruences"
+  - "Number Theory Step by Step, Section 3.2: Congruent Properties of Multiplication"
 frontier:
-  - "Number Theory Step by Step, Section 2.4: Least Common Multiple"
+  - "Number Theory Step by Step, Section 3.2: Congruent Properties of Multiplication"
 explicit_future_targets: —
