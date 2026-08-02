@@ -1,0 +1,41 @@
+date: "2026-08-02"
+title: "Number Theory Step by Step, Section 3.3: Solving Linear Congruences"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 3, Section 3.3"
+  status: completed
+  attempted:
+    - "Complete Section 3.3 (Solving Linear Congruences), Exercises 1-24, in book order."
+  explored:
+    - "Tested whether a common divisor d>1 of a, n, and b (short of the full gcd(a,n)) is sufficient for solvability, via the counterexample 4x≡2(mod8) in Exercise 10."
+    - "Examined the non-linear congruence x^5≡x(mod5) by factoring x(x-1)(x+1)(x^2+1) and checking each residue in Exercise 22, then reused that fact to solve x^5+1≡0(mod5)."
+    - "Tested the edge case where gcd(a,n) equals n itself in Exercise 4(d) (1001x≡121(mod11)), finding all 11 residues satisfy the congruence."
+    - "Verified 12^2≡1(mod143) as a shortcut for computing 12^17 and 12^113 mod 143 in Exercise 23, rather than full repeated squaring."
+    - "Confirmed the printed text of Exercise 14 at 300 DPI after noticing its premise looked inconsistent."
+  tried:
+    - "Derived Proposition (3.15) directly from Section 1.4's linear Diophantine equation solvability condition."
+    - "Constructed the periodicity and distinctness arguments for Proposition (3.16) from scratch, via guided small steps, then reused the identical argument to prove Proposition (3.16) again in Exercise 24."
+    - "Used back-substitution through the extended Euclidean algorithm to compute 9^-1(mod101) (Exercise 8e) and 71^-1(mod771) (Exercise 21), rather than trial-and-error."
+    - "Reused Proposition (3.10) (Section 3.2) to reduce 6x≡34(mod68) and other large-modulus congruences to smaller equivalent ones before solving."
+  corrections:
+    - "Exercise 4(f): gcd(407,666) initially computed as 11, then as 1, before being corrected to 37 via the prime factorizations 407=11×37 and 666=18×37."
+    - "Exercise 5(b): initial solution list for 12x≡18(mod48) assumed solvability without checking gcd(12,48)=12 does not divide 18; corrected to 'no solution' after rechecking."
+    - "Exercise 3(d): initial solution list for 7x≡21(mod1001) used a base residue (21) inconsistent with the derived residue class x≡3(mod143); corrected to 3, 146, 289, 432, 575, 718, 861 after checking directly against the original congruence."
+    - "Exercise 22(b): initially overgeneralized 'all residues are solutions' from part (a) before correctly substituting x^5≡x(mod5) to reduce to the linear congruence x≡-1(mod5)."
+    - "Exercise 8(e): the Euclidean algorithm's second step was first continued by dividing the previous quotient (11) instead of the previous divisor (9); corrected to 9=2×4+1."
+    - "Exercise 8(e): the back-substitution coefficient of 9 was first computed as 37 instead of 45 when expanding 1=9-4(101-9×11); corrected after re-expanding 1+4×11 term by term."
+    - "Repeated notational lapses using a plain '=' for congruence were caught and either corrected or, by mutual agreement, treated as an intentional '==' shorthand for congruence going forward."
+  bugs_found: —
+  completed:
+    - "Derived Proposition (3.15) from the linear Diophantine equation solvability condition."
+    - "Derived Proposition (3.16), including both the periodicity and distinctness arguments, from scratch."
+    - "Derived and applied the congruence-reduction technique (dividing by a common factor via Proposition 3.10) to simplify large-modulus congruences before solving."
+    - "Derived Corollary (3.19) and Definition (3.20)/Proposition (3.21), including the notion of self-invertible elements."
+    - "Completed all 24 Exercises 3.3 in book order, including full from-scratch two-direction proofs for Exercises 11, 12, 13, and 24."
+    - "Connected Exercise 23 (toy RSA with p=11, q=13, e=17) directly to the existing src/bin/mod-rsa.rs and src/bin/mod-inverse.rs implementations, computing d=113 and verifying both encryption and decryption."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Confirmed via a 300 DPI re-render of the physical page that Exercise 14's instruction 'Determine 9^-1(mod 21)' is a book erratum: gcd(9,21)=3, contradicting the exercise's own stated premise gcd(a,n)=1; no inverse exists, so nothing was computed for that sub-part."
+    - "No Supplementary Problems are individually attached to Section 3.3 — the book groups Supplementary Problems 3 after Section 3.5, consistent with Section 3.2's own note on this."
+    - "Edited .skills/session-plan.md mid-session, with explicit user permission, to add two guardrails after the plan agent's first two runs deviated from its own instructions: it must complete its research before reporting rather than echoing the assignment back, and it must never address the user or draft session-facing content."

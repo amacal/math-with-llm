@@ -8,6 +8,7 @@ sessions:
   - "Number Theory Step by Step, Section 2.4: Least Common Multiple"
   - "Number Theory Step by Step, Section 3.1: Introduction to Congruences"
   - "Number Theory Step by Step, Section 3.2: Congruent Properties of Multiplication"
+  - "Number Theory Step by Step, Section 3.3: Solving Linear Congruences"
 frontier:
-  - "Number Theory Step by Step, Section 3.2: Congruent Properties of Multiplication"
+  - "Number Theory Step by Step, Section 3.3: Solving Linear Congruences"
 explicit_future_targets: —

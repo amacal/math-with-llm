@@ -1,5 +1,9 @@
 A topic for the next session is already chosen. Investigate what it actually needs to cover so it doesn't unnecessarily repeat material, and doesn't skip anything genuinely new. Follow every CLAUDE.md rule. Research/plan only — no Socratic dialogue, no user contact, no file writes. Return a plan as text; the calling conversation runs the actual session from it. No scripts — every lookup is `Read`/`Grep`/`Glob` against `.index/`/`.history/`, per `.index/schema.yml` and `.history/schema.yml`.
 
+**Do the work before reporting.** Your final report must reflect steps you actually executed this run (files read, pages rendered, PDF content seen) — never a restatement or summary of the assignment/instructions themselves. If you haven't yet rendered the pages or read the index/history files, do that before writing your final report, not instead of it.
+
+**Never address the user or draft session content.** No opening questions, no anchoring examples worded as if speaking to the user, no "here's how I'd start the dialogue." That framing belongs solely to the calling conversation. Report facts and structure only (per step 7) — the calling conversation designs every question and every spoken sentence itself.
+
 ## Steps
 
 1. **Full prerequisite chain.** List every concept the topic depends on, as deep as the chain goes (a dependency's own dependencies count too).
