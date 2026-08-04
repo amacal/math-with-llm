@@ -1,0 +1,32 @@
+date: "2026-08-04"
+title: "Number Theory Step by Step, Section 3.4: Chinese Remainder Theorem"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 3, Section 3.4"
+  status: completed
+  attempted:
+    - "Complete Section 3.4 (Chinese Remainder Theorem), Exercises 1-11, in book order."
+  explored:
+    - "Compared the direct/constructive CRT existence proof derived this session against the June session's non-constructive pigeonhole/counting existence proof (gcd-crt.rs) for 2 moduli, and why the constructive approach generalizes to r moduli without needing induction on the construction itself."
+    - "Tested whether gcd of the whole set of moduli being 1 is sufficient for the construction, via the counterexample gcd(2,3,4)=1 while gcd(2,4)=2, establishing pairwise coprimality as the actual requirement."
+    - "Checked the general coprime-divides-product argument against composite (non-prime) pairwise-coprime moduli 4, 9, 25, to confirm the argument does not depend on the moduli being prime."
+  tried:
+    - "Extended the known 2-modulus sequential-substitution method (from gcd-crt.rs) to 3 simultaneous congruences by iterating it pairwise, before deriving the book's direct simultaneous construction (Nk, zk, summation) for the same 3-modulus example and checking both methods agree."
+    - "Derived Proposition (3.24)'s coefficient-reduction step (ckx≡bk(mod nk) to x≡ak(mod nk) via ck's inverse) informally through Socratic dialogue before Exercise 9 required a formal two-step proof of it."
+    - "Reframed Exercise 11's converse direction as a linear Diophantine equation pm+qn=a-b, working a concrete instance (m=6, n=10, a=3, b=1) via Bezout's identity to find x=-9 before generalizing to x=a-m(ut)=b-n(vt)."
+  corrections:
+    - "Exercise 2(b): used the unreduced remainder 26 instead of its reduced form 7 (mod 19) inside the CRT construction; the final answer was still correct since the extra multiple of 19 canceled out mod n=247, but flagged as an efficiency/precision habit to fix going forward."
+    - "Exercise 7: the reduction of 5x≡9(mod11) was first computed as x≡5(mod11); corrected to x≡4(mod11) after direct verification (5×5=25≡3, not 9, mod 11)."
+    - "Exercise 8(c): a divisibility statement was first written backwards ('(a-b) divides mi' instead of 'mi divides (a-b)'); corrected after being asked to state the direction explicitly."
+    - "The claim that gcd(2,3,4)=1 (whole-set gcd) is sufficient for the CRT construction was corrected to the requirement of pairwise coprimality specifically, using the counterexample gcd(2,4)=2."
+  bugs_found: —
+  completed:
+    - "Derived the general Chinese Remainder Theorem construction for r pairwise-coprime moduli from scratch, including both the existence and uniqueness arguments."
+    - "Derived and formally proved Proposition (3.24), extending CRT to the ckx≡bk(mod nk) case via ck's modular inverse."
+    - "Completed all 11 Exercises 3.4 in book order, including the two hardest proof exercises: Exercise 8(c) and Exercise 11."
+    - "Proved Exercise 5 (x≡1(mod2) and x≡2(mod4) has no solution) as a first concrete instance of non-coprime-moduli inconsistency, later generalized by Exercise 11's full iff criterion."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Supplementary Problems 3 remain deferred until Section 3.5 is also complete, consistent with the book's grouping (Supplementary Problems 3 are listed after Section 3.5, not directly after Section 3.4)."
+    - "The comparison between this session's constructive CRT proof and the June session's pigeonhole-based proof (gcd-crt.rs) was also connected to the Z/nZ isomorphic-to-the-product-of-Z/nkZ ring framing, mentioned as context only, not derived."

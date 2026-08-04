@@ -1,0 +1,1 @@
+Derived the general Chinese Remainder Theorem construction for r pairwise-coprime moduli and Proposition (3.24) from scratch, and completed all 11 Exercises 3.4.
