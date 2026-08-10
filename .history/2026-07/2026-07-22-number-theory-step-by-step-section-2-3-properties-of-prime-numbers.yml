@@ -13,7 +13,7 @@ session:
     - "Generalized the closed-vs-open residue class distinction to mod 5, checking by hand which of the four nonzero residue classes are self-closed under multiplication."
   tried:
     - "Reused Euler's Criterion (from mod-legendre.md) to show -1 is a quadratic residue mod q exactly when q is congruent to 1 mod 4, then built the M^2+1 construction for Exercise 1(a)."
-    - "Built an order-of-element argument (via M^3-1=(M-1)(M^2+M+1) and Fermat's Little Theorem) as the mod-3 analogue of the quadratic-residue trick, for Exercise 2(a)."
+    - "Built an order-of-element argument (via a factorization of M^3-1 and Fermat's Little Theorem) as the mod-3 analogue of the quadratic-residue trick, for Exercise 2(a)."
     - "Constructed a direct/universal proof (fix an arbitrary bound X, exhibit a larger prime) as a second, structurally different proof of Proposition 2.16 for Exercise 1(b), rather than restating the book's contradiction-based proof."
   corrections:
     - "An informal divisibility statement (\"n divides 7!+n for n through 2 to 7\") was restated precisely as a properly quantified claim before generalizing."

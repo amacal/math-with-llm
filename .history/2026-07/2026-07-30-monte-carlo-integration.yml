@@ -10,8 +10,8 @@ session:
   explored:
     - Whether hit-or-miss could be generalized directly via a 2D bounding box under the curve, requiring the max/min of f over [a, b]
     - Whether sampling could be used to estimate that bounding box's height when the true max/min is unknown
-    - Comparing the convergence rate and variance structure of this estimator against Var(Z) = p(1-p) from the Pi session
-    - Whether Var(f(X)) has a universal bound analogous to p(1-p) <= 1/4, using a constant function versus a wildly oscillating function as contrasting cases
+    - Comparing the convergence rate and variance structure of this estimator against the Bernoulli variance from the Pi session
+    - Whether Var(f(X)) has a universal bound analogous to the Bernoulli variance's own upper bound, using a constant function versus a wildly oscillating function as contrasting cases
   tried:
     - Estimating the bounding box's max/min by sampling a handful of x-values and taking the observed extreme
     - Building the mean-value identity from a concrete three-point average of f(x) = x^2 on [0,1] before generalizing to a continuous weighted average
@@ -26,7 +26,7 @@ session:
     - Implemented `integrate(lcg, f, interval, n) -> Option<f64>` computing (b-a)/n times the sum of f(x_i) for n uniform samples in [a, b]
     - Added 8 tests covering four integrands (x^2, x^3, sin(x), 4/(1+x^2), e^(-x^2)) against known closed-form or high-precision reference values, plus three edge cases (n=0, a>b, a=b)
     - Derived the identity integral of f(x) over [a,b] equals (b-a) times E[f(X)] for X uniform on [a,b], from first principles using a density argument analogous to E[Z] in the Pi session
-    - Derived the general variance formula Var(f(X)) as a continuous weighted average of squared deviations, generalizing Var(Z) = p(1-p)
+    - Derived the general variance formula Var(f(X)) as a continuous weighted average of squared deviations, generalizing the Bernoulli variance from the Pi session
     - Verified all 8 tests pass after the scale-factor fix
   not_completed:
     - —

@@ -14,7 +14,7 @@ session:
   corrections: —
   bugs_found: —
   completed:
-    - "Implemented modular inverse via a^(phi(n)-1) mod n."
+    - "Implemented modular inverse via exponentiation, using Euler's theorem."
     - "Traced a worked example: modular inverse of 5 mod 9, computed as 5^5 mod 9 = 2."
   not_completed: —
   open_questions: —

@@ -15,7 +15,7 @@ session:
     - "Attempted an ad hoc doubled-halved-base normalization formula to avoid a potential overflow; set aside after finding configurations where its safety margin could not be verified by hand, in favor of exact u128 arithmetic."
     - "Verified several intermediate computations (the normalization factor, a window value, a multiplication result) against independent Python bignum arithmetic before accepting or rejecting a hypothesis about where a bug lived."
   corrections:
-    - "Initially assumed the normalization factor was simply half the base divided by the leading digit; corrected once a non-trivial leading digit (13) was found to undershoot the required half-base threshold due to integer truncation, in favor of the proven base/(leading_limb+1) formula."
+    - "Initially assumed the normalization factor was simply half the base divided by the leading digit; corrected once a non-trivial leading digit (13) was found to undershoot the required half-base threshold due to integer truncation, in favor of the proven Knuth Algorithm D normalization formula."
     - "Initially believed the correction loop's `candidate >= window` comparison was correct; corrected to `candidate > window` once an exact match (remainder zero) was found to be wrongly decremented."
     - "Initially computed the digit-extraction loop's window offset as a fixed formula assuming the scaled dividend always had at least one spare limb beyond the divisor; corrected to an unconditional single-leading-zero pad after two distinct failures (equal-length underflow, one-limb-longer silent wrong window) traced to this assumption."
   bugs_found:

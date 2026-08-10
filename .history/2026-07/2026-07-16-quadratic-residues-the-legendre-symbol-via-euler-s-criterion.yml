@@ -8,11 +8,11 @@ session:
     - "Implement a Legendre symbol test deciding whether a is a quadratic residue mod prime p, via Euler's Criterion."
   explored:
     - "Derived the exactly-two-to-one structure of the squaring map mod p."
-    - "Investigated the relationship between the primitive-root-power form (-1)^k and the general a^((p-1)/2) form of Euler's Criterion."
+    - "Investigated the relationship between the primitive-root-power form and the general form of Euler's Criterion."
     - "Considered adding modular square root extraction to the same function; scoped out as separate future work."
   tried:
-    - "Derived x^2 = (p-x)^2 (mod p) algebraically."
-    - "Derived that x^2 = y^2 (mod p) implies x = +-y (mod p), via z = x * y^-1."
+    - "Derived that x and p-x square to the same value mod p, algebraically."
+    - "Derived that two square roots of the same residue mod p must be negatives of each other, via their ratio."
     - "Verified the counting argument and Euler's Criterion concretely for p=7, including via powers of the primitive root g=3."
   corrections:
     - "Initial algebra for (p-x)^2 had a sign error (p(p-2x-q) instead of p(p-2x+q)); corrected on request to recheck the sign."

@@ -7,7 +7,7 @@ session:
   attempted:
     - "Implement polynomial multiplication in O(n log n) via evaluation at roots of unity mod p, instead of direct convolution."
   explored:
-    - "Investigated constructing a primitive n-th root of unity h=g^((p-1)/n) from a primitive root g."
+    - "Investigated constructing a primitive n-th root of unity from a primitive root g."
     - "Investigated why the even/odd-split recursion requires n to be a power of two, checking concretely with p=7, h=3 (order 6, not a power of 2)."
     - "Derived the orthogonality identity used to justify the inverse transform."
   tried:

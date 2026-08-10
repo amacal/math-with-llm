@@ -5,7 +5,7 @@ session:
   source: —
   status: "completed"
   attempted:
-    - "Augment the Euclidean algorithm to also produce Bezout coefficients x,y with a*x+b*y=gcd(a,b)."
+    - "Augment the Euclidean algorithm to also produce Bezout coefficients satisfying Bezout's identity."
   explored:
     - "Investigated threading a coefficient-pair invariant through the same reduction loop as the basic algorithm."
   tried: —

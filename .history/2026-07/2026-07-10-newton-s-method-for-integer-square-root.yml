@@ -5,9 +5,9 @@ session:
   source: —
   status: "completed"
   attempted:
-    - "Compute isqrt(n) via Newton's method (tangent-line iteration on f(x) = x^2 - n) instead of bisection."
+    - "Compute isqrt(n) via Newton's method (tangent-line iteration) instead of bisection."
   explored:
-    - "Derived the update rule x1 = (x0 + n/x0)/2 from the tangent-line x-intercept."
+    - "Derived the update rule from the tangent-line x-intercept."
     - "Investigated the effect of integer truncation on convergence."
     - "Compared quadratic convergence against bisection's geometric error decay."
   tried:

@@ -5,7 +5,7 @@ session:
   source: —
   status: completed
   attempted:
-    - "Implemented and proved Wilson's Theorem ((n-1)! ≡ -1 mod n iff n is prime) as a primality test, contrasted against Trial Division and Miller-Rabin"
+    - "Implemented and proved Wilson's Theorem as a primality test, contrasted against Trial Division and Miller-Rabin"
   explored:
     - "Concrete inverse-pairing structure for p=7 (found each residue's multiplicative inverse by hand)"
     - "Whether order(a)=2 (group-theory framing) was a valid route to showing only 1 and p-1 are self-inverse mod p, compared against a more elementary factoring-plus-Euclid's-Lemma route"
@@ -17,7 +17,7 @@ session:
     - "Derived an early-exit optimization: stop and return composite as soon as the running product hits 0 mod n"
   corrections:
     - "Initial expansion of (p-x)^2 mod p was stated as x, corrected to x^2 after rechecking the expansion term-by-term"
-    - "Initial appeal to 'order(a)=2' as the reason only 1 and p-1 are self-inverse was set aside in favor of the elementary factoring argument (a^2-1=(a-1)(a+1) plus Euclid's Lemma), since it does not require additional unproven group-theory machinery"
+    - "Initial appeal to 'order(a)=2' as the reason only 1 and p-1 are self-inverse was set aside in favor of the elementary factoring-plus-Euclid's-Lemma argument, since it does not require additional unproven group-theory machinery"
   bugs_found: —
   completed:
     - "Implemented src/bin/mod-wilson.rs with a wilson(n: u64) -> bool function, including early-exit on zero and u128 for the running product"

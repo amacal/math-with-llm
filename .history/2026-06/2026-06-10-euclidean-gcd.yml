@@ -7,7 +7,7 @@ session:
   attempted:
     - "Implement the Euclidean algorithm for GCD."
   explored:
-    - "Investigated why gcd(a,b)=gcd(b,a mod b) via a common-divisor-set argument."
+    - "Investigated why the Euclidean algorithm's reduction step preserves the gcd, via a common-divisor-set argument."
   tried:
     - "Used absolute values for negative inputs to avoid Rust's toward-zero remainder truncation breaking termination."
   corrections: —

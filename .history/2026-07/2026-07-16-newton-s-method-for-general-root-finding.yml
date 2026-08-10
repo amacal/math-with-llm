@@ -8,7 +8,7 @@ session:
     - "Generalize the isqrt Newton update to an arbitrary differentiable f with a supplied derivative f'."
     - "Determine whether Newton's method converges unconditionally for a general f."
   explored:
-    - "Derived the general update rule x1 = x0 - f(x0)/f'(x0) from point-slope form and checked it reduces to the isqrt-specific formula for f(x) = x^2 - n."
+    - "Derived the general Newton update rule from point-slope form and checked it reduces to the isqrt-specific formula for f(x) = x^2 - n."
     - "Investigated convergence behavior for f(x) = x^3 - x starting away from any of its three roots."
     - "Introduced Taylor's theorem to generalize the quadratic-convergence proof beyond the isqrt-specific case."
     - "Investigated what a function-value stopping check versus a step-size stopping check each actually guarantee near a root of multiplicity k."

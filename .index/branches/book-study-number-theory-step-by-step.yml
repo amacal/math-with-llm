@@ -10,6 +10,7 @@ sessions:
   - "Number Theory Step by Step, Section 3.2: Congruent Properties of Multiplication"
   - "Number Theory Step by Step, Section 3.3: Solving Linear Congruences"
   - "Number Theory Step by Step, Section 3.4: Chinese Remainder Theorem"
+  - "Number Theory Step by Step, Section 3.5: Introduction to Factorization"
 frontier:
-  - "Number Theory Step by Step, Section 3.4: Chinese Remainder Theorem"
+  - "Number Theory Step by Step, Section 3.5: Introduction to Factorization"
 explicit_future_targets: —

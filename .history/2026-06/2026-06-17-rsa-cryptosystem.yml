@@ -7,7 +7,7 @@ session:
   attempted:
     - "Implement textbook RSA key generation, encryption, and decryption."
   explored:
-    - "Investigated the coprimality condition gcd(m,n)=1 required for correct decryption, and how m<min(p,q) is a sufficient but not necessary special case."
+    - "Investigated the coprimality condition required for correct decryption, and a sufficient-but-not-necessary special case for small messages."
     - "Investigated why signing (encrypt with d, verify with e) is mathematically equivalent to encryption."
   tried: —
   corrections: —

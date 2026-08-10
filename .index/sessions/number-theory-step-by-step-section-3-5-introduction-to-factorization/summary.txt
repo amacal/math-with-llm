@@ -1,0 +1,1 @@
+Derived Definition 3.25 and the Factorization Theorem (3.26) for factoring via a^2≡b^2(mod n), and completed all 15 Exercises 3.5 and all 23 Supplementary Problems 3, including Lagrange's Theorem on polynomial congruence roots.

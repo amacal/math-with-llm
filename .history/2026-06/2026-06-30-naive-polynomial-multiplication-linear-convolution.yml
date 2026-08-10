@@ -12,7 +12,7 @@ session:
   corrections: —
   bugs_found: —
   completed:
-    - "Implemented linear convolution c[k] = sum of a[i]*b[k-i]."
+    - "Implemented linear convolution of the two coefficient vectors."
   not_completed: —
   open_questions: —
   notes:

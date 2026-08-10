@@ -11,7 +11,7 @@ session:
     - "Tested whether a×b≡0(mod n) implies a≡0 or b≡0(mod n) via the counterexample 2×5≡0(mod 10)."
     - "Worked through the composite-vs-prime-modulus contrast for square roots of unity in Exercise 9, finding x=3,n=8 and x=5,n=22,a=3 as disproofs."
   tried:
-    - "Attempted a proof-by-contradiction route for gcd(x,y)=1 inside Proposition (3.10)'s proof (x=c/g, y=n/g), assuming gcd(x,y)=d>1 to derive a larger common divisor g·d of c and n."
+    - "Attempted a proof-by-contradiction route for the coprimality sub-lemma inside Proposition (3.10)'s proof, assuming a common divisor greater than 1 to derive a contradiction."
     - "Attempted an inductive proof of Exercise 10, using Exercise 6's n=2 case as the base case."
   corrections:
     - "Repeated notation slip writing g as gcd(c,b) instead of gcd(c,n) during Proposition (3.10)'s proof; corrected each time."
@@ -22,10 +22,10 @@ session:
     - "A stray misstatement that gcd(7,14)=2 (rather than 7) surfaced mid-Exercise 2(b); corrected before completing the part."
   bugs_found: —
   completed:
-    - "Derived Proposition (3.10) (ac≡bc(mod n), g=gcd(c,n) implies a≡b(mod n/g)) from scratch, including a live proof of the sub-lemma gcd(c/g, n/g)=1."
+    - "Derived Proposition (3.10) from scratch, including a live proof of the coprimality sub-lemma."
     - "Derived Cancellation Laws (3.11) and (3.12) as corollaries of Proposition (3.10)."
-    - "Derived Proposition (3.13) (a×b≡0(mod n), gcd(a,n)=1 implies b≡0(mod n))."
-    - "Derived Proposition (3.14a) (prime-modulus zero-divisor property) and Proposition (3.14b) (a²≡b²(mod p) iff a≡±b(mod p)), both directions."
+    - "Derived Proposition (3.13)."
+    - "Derived Proposition (3.14a) (prime-modulus zero-divisor property) and Proposition (3.14b), both directions."
     - "Completed all 10 Exercises 3.2 in book order."
   not_completed: —
   open_questions: —

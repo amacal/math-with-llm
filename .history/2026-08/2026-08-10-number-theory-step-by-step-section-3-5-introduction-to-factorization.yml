@@ -1,0 +1,37 @@
+date: "2026-08-10"
+title: "Number Theory Step by Step, Section 3.5: Introduction to Factorization"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 3, Section 3.5"
+  status: completed
+  attempted:
+    - "Complete Section 3.5 (Introduction to Factorization): all 15 Exercises and all 23 Supplementary Problems 3, in book order."
+  explored:
+    - "Compared Theorem 3.26's core lever against Pollard's Rho's hidden-factor lever from the June session, identifying them as the same underlying mechanism reached via different constructions."
+    - "Investigated why plain Fermat/difference-of-squares search becomes impractical when a number's two factors are far apart, using Exercise 2(c)'s 2 974 791 = 3×29×31×1103 and Problem 3.19's 2 027 651 281 = 44021×46061 as concrete cases, and small-prime trial division as the practical complement."
+    - "Compared the worst-case iteration count of the difference-of-squares search (O(n), via Exercise 3's guaranteed termination at a1=(n+1)/2) against ordinary trial division's O(sqrt(n)), using Exercise 8's factorization of the prime 53 as the concrete worst case."
+    - "Examined Problem 3.22's Wieferich prime exception (p=1093, where 2^p≡2(mod p^2), contrary to the pattern verified for small primes p=3 and p=5) using the supplied hint 2^364≡1(mod 1093^2)."
+  tried:
+    - "Attempted to prove Supplementary Problem 1.22's general lemma from scratch via Bezout's identity using abstract x,y,z, before recognizing it was identical to a result already proved in the Section 1.4 session and citing it directly instead."
+    - "Reorganized Theorem 3.26's proof into an alternative direct-contradiction structure for Problem 3.20, using 1.22's contrapositive in place of the original proof's weaker gcd>1 conclusion."
+    - "Proved Problem 3.23 (Lagrange's Theorem) by induction on polynomial degree, using the polynomial factor theorem (the same factoring pattern from Exercise 10) combined with Euclid's Lemma to bound the number of incongruent roots."
+  corrections:
+    - "Exercise 2(a) (9271): computed 100-27 as 83; corrected to 73 after being asked to recompute the subtraction directly."
+    - "Exercise 2(b) (2146): initially proposed 29×74 without checking feasibility; corrected after establishing that a-b and a+b must share parity, so an integer congruent to 2 (mod 4) can never be written as a difference of two squares, requiring a factor of 2 to be pulled out by trial division first."
+    - "Exercise 4 (1 236 519): claimed 10053 was prime; corrected via the digit-sum test to 10053 = 9×1117 = 3^2×1117."
+    - "Exercise 5(i)(b) (1271): computed (36-25)(36+25)=11×61, conflating b=5 with b^2=25; corrected to (36-5)(36+5)=31×41."
+    - "Exercise 12(b) (2189): computed 11×189=2189; corrected to 11×199=2189 after verifying the multiplication directly."
+    - "Problem 3.2(b): attempted to find a multiplicative inverse of 12 (mod 27) despite gcd(12,27)=3≠1; corrected to recognize no inverse exists, then solved via dividing the congruence by the common factor 3."
+    - "Problem 3.6(d): first counterexample attempt used p=3 with m=6, which is invalid since 6 has a prime factor (2) that can never divide any power of 3; corrected to the valid counterexample p=3, n=3, m=9, a=1, b=2."
+    - "Problem 3.14: computed 2^8 (mod 15) instead of the required 2^15 (mod 15) for the exponent pq=3×5; corrected to 2^15≡8(mod 15)."
+  bugs_found: —
+  completed:
+    - "Derived Definition 3.25 (non-trivial factor) and the Factorization Theorem (3.26) from scratch, including both the original two-case direct proof and Problem 3.20's alternative contradiction-based proof."
+    - "Proved Exercise 3's identity and connected it to the guaranteed worst-case termination of the difference-of-squares search."
+    - "Completed all 15 Exercises 3.5 in book order, including the starred Exercise 2(c) and Exercise 8, and Exercise 15's repeated difference-of-squares decomposition of 8^8-1."
+    - "Completed all 23 Supplementary Problems 3 in book order, including simultaneous congruences via CRT reapplication (3.13), the order-divides-exponent theorem (3.15), the p≡1(mod4) result for a^2≡-1(mod p) (3.16), the last-two-digits-of-a-square classification (3.17), the Wieferich prime verification for p=1093 (3.22), and Lagrange's Theorem on polynomial congruence roots proved by induction (3.23)."
+    - "Factorized Problem 3.19's 2 027 651 281 = 44021×46061 via the difference-of-squares search."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "This completes Chapter 3 (Sections 3.1 through 3.5 plus Supplementary Problems 3) of Number Theory Step by Step; Chapter 4 begins at printed page 153 of the book."

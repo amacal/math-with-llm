@@ -7,7 +7,7 @@ session:
   attempted:
     - "Sieve primes in a window [L,R] using O(sqrt(R)) space instead of O(R)."
   explored:
-    - "Investigated the first-multiple-in-window formula ceil(L/p)*p and its edge case when the result equals p itself."
+    - "Investigated the first-multiple-in-window formula and its edge case when the result equals p itself."
     - "Investigated ceil versus floor when computing the sqrt(R) precomputation limit."
   tried: —
   corrections:

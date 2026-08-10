@@ -7,7 +7,7 @@ session:
   attempted:
     - "Solve g^x = h mod p for the discrete logarithm x, faster than brute force."
   explored:
-    - "Investigated the exponent decomposition x=k*m+y with m=ceil(sqrt(p)), and why ceil (not floor) is required to cover every exponent."
+    - "Investigated the exponent decomposition underlying the baby-step/giant-step split, and why using the ceiling (not floor) of the square root for the step size is required to cover every exponent."
     - "Investigated why the baby-step table depends on h and must be rebuilt per query, while the giant-step table depends only on g and p."
     - "Investigated the safe-prime generator-finding shortcut (checking only g^2 and g^((p-1)/2))."
   tried: —

@@ -28,4 +28,4 @@ session:
     - "Did not widen the extended-GCD Bezout-coefficient type to i128; used smaller primes instead as a scope decision."
   open_questions: —
   notes:
-    - "Derived bound d < n^(1/4)/sqrt(2), looser than the literature's n^(1/4)/3 but the same order of magnitude."
+    - "Derived a bound on d, looser than the literature's published bound but the same order of magnitude."

@@ -7,7 +7,7 @@ session:
   attempted:
     - "Compute phi(n) efficiently using trial division and multiplicativity."
   explored:
-    - "Investigated the multiplicativity property phi(m*n)=phi(m)*phi(n) for coprime m,n and the prime-power formula phi(p^k)=p^k-p^(k-1)."
+    - "Investigated the multiplicativity property of phi for coprime arguments and the prime-power formula for phi."
   tried: —
   corrections: —
   bugs_found: —
