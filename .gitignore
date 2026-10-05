@@ -1,5 +1,4 @@
 .claude
 .tmp
-.other
 *.pdf
 __pycache__/

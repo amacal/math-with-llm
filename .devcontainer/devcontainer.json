@@ -5,7 +5,8 @@
 		"context": ".."
 	},
 	"containerEnv": {
-		"CARGO_TARGET_DIR": "/tmp/cargo"
+		"CARGO_TARGET_DIR": "/tmp/cargo",
+		"GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}"
 	},
 	"customizations": {
 		"vscode": {

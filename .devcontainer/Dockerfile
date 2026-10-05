@@ -3,6 +3,7 @@ USER vscode
 
 RUN sudo apt-get update
 RUN sudo apt-get upgrade -y
+RUN sudo apt-get install -y jq
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
 RUN rustup update 1.97.1
