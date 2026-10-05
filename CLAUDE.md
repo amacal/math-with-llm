@@ -32,6 +32,7 @@ Math understanding is the primary goal. Working, correct code is the evidence th
 
 ## Prompt effectiveness retros
 - Every 10 completed sessions: spawn **retro agent** (fork, `.skills/session-retro.md`) to audit CLAUDE.md/`.skills/*.md` calibration against recent HISTORY/notes evidence.
+- When `GITHUB_TOKEN` is available and this repo's own remote resolves to an owner, the retro agent also checks whether a sibling `-with-llm` repo's own CLAUDE.md/`.skills/*.md` has evolved in a way genuinely worth adopting here — content and change history both, weighing how long a practice has been in place and whether it's actually been exercised there since (see `.skills/session-retro.md`'s cross-repo reconciliation step). Reported as its own category, same accept/reject/never-auto-apply discipline as every other finding.
 - Retro agent only researches/reports — never talks to the user, never edits CLAUDE.md or any `.skills/*.md` file, never picks a winner among its own suggestions.
 - Present findings in chat for accept/reject. Apply a wording change only after explicit user approval — never auto-apply.
 
