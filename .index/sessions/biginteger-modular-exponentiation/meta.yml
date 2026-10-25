@@ -1,0 +1,6 @@
+title: "BigInteger Modular Exponentiation"
+kind: "implementation"
+status: "demonstrated"
+file: "src/bin/big-uint-mod-exponent.rs"
+source: —
+date: "2026-10-25"

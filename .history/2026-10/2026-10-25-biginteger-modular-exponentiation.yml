@@ -1,0 +1,29 @@
+date: "2026-10-25"
+title: "BigInteger Modular Exponentiation"
+session:
+  file: "src/bin/big-uint-mod-exponent.rs"
+  source: —
+  status: "completed"
+  attempted:
+    - "Port square-and-multiply modular exponentiation from the fixed-width implementation in \"Modular Exponentiation\" to the arbitrary-precision BigNumber type, as the stepping stone toward BigInteger Miller-Rabin, BigInteger RSA, and Wiener's Attack on BigInteger RSA named in \"BigInteger Division\"'s open arc."
+  explored:
+    - "Derived the precise loop invariant for the BigNumber version via Socratic induction, confirming it matches the native-integer version's invariant with power and result expressions parameterized by limb/bit position."
+    - "Derived the complexity bound in terms of exponent limb count and modulus limb count, reusing BigInteger Division's reduction-cost result rather than re-deriving it."
+    - "Compared reading exponent bits via direct limb indexing against destructively right-shifting the whole multi-limb exponent each iteration, and derived the asymptotic cost difference between the two."
+    - "Confirmed all three parameters (base, exponent, modulus) must be BigNumber rather than native integers, citing Miller-Rabin's exponent d (derived from n minus one) and RSA's exponents and message/ciphertext as motivating examples."
+  tried:
+    - "Considered guarding modulus less than or equal to one by returning None, instead choosing to fix the general initialization of the running product so modulus equal to one is handled correctly rather than rejected."
+  corrections:
+    - "Predicted that reducing the initial running product (the value one) modulo the modulus would be an expensive operation for a large modulus; corrected after tracing the division implementation's early-exit comparison, which shows the reduction is constant time for any modulus of two or more."
+    - "Restated the result invariant's exponent mask as 2^(k+1)-1 after k bits processed during the closing wrap-up; corrected to 2^k-1 after checking the formula against k=0, where the mask must select zero bits."
+  bugs_found:
+    - "The running product result was initialized to the literal value one without reducing it modulo the modulus; this was masked by every test with a nonzero exponent, since the main loop's first conditional multiplication reduces result immediately, but surfaced as mod_exp(2, 0, 1) incorrectly returning Some(1) instead of Some(0) because the loop body never executes when the exponent is zero. Fixed by initializing result via dividing the value one by the modulus and keeping the remainder."
+  completed:
+    - "Implemented mod_exp(base, exp, modulus) over BigNumber, keeping both power and result reduced modulo the modulus at every iteration and reading exponent bits by indexing into its limbs without shifting or mutating it."
+    - "Added an assertion to the existing modulus-edge-case test locking in the modulus-equal-to-one, exponent-equal-to-zero fix."
+    - "Removed unused scaffolding (a signed BigNumber wrapper type and a free extended-Euclidean gcd function) left over from an earlier draft, confirming via a forced rebuild that the file compiles with zero warnings and all four tests pass."
+  not_completed:
+    - "No further overflow-specific tests were added beyond the existing 32-limb stress test, since BigNumber arithmetic overflow and carry behavior were already covered by tests in this repo's earlier BigInteger sessions."
+  open_questions: —
+  notes:
+    - "Rust's dead_code lint flagged the unused free gcd function and some inherent methods on the unused signed wrapper type, but did not flag that type's unused trait-impl methods (Sub, Mul, Ord, and similar), which required a manual code read to catch."

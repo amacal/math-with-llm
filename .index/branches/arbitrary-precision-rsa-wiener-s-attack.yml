@@ -3,10 +3,11 @@ sessions:
   - "BigInteger Division"
   - "BigInteger GCD"
   - "BigInteger Extended GCD"
+  - "BigInteger Modular Exponentiation"
 frontier:
   - "BigInteger Extended GCD"
-explicit_future_targets:
   - "BigInteger Modular Exponentiation"
+explicit_future_targets:
   - "BigInteger Miller-Rabin Primality Test"
   - "BigInteger RSA Cryptosystem"
   - "BigInteger Continued-Fraction Convergents"

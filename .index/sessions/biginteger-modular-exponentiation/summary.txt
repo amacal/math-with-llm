@@ -1,0 +1,1 @@
+Ported square-and-multiply modular exponentiation to arbitrary-precision BigNumber, reading exponent bits by direct limb indexing and proving an O(mb^3) complexity bound where mb is the modulus's limb count.

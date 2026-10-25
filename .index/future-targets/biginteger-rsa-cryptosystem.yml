@@ -2,5 +2,7 @@ title: "BigInteger RSA Cryptosystem"
 status: not-completed
 mentioned_by:
   - "BigInteger Division"
+  - "BigInteger Modular Exponentiation"
 evidence:
   - "HISTORY-2026.07.yml: BigInteger Division's not_completed field names it directly, as part of the stated arc toward Wiener's attack on BigInteger RSA."
+  - "2026-10-25-biginteger-modular-exponentiation.yml: cited directly as the motivating reason the base and modulus parameters must be BigNumber (base as RSA message/ciphertext, modulus as the RSA public key n)."
