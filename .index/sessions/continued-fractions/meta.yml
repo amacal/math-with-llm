@@ -1,5 +1,6 @@
 title: "Continued Fractions"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/gcd-euclidean-sqrt.rs"
 source: —
 date: "2026-07-10"

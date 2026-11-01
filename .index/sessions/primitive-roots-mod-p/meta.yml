@@ -1,5 +1,6 @@
 title: "Primitive Roots mod p"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/mod-primitive-root.rs"
 source: —
 date: "2026-07-01"

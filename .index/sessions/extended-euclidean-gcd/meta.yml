@@ -1,5 +1,6 @@
 title: "Extended Euclidean GCD"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/gcd-euclidean-extended.rs"
 source: —
 date: "2026-06-11"

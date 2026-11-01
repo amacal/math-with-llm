@@ -1,5 +1,6 @@
 title: "Continued-Fraction Term Generation via the Euclidean Algorithm"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/gcd-euclidean-fraction.rs"
 source: —
 date: "2026-07-12"

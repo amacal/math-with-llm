@@ -1,5 +1,6 @@
 title: "Segmented Sieve"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/sieve-segmented.rs"
 source: —
 date: "2026-06-30"

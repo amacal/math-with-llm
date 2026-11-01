@@ -1,5 +1,6 @@
 title: "Pell's Equation via Continued Fractions"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/gcd-euclidean-pell.rs"
 source: —
 date: "2026-07-12"

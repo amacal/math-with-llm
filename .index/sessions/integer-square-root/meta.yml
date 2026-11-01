@@ -1,5 +1,6 @@
 title: "Integer Square Root"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/mod-isqrt-bisect.rs"
 source: —
 date: "2026-07-10"

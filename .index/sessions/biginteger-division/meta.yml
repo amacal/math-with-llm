@@ -1,5 +1,6 @@
 title: "BigInteger Division"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/big-uint-division.rs"
 source: —
 date: "2026-07-18"

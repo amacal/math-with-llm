@@ -1,5 +1,6 @@
 title: "Pollard's Rho Factoring Algorithm"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/mod-pollard-rho.rs"
 source: —
 date: "2026-06-18"

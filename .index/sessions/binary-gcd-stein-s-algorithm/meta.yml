@@ -1,5 +1,6 @@
 title: "Binary GCD (Stein's Algorithm)"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/gcd-binary.rs"
 source: —
 date: "2026-06-11"

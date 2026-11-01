@@ -1,5 +1,6 @@
 title: "Monte Carlo Integration"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/rand-monte-carlo-integration.rs"
 source: —
 date: "2026-07-30"

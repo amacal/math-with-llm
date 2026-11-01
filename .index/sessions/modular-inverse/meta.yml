@@ -1,5 +1,6 @@
 title: "Modular Inverse"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/mod-inverse.rs"
 source: —
 date: "2026-06-11"

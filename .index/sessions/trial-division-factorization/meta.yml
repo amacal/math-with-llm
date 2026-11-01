@@ -1,5 +1,6 @@
 title: "Trial Division Factorization"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/mod-factorize-trial.rs"
 source: —
 date: "2026-07-11"

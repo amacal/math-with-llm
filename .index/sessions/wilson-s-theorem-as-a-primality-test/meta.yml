@@ -1,5 +1,6 @@
 title: "Wilson's Theorem as a Primality Test"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/mod-wilson.rs"
 source: —
 date: "2026-07-24"

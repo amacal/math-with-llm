@@ -1,5 +1,6 @@
 title: "Wiener's Attack on RSA"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/mod-rsa-wiener.rs"
 source: —
 date: "2026-07-13"

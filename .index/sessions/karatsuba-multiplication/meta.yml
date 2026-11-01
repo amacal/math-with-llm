@@ -1,5 +1,6 @@
 title: "Karatsuba Multiplication"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/big-uint-karatsuba.rs"
 source: —
 date: "2026-06-30"

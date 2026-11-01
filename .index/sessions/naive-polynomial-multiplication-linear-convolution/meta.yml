@@ -1,5 +1,6 @@
 title: "Naive Polynomial Multiplication (Linear Convolution)"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/poly-mul-naive.rs"
 source: —
 date: "2026-06-30"

@@ -1,5 +1,6 @@
 title: "Brent's Method for Root-Finding"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/root-brent.rs"
 source: —
 date: "2026-07-25"

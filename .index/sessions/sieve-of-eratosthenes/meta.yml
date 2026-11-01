@@ -1,5 +1,6 @@
 title: "Sieve of Eratosthenes"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/sieve-eratosthenes.rs"
 source: —
 date: "2026-06-30"

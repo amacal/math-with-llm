@@ -1,5 +1,6 @@
 title: "Number Theoretic Transform (NTT)"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/poly-mul-ntt.rs"
 source: —
 date: "2026-07-04"

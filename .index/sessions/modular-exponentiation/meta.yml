@@ -1,5 +1,6 @@
 title: "Modular Exponentiation"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/mod-exponent.rs"
 source: —
 date: "2026-06-14"

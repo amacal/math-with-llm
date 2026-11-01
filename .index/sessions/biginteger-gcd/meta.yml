@@ -1,5 +1,6 @@
 title: "BigInteger GCD"
 kind: "implementation"
+status: "demonstrated"
 file: "src/bin/big-uint-gcd-basic.rs"
 source: —
 date: "2026-07-25"
