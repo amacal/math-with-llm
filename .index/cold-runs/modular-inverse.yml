@@ -1,5 +1,4 @@
 concept: "Modular Inverse"
 due_date: "2026-06-25"
-status: "pending"
-task: —
-result: —
+status: "failed"
+result: "Number Theory Step by Step, Section 4.1 (2026-11-03), Exercise 13: inverses computed correctly via a^(p-2) and by trial over m, but recalling that the extended Euclidean algorithm yields the inverse as a Bezout coefficient needed several prompts ('mod inverse using gcd', 'extended inverse', 'linear coefficients') before 3*69-103*2=1 was stated."

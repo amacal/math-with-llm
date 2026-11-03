@@ -1,0 +1,1 @@
+Derived Fermat's Little Theorem (4.1) by the rearrangement-of-multiples argument and Corollary 4.2, examined the contrapositive compositeness test, pseudoprimes and Carmichael numbers, and completed all 23 Exercises 4.1.

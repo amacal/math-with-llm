@@ -1,0 +1,60 @@
+date: "2026-11-03"
+title: "Number Theory Step by Step, Section 4.1: Introduction to Fermat's Little Theorem"
+session:
+  file: —
+  source: "Number Theory Step by Step (Kuldeep Singh), Chapter 4, Section 4.1"
+  status: completed
+  attempted:
+    - "Complete Section 4.1 (Introduction to Fermat's Little Theorem, printed pp. 153-163): the section text and all 23 Exercises 4.1, in book order."
+  explored:
+    - "Conjectured Fermat's Little Theorem from Example 4.1's table of powers mod 5 and the mod-13 case before stating it."
+    - "Traced the p=7, a=3 case (multiples 3,6,9,12,15,18 reducing to 3,6,2,5,1,4) and the p=6, a=2 contrast case before the general proof."
+    - "Compared the book's elementary proof of Fermat's Little Theorem with the Lagrange-based proof from the Euler's Theorem session."
+    - "Worked Examples 4.2-4.6 (7^52 mod 11, 3^101 mod 31, a^(p-2) as inverse, 31x≡5 (mod 37), product of consecutive integers even)."
+    - "Examined the contrapositive of Fermat's Little Theorem as a compositeness test (5^1000 mod 1001), base-2 pseudoprimes (341, 2047), and Carmichael numbers (561), the last as a quick review against the Miller-Rabin session."
+    - "Raised, from Exercise 1(d)'s 3^11≡1 (mod 23), why the order of an element mod p divides p-1, and argued it via the division algorithm on the order-4 mod 23 case."
+    - "Discussed why the extended Euclidean algorithm replaces trial over m in 3x=1+103m for large moduli (Exercise 13)."
+  tried:
+    - "Exercise 1(a): first attempted 7^101 mod 11 by repeated squaring cycles without Fermat's Little Theorem, before reducing the exponent mod 10."
+    - "Exercise 9: tried squaring both sides of x^5≡5 (mod 13) and multiplying by x^8 before raising both sides to the 5th power."
+    - "Exercise 13: found the inverse of 3 mod 103 by trying m=1,2 in 3x=1+103m."
+    - "Exercise 16: split mod 77 into mod 7 and mod 11 and combined via the coprime-moduli lemma from Exercises 3.1 Q24(d); same approach for Exercise 14(ii) and Exercise 17."
+  corrections:
+    - "Fermat proof, which a to exclude: claimed p prime implies a coprime to p; corrected via a=10, p=5 to coprimality holding exactly when p does not divide a."
+    - "Fermat proof, no-zero step: 'the first k with p dividing ka is k=p' given without justification; corrected to Euclid's lemma (p=6, a=2, k=3 shown as the composite counterexample)."
+    - "Fermat proof, no-repeats step: cancellation of a justified by gcd(p,k)=gcd(p,m)=1; corrected to gcd(p,a)=1."
+    - "Fermat proof, product step: a*2a*...*(p-1)a first written (p-1)!*(p-1)a, then (p-1)!*a; corrected to (p-1)!*a^(p-1) after checking 3*6=18=2!*3^2."
+    - "Fermat proof, cancelling (p-1)!: 'none of the k<p can divide p' (direction reversed, 1 divides p); corrected to p dividing no factor k<p, then Euclid's lemma for the product."
+    - "Example 4.3: split 3^(3*3+2) as (-4)^3+3^2=-55≡7; corrected to the product (-4)^3*3^2≡13 (mod 31)."
+    - "Example 4.5: reused the -4 from the mod-31 example for 31^35 mod 37; corrected to 31≡-6, (-6)^2≡-1 (mod 37)."
+    - "Contrapositive of Fermat first stated without the hypothesis that n does not divide a; corrected via 7^6≡0 (mod 7)."
+    - "Carmichael definition attempts: described the gcd(k,n)=1-for-all-k property (which only primes have); then 'for some a'; then exponent n instead of n-1; then 'all a except divisors of n'; corrected to all a with gcd(a,n)=1 (a=6 with n=561 as the case divisors miss), after showing 3^560 cannot be ≡1 (mod 561)."
+    - "Order of an element named 'generator'; corrected (a generator has order p-1), and the term 'order' recalled only after being supplied."
+    - "Order divides p-1 first justified as 'it eventually produces 1 again at p-1' (only shows order ≤ p-1); corrected via 22=5*4+2 giving a^2≡1, contradicting minimality."
+    - "Exercise 1(a): 25≡4 (mod 11) on the non-Fermat route; actual 25≡3."
+    - "Exercise 1(c): left answer as 10; least non-negative residue is 3."
+    - "Exercise 1(d): used 2013=87*22+12 (actually 1926) and 4^4=64 (actually 256); corrected to 2013=91*22+11, 3^11≡1 (mod 23)."
+    - "Exercise 1(e): 26≡5 (mod 23); actual 26≡3, making (e) equal to (d)."
+    - "Exercise 2(c): (-3)^4 written as -81, giving 18; corrected to 81, giving 2^(-1)≡19 (mod 37)."
+    - "Exercise 5(a): used Fermat's Little Theorem to show 2^8190≡1 (mod 8191), assuming the primality being asked about; corrected to 2^13=8192≡1 directly."
+    - "Exercise 7: concluded composite from 7 dividing 40 353 607, which does not establish the stated congruence; corrected to 40 353 607=7^9."
+    - "Exercise 9: 13 not dividing x justified by gcd(x,13)=1 (circular); corrected via x≡0 giving x^101≡0, not 5. Then x^25≡25 written instead of x^25≡5^5; corrected to x≡5 (mod 13)."
+    - "Exercise 10(b): used p(p+1)/2 for 1+...+(p-1); corrected to (p-1)p/2. 'p prime so odd' corrected via p=2, where the sum is 1 mod 2."
+    - "Exercise 12: (-5)^3 taken as +125, giving 35; corrected to -125≡4, giving 3^2013≡8 (mod 43)."
+    - "Exercise 13: method for inverses described as 'mod inverse using gcd', then 'extended inverse', then 'linear coefficients'; corrected to the extended Euclidean algorithm returning Bezout coefficients with 3*69-103*2=1."
+    - "Exercise 14(i): stated a^n≡a (mod n) for all n; corrected via n=4, a=2 to prime moduli only. Sign slip 3a+3a^2 for 3a-3a^2."
+    - "Exercise 16: typo 26n^61 for 25n^61; 52≡2 (mod 11) corrected to 8; gcd(7,11) written as 0, corrected to 1."
+    - "Exercise 19: used n^(1/2) as a residue mod p; corrected to multiplying n^((p-1)/2) by itself to get n^(p-1)≡1."
+    - "Exercise 20: Euclid's lemma step justified by gcd(x-2,x+2)=1; corrected via x=4 (gcd(2,6)=2) to the prime form of Euclid's lemma."
+  bugs_found: —
+  completed:
+    - "Derived Fermat's Little Theorem (4.1) via the rearrangement of a, 2a, ..., (p-1)a, citing Euclid's lemma (Section 2.3) and the Cancellation Law (3.12)."
+    - "Derived Corollary 4.2 by proof by cases and the contrapositive compositeness test."
+    - "Completed all 23 Exercises 4.1 in book order, including the starred Exercises 16 and 23."
+    - "Stated the structural fact, correctness argument and O(log p) exponentiation cost (exponent reduction mod p-1 plus square-and-multiply) at session close."
+  not_completed: —
+  open_questions: —
+  notes:
+    - "Section 4.1 has no Supplementary Problems of its own; Supplementary Problems 4 follow the last section of Chapter 4."
+    - "poppler-utils was missing from the container and was installed via apt-get during this session; it is not in .devcontainer/Dockerfile."
+    - "Stale .tmp/probe-166.png, probe-167.png, probe-168.png from the 2026-08-10 close were still present at the start of this session."
